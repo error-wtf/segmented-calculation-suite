@@ -132,9 +132,9 @@ def xi_blended(r, r_s):
 ## 5. Universal Intersection Point
 
 ```
-r* / r_s = 1.386562  (for exponential Ξ)
+r* / r_s = 1.594811  (korrigierte Formel: r_s/r statt r/r_s)
 
-At r*: D_GR(r*) = D_SSZ(r*) = 0.528007  (EXACTLY!)
+At r*: D_GR(r*) = D_SSZ(r*) = 0.610710  (EXACTLY!)
 ```
 
 **Critical:** This is **MASS-INDEPENDENT**!
@@ -244,7 +244,7 @@ c = 299792458.0               # m/s
 M_SUN = 1.98847e30            # kg
 XI_MAX = 0.802                # Ξ(r_s) in strong field
 D_HORIZON = 0.555             # D_SSZ(r_s)
-R_STAR_OVER_RS = 1.387        # Universal intersection
+R_STAR_OVER_RS = 1.595        # Universal intersection (corrected)
 ```
 
 ---
@@ -260,7 +260,7 @@ R_STAR_OVER_RS = 1.387        # Universal intersection
 | C² Hermite interpolation | 01_MATHEMATICAL_FOUNDATIONS.md | §12.2 |
 | Ξ(r_s) = 0.802 | 02_PHYSICS_CONCEPTS.md | §3.2 |
 | D(r_s) = 0.555 | 02_PHYSICS_CONCEPTS.md | §3.2 |
-| r*/r_s = 1.387 | 01_MATHEMATICAL_FOUNDATIONS.md | §4.3 |
+| r*/r_s = 1.595 | 01_MATHEMATICAL_FOUNDATIONS.md | §4.3 |
 
 ---
 

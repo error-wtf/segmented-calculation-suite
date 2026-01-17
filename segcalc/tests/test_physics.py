@@ -51,12 +51,11 @@ class TestMathematicalConsistency:
             assert abs(xi - expected) < 1e-12, f"Xi_weak({r/r_s:.0f}r_s) = r_s/(2r)"
     
     def test_xi_strong_field_limit(self):
-        """Test: Xi_strong = 1 - exp(-φr/r_s) increases with r toward 1.0
+        """Test: Xi_strong = 1 - exp(-φ*r_s/r) DECREASES with r toward 0
         
-        NOTE: Xi_strong INCREASES with r (opposite to weak field!)
-        - At r=0: Xi=0
-        - At r=r_s: Xi=0.802
-        - At r→∞: Xi→1.0
+        KORRIGIERT: Xi_strong DECREASES with r (like weak field!)
+        - At r=r_s: Xi=0.802 (maximum)
+        - At r→∞: Xi→0 (correct asymptotic)
         """
         r_s = 3000.0
         xi_max = XI_MAX_DEFAULT
@@ -69,9 +68,9 @@ class TestMathematicalConsistency:
         r_far = 100 * r_s
         xi_far = xi_strong(r_far, r_s, xi_max, PHI)
         
-        # Xi_strong INCREASES with r (saturates toward xi_max=1.0)
-        assert xi_far > xi_near, "Xi_strong increases with r toward saturation"
-        assert xi_far < xi_max + 0.01, "Xi_strong saturates at xi_max"
+        # Xi_strong DECREASES with r (korrigierte Formel r_s/r)
+        assert xi_far < xi_near, "Xi_strong decreases with r (corrected formula)"
+        assert xi_far > 0, "Xi_strong stays positive"
     
     def test_xi_blend_continuity(self):
         """Test: Xi_blend provides smooth transition between regimes

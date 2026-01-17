@@ -14,8 +14,8 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from segcalc.config.constants import (
-    PHI, G, c, M_SUN, 
-    REGIME_WEAK_THRESHOLD, REGIME_STRONG_THRESHOLD,
+    PHI, G, c, M_SUN,
+    REGIME_BLEND_LOW, REGIME_BLEND_HIGH,
     INTERSECTION_R_OVER_RS
 )
 from segcalc.methods.xi import xi_weak, xi_strong, xi_blended, xi_auto
@@ -37,13 +37,14 @@ class TestConstants:
         assert abs(PHI - 1.618033988749895) < 1e-14
     
     def test_regime_boundaries(self):
-        """Weak > 110, Strong < 90"""
-        assert REGIME_WEAK_THRESHOLD == 110.0
-        assert REGIME_STRONG_THRESHOLD == 90.0
+        """KANONISCH segcalc: Blend 1.8-2.2, Weak > 10"""
+        assert REGIME_BLEND_LOW == 1.8
+        assert REGIME_BLEND_HIGH == 2.2
+        # NOTE: Legacy 90/110 ist ssz-qubits Kontext, NICHT segcalc!
     
     def test_intersection_point(self):
-        """r*/r_s = 1.387 (universal)"""
-        assert abs(INTERSECTION_R_OVER_RS - 1.386562) < 0.001
+        """r*/r_s = 1.595 (universal, korrigierte Formel)"""
+        assert abs(INTERSECTION_R_OVER_RS - 1.594811) < 0.001
 
 
 class TestXiRegimes:
@@ -72,12 +73,13 @@ class TestXiRegimes:
         assert abs(xi - 0.802) < 0.001
     
     def test_strong_field_zero(self):
-        """At r=0: Xi = 0 (no singularity!)"""
+        """At r=0: Xi = 1.0 (mit korrigierter Formel r_s/r -> inf -> exp(-inf)=0 -> Xi=1)"""
         r_s = 3000.0
-        r = 0.0
+        r = 1e-10  # Sehr nah an 0
         
         xi = xi_strong(r, r_s)
-        assert xi == 0.0
+        # Mit r_s/r Formel: Xi -> 1 wenn r -> 0
+        assert xi > 0.99, f"Xi near r=0 should be ~1.0, got {xi}"
     
     def test_blend_zone_continuity(self):
         """Blend zone should be continuous."""

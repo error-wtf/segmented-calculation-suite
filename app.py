@@ -142,6 +142,19 @@ def create_dilation_plot(M_Msun: float, r_max_factor: float = 10.0) -> go.Figure
         hovertemplate='At horizon<br>D_SSZ = %{y:.6f}<br>(FINITE!)<extra></extra>'
     ))
     
+    # Universal intersection point r*/r_s = 1.595 (corrected formula)
+    R_STAR = 1.595
+    d_at_intersection = D_ssz(R_STAR * r_s, r_s, XI_MAX_DEFAULT, PHI, "strong")
+    fig.add_trace(go.Scatter(
+        x=[R_STAR], y=[d_at_intersection],
+        name=f'r*={R_STAR} (SSZ=GR)',
+        mode='markers',
+        marker=dict(size=14, color='gold', symbol='star'),
+        hovertemplate=f'Universal Intersection<br>r*/r_s = {R_STAR}<br>D = %{{y:.6f}}<extra></extra>'
+    ))
+    fig.add_vline(x=R_STAR, line_dash="dash", line_color="gold", 
+                  annotation_text="r*", annotation_position="top")
+    
     fig.update_layout(
         title=dict(text=f'Time Dilation: SSZ vs GR (M = {M_Msun:.2g} M☉)', font=dict(size=14)),
         xaxis_title='r / r_s',
@@ -240,7 +253,14 @@ def create_regime_distribution(results_df: pd.DataFrame) -> go.Figure:
         return None
     
     regime_counts = results_df['regime'].value_counts()
-    colors = {'weak': '#3498db', 'strong': '#e74c3c', 'blend': '#f39c12'}
+    # Canonical regime colors (matching get_regime() output)
+    colors = {
+        'very_close': '#9b59b6',      # Purple - near-horizon
+        'blended': '#f39c12',         # Orange - Hermite C² zone
+        'photon_sphere': '#e74c3c',   # Red - SSZ optimal
+        'strong': '#e67e22',          # Dark orange
+        'weak': '#3498db'             # Blue - GR-convergent
+    }
     
     fig = go.Figure(go.Pie(
         labels=regime_counts.index,
@@ -259,12 +279,22 @@ def create_regime_distribution(results_df: pd.DataFrame) -> go.Figure:
 
 def create_win_rate_chart(results_df: pd.DataFrame) -> go.Figure:
     """Bar chart showing SSZ vs GR win rates by regime."""
+    # Create placeholder for missing data
+    def _empty_win_chart(msg: str) -> go.Figure:
+        fig = go.Figure()
+        fig.add_annotation(text=msg, xref="paper", yref="paper", 
+                          x=0.5, y=0.5, showarrow=False,
+                          font=dict(size=14, color="gray"))
+        fig.update_layout(title="Win Rate by Regime", height=350, 
+                         template="plotly_white")
+        return fig
+    
     if results_df is None or 'ssz_closer' not in results_df.columns:
-        return None
+        return _empty_win_chart("No comparison data<br>Load data with z_obs")
     
     valid = results_df[results_df['z_obs'].notna()].copy()
     if len(valid) == 0:
-        return None
+        return _empty_win_chart("No objects with z_obs<br>Add observed redshifts")
     
     # Group by regime
     regime_stats = []
@@ -280,7 +310,7 @@ def create_win_rate_chart(results_df: pd.DataFrame) -> go.Figure:
         })
     
     if not regime_stats:
-        return None
+        return _empty_win_chart("No regime data available")
     
     fig = go.Figure()
     regimes = [s['regime'] for s in regime_stats]
@@ -371,11 +401,22 @@ def create_compactness_plot(results_df: pd.DataFrame) -> go.Figure:
 def create_comparison_scatter(results_df: pd.DataFrame) -> go.Figure:
     """Scatter plot: predicted vs observed redshift."""
     if results_df is None or "z_obs" not in results_df.columns:
-        return None
+        # Return placeholder figure
+        fig = go.Figure()
+        fig.add_annotation(text="No z_obs data available<br>Load data with observed redshifts", 
+                          xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
+                          font=dict(size=14, color="gray"))
+        fig.update_layout(title="Prediction vs Observation", height=400, template="plotly_white")
+        return fig
     
     valid = results_df[results_df["z_obs"].notna()].copy()
     if len(valid) == 0:
-        return None
+        fig = go.Figure()
+        fig.add_annotation(text="No objects with z_obs in dataset<br>Add z_obs column to compare", 
+                          xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
+                          font=dict(size=14, color="gray"))
+        fig.update_layout(title="Prediction vs Observation", height=400, template="plotly_white")
+        return fig
     
     fig = go.Figure()
     
@@ -477,9 +518,19 @@ def calculate_single_object(name: str, M_Msun: float, R_km: float, v_kms: float,
     # Generate report
     STATE.run_manager.generate_report(summary, results_df)
     
-    # Create plots
-    fig_dilation = create_dilation_plot(M_Msun, max(10, result["r_over_rs"] * 1.5))
-    fig_xi = create_xi_plot(M_Msun, max(10, result["r_over_rs"] * 1.5))
+    # Create plots - regime-aware r_max selection
+    # REGIME_WEAK_START = 10.0, so:
+    # - Strong/photon_sphere/blend (r/r_s < 10): show actual position + buffer
+    # - Weak field (r/r_s > 10): show only 1-15 r_s to see curve details
+    r_over_rs = result["r_over_rs"]
+    if r_over_rs <= 10.0:
+        # Strong field: show up to object position + 50%
+        r_max_for_plot = max(5.0, r_over_rs * 1.5)
+    else:
+        # Weak field: show only the interesting region (1-15 r_s)
+        r_max_for_plot = 15.0
+    fig_dilation = create_dilation_plot(M_Msun, r_max_for_plot)
+    fig_xi = create_xi_plot(M_Msun, r_max_for_plot)
     fig_redshift = create_redshift_breakdown(result)
     
     # Create run bundle for download
@@ -1201,7 +1252,7 @@ def create_app():
                 
                 def do_eval(m, r, v, z):
                     from segcalc.config.constants import RunConfig, G, c, M_SUN
-                    from segcalc.config.constants import REGIME_STRONG_THRESHOLD, REGIME_WEAK_THRESHOLD
+                    from segcalc.config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
                     z_val = z if z and z > 0 else None
                     res = calculate_single("Eval", m, r, v or 0, z_val, RunConfig())
                     
@@ -1212,8 +1263,8 @@ def create_app():
                     r_s_km = r_s / 1000
                     r_over_rs = r_m / r_s if r_s > 0 else float('inf')
                     
-                    # SSZ Regime thresholds (CORRECTED per full-output.md)
-                    # Blend zone is at 1.8-2.2 r_s, NOT 90-110!
+                    # SSZ Regime thresholds (CANONICAL)
+                    # Blend zone: 1.8-2.2 r_s
                     from segcalc.config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
                     
                     # Determine regime with numeric justification
@@ -1284,7 +1335,7 @@ def create_app():
 
 **Blend Zone:** 1.8 < r/r_s < 2.2 (Hermite C² join)
 
-**Key Constants:** φ=1.618, Ξ(r_s)=0.802, D(r_s)=0.555 (FINITE!), r*/r_s=1.387
+**Key Constants:** φ=1.618, Ξ(r_s)=0.802, D(r_s)=0.555 (FINITE!), r*/r_s=1.595
                 """)
                 regime_fig = gr.Plot(label="Regime Zones", value=plot_regime_zones())
             
@@ -1309,7 +1360,7 @@ def create_app():
 |-----------|-------|-------------|
 | φ (phi) | 1.6180339887... | Golden ratio = (1+√5)/2 |
 | Ξ_max | 0.802 | Maximum segment saturation = 1-e⁻ᵠ |
-| r*/r_s | 1.387 | Universal intersection point |
+| r*/r_s | 1.595 | Universal intersection point |
 
 ### PPN Parameters (Post-Newtonian)
 
@@ -1327,13 +1378,15 @@ def create_app():
 | **Energy Conservation** | D × (1 + Ξ) = 1 | Fundamental identity |
 | **Dual Velocity** | v_esc × v_fall = c² | Escape-fall product = c² |
 
-### Regime Classification
+### Regime Classification (KANONISCH segcalc — KEIN OVERLAP)
 
 | Regime | Condition | Formula for Ξ(r) |
 |--------|-----------|------------------|
-| **Weak Field** | r/r_s > 110 | Ξ = r_s / (2r) |
-| **Strong Field** | r/r_s < 90 | Ξ = Ξ_max × (1 - e^(-φ·r/r_s)) |
-| **Blend Zone** | 90 ≤ r/r_s ≤ 110 | Hermite C² interpolation |
+| **Very Close** | r/r_s < 1.8 | Ξ = 1 - e^(-φ·r/r_s) |
+| **Blended** | 1.8 ≤ r/r_s ≤ 2.2 | Hermite C² interpolation |
+| **Photon Sphere** | 2.2 < r/r_s ≤ 3.0 | Ξ = 1 - e^(-φ·r/r_s) |
+| **Strong Field** | 3.0 < r/r_s ≤ 10.0 | Ξ = 1 - e^(-φ·r/r_s) |
+| **Weak Field** | r/r_s > 10.0 | Ξ = r_s / (2r) |
 
 ### Core Formulas
 
@@ -1341,7 +1394,7 @@ def create_app():
 |---------|------------|-------------|
 | **Schwarzschild Radius** | r_s = 2GM/c² | Event horizon radius |
 | **Segment Density (Weak)** | Ξ(r) = r_s/(2r) | Newtonian limit |
-| **Segment Density (Strong)** | Ξ(r) = Ξ_max·(1-e^(-φr/r_s)) | Near-horizon |
+| **Segment Density (Strong)** | Ξ(r) = Ξ_max·(1-e^(-φ·r_s/r)) | Near-horizon |
 | **Time Dilation SSZ** | D_SSZ = 1/(1+Ξ) | Always finite! |
 | **Time Dilation GR** | D_GR = √(1-r_s/r) | Singular at r=r_s |
 | **Gravitational Redshift** | z = 1/D - 1 | Observable |
@@ -1353,20 +1406,38 @@ def create_app():
 | D_SSZ(r_s) | **0.555** | FINITE at horizon (no singularity!) |
 | D_GR(r_s) | 0 | Singular (infinite redshift) |
 | Ξ(r_s) | 0.802 | Maximum segment density |
-| r*/r_s | 1.387 | SSZ = GR intersection (mass-independent) |
+| r*/r_s | 1.595 | SSZ = GR intersection (mass-independent) |
 
-### Regime Selection (Python)
+### Regime Selection (Python) – KANONISCH segcalc (KEIN OVERLAP)
 
 ```python
 def get_regime(r, r_s):
     ratio = r / r_s
-    if ratio > 110:
-        return "weak"      # Ξ = r_s/(2r)
-    elif ratio < 90:
-        return "strong"    # Ξ = Ξ_max·(1-e^(-φr/r_s))
+    if ratio < 1.8:
+        return "very_close"   # Near-horizon (< 1.8)
+    elif ratio <= 2.2:
+        return "blended"      # Hermite C² [1.8, 2.2]
+    elif ratio <= 3.0:
+        return "photon_sphere" # SSZ optimal (82% wins)
+    elif ratio <= 10.0:
+        return "strong"       # Strong field
     else:
-        return "blend"     # C² Hermite interpolation
+        return "weak"         # Ξ = r_s/(2r)
 ```
+
+---
+
+### g1/g2 Operationalisierung (Carmen's Methodik)
+
+| Symbol | Ebene | Beschreibung |
+|--------|-------|--------------|
+| **g1** | Observable | Messbare Grenzflächen-Signaturen (GPS, Pound-Rebka, S2-Stern) |
+| **g2** | Formal | Interner Zustands-/Prozessraum (nicht direkt testbar) |
+
+**Kernregel:** Wir erheben Claims NUR über g1-Observablen. g2 bleibt formal.
+
+*Außen-Operationalisierung = konsistent rekonstruierbare Menge kompatibler Zustände/Verläufe,*
+*nicht zwingend eindeutiger innerer Prozess; Innen-Dynamik nur indirekt via Rand-Signaturen.*
 
 ---
 
@@ -1377,19 +1448,22 @@ def get_regime(r, r_s):
             # TAB 5: Validation (Full Unified Test Suite)
             # =================================================================
             with gr.TabItem("✅ Validation"):
-                gr.Markdown("### Unified SSZ Validation Suite")
+                gr.Markdown("### 🧪 Unified SSZ Validation Suite")
                 gr.Markdown("""
-**REAL Legacy Tests** from `ssz-qubits/tests/` - NOT self-invented!
+**144 Tests** aus 3 Kategorien:
 
-**Source Files:**
-- `test_ssz_physics.py` - 17 tests (Schwarzschild, Xi, Time Dilation, Strong Field)
-- `test_validation.py` - 17 tests (GPS, Pound-Rebka, NIST, Theoretical Consistency)
-- `test_edge_cases.py` - 25 tests (Extreme values, Numerical precision, Error handling)
+| Kategorie | Tests | Beschreibung |
+|-----------|-------|--------------|
+| **pytest tests/** | 82 | Core Physics, Regime, UI Canonicalization |
+| **pytest segcalc/tests/** | 62 | SSZ Physics, Power Law, Integration |
+| **Built-in Suite** | ~60 | GPS, Pound-Rebka, Neutron Stars, Invariants |
 
-**Tolerances from Source Code:**
-- `rtol=1e-10` for mathematical identities
-- `rtol=0.01` for physical measurements (GPS, redshift)
-- `rtol=1e-6` for precision experiments (Pound-Rebka)
+**Kanonische Regime-Grenzen (segcalc):**
+- Very Close: r/r_s < 1.8
+- Blended: 1.8 ≤ r/r_s ≤ 2.2
+- Photon Sphere: 2.2 < r/r_s ≤ 3.0
+- Strong: 3.0 < r/r_s ≤ 10.0
+- Weak: r/r_s > 10.0
                 """)
                 
                 run_validation_btn = gr.Button("▶️ Run Full Validation Suite", variant="primary", size="lg")
@@ -1402,62 +1476,95 @@ def get_regime(r, r_s):
                 validation_details = gr.Markdown()
                 
                 def run_validation_handler():
-                    """Run validation with fallback: legacy tests -> built-in suite"""
+                    """Run COMPLETE validation: pytest + built-in suite"""
+                    import subprocess
+                    import os
+                    os.environ['PYTHONIOENCODING'] = 'utf-8:replace'
+                    
                     try:
-                        # Try legacy tests first
-                        legacy_available = False
-                        try:
-                            from segcalc.tests.legacy_adapter import run_all_legacy_tests
-                            results = run_all_legacy_tests()
-                            if results and len(results) > 0:
-                                legacy_available = True
-                        except Exception as legacy_err:
-                            legacy_available = False
+                        categories = []
+                        passed_counts = []
+                        failed_counts = []
+                        details_lines = []
                         
-                        if legacy_available:
-                            # Use legacy test results
-                            categories = []
-                            passed_counts = []
-                            failed_counts = []
-                            total_passed = 0
-                            total_failed = 0
+                        # ============================================================
+                        # PART 1: Run pytest tests (144 tests)
+                        # ============================================================
+                        pytest_passed = 0
+                        pytest_failed = 0
+                        pytest_details = []
+                        
+                        try:
+                            result = subprocess.run(
+                                ["python", "-m", "pytest", "tests/", "segcalc/tests/", 
+                                 "-v", "--tb=no", "-q"],
+                                capture_output=True, text=True,
+                                encoding='utf-8', errors='replace',
+                                timeout=120, cwd=os.path.dirname(__file__)
+                            )
                             
-                            details_lines = ["## Test Details (Source: ssz-qubits/tests/)\n"]
+                            # Parse pytest output
+                            for line in result.stdout.split('\n'):
+                                if '::' in line and (' PASSED' in line or ' FAILED' in line):
+                                    if ' PASSED' in line:
+                                        pytest_passed += 1
+                                    else:
+                                        pytest_failed += 1
+                                    pytest_details.append(line.strip())
                             
-                            for path, suite in results.items():
-                                cat_name = path.split("/")[-1].replace(".py", "").replace("test_", "")
-                                categories.append(cat_name)
-                                passed_counts.append(suite.passed)
-                                failed_counts.append(suite.failed)
-                                total_passed += suite.passed
-                                total_failed += suite.failed
-                                
-                                details_lines.append(f"\n### {path}")
-                                details_lines.append(f"**{suite.passed}/{suite.total} passed ({suite.pass_rate:.1f}%)**\n")
-                                details_lines.append("| Test | Status | Source |")
-                                details_lines.append("|------|--------|--------|")
-                                for r in suite.results:
-                                    status = "PASS" if r.passed else "FAIL"
-                                    details_lines.append(f"| {r.source_method} | {status} | {r.source_file}:{r.source_lines} |")
-                            
-                            total_tests = total_passed + total_failed
-                            overall_rate = total_passed / total_tests * 100 if total_tests > 0 else 0
-                            source_info = "ssz-qubits/tests/ (legacy)"
-                        else:
-                            # Fallback to built-in validation suite
-                            suite = run_full_validation()
-                            plot_data = get_validation_plot_data(suite)
-                            
-                            categories = plot_data["categories"]
-                            passed_counts = plot_data["passed"]
-                            failed_counts = plot_data["failed"]
-                            total_passed = plot_data["total_passed"]
-                            total_failed = plot_data["total_failed"]
-                            total_tests = plot_data["total_tests"]
-                            overall_rate = plot_data["overall_rate"]
-                            
-                            details_lines = [format_validation_results(suite)]
-                            source_info = "Built-in Unified Validation Suite"
+                            # Extract summary from last lines
+                            if 'passed' in result.stdout:
+                                for line in result.stdout.split('\n')[-10:]:
+                                    if 'passed' in line:
+                                        pytest_details.append(f"\n**Summary:** {line.strip()}")
+                                        break
+                        except Exception as pytest_err:
+                            pytest_details.append(f"pytest error: {pytest_err}")
+                        
+                        if pytest_passed + pytest_failed > 0:
+                            categories.append("pytest (tests/)")
+                            passed_counts.append(pytest_passed)
+                            failed_counts.append(pytest_failed)
+                        
+                        # ============================================================
+                        # PART 2: Run built-in validation suite (~60 tests)
+                        # ============================================================
+                        suite = run_full_validation()
+                        plot_data = get_validation_plot_data(suite)
+                        
+                        for i, cat in enumerate(plot_data["categories"]):
+                            categories.append(cat)
+                            passed_counts.append(plot_data["passed"][i])
+                            failed_counts.append(plot_data["failed"][i])
+                        
+                        builtin_passed = plot_data["total_passed"]
+                        builtin_failed = plot_data["total_failed"]
+                        
+                        # ============================================================
+                        # COMBINE RESULTS
+                        # ============================================================
+                        total_passed = pytest_passed + builtin_passed
+                        total_failed = pytest_failed + builtin_failed
+                        total_tests = total_passed + total_failed
+                        overall_rate = total_passed / total_tests * 100 if total_tests > 0 else 0
+                        
+                        # Build details
+                        details_lines.append("## 🧪 pytest Results")
+                        details_lines.append(f"**{pytest_passed}/{pytest_passed + pytest_failed}** tests passed\n")
+                        details_lines.append("| Test | Status |")
+                        details_lines.append("|------|--------|")
+                        for line in pytest_details[:50]:  # Limit to 50 for UI
+                            if '::' in line:
+                                status = "✅" if "PASSED" in line else "❌"
+                                test_name = line.split('::')[-1].split()[0] if '::' in line else line[:40]
+                                details_lines.append(f"| {test_name} | {status} |")
+                        if len(pytest_details) > 50:
+                            details_lines.append(f"| ... +{len(pytest_details)-50} more | |")
+                        
+                        details_lines.append("\n---\n")
+                        details_lines.append(format_validation_results(suite))
+                        
+                        source_info = f"pytest ({pytest_passed + pytest_failed}) + Built-in ({builtin_passed + builtin_failed})"
                         
                         # Create bar chart
                         fig = go.Figure()

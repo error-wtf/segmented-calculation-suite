@@ -1,8 +1,10 @@
 # Segmented Spacetime Calculation Suite
 
-[![Tests](https://img.shields.io/badge/tests-56%2F56%20passing-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/tests-186%2F186%20passing-brightgreen)](.)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](.)
 [![License](https://img.shields.io/badge/license-Anti--Capitalist%20v1.4-red)](.)
+[![Regimes](https://img.shields.io/badge/regimes-kanonisch%201.8--2.2-orange)](.)
+[![Colab](https://img.shields.io/badge/Colab-Online%20Demo-yellow)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Calculation_Suite.ipynb)
 
 **Production-ready toolkit for SSZ (Segmented Spacetime) calculations**  
 **Validated against GPS, Pound-Rebka, and 47 ESO spectroscopy measurements**
@@ -14,11 +16,17 @@ Contact: mail@error.wtf
 
 ## 🚀 Quick Start
 
-### Option 1: Google Colab (No Installation)
+### Option 1: 🌐 Online (Google Colab - No Installation)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Calculation_Suite.ipynb)
 
-### Option 2: Local Gradio Web UI
+1. Click the badge above to open in Google Colab
+2. Run all cells (Runtime → Run all)
+3. The last cell launches Gradio with `share=True`
+4. **You get a public shareable link** (e.g., `https://xxxxx.gradio.live`)
+5. Share this link with anyone - they can use the calculator without installation!
+
+### Option 2: 💻 Offline (Local Gradio Web UI)
 
 ```bash
 git clone https://github.com/error-wtf/segmented-calculation-suite.git
@@ -54,7 +62,7 @@ python -m segcalc info                     # Show formulas
 | **D_SSZ(r_s)** | 0.555 | 0.555 (FINITE!) | ✅ |
 | **GPS Correction** | ~45 μs/day | 45.7 μs/day | ✅ |
 | **Pound-Rebka** | 2.46×10⁻¹⁵ | 2.46×10⁻¹⁵ | ✅ |
-| **Unit Tests** | 53/53 | 53/53 passing | ✅ |
+| **Unit Tests** | 186/186 | 186/186 passing | ✅ |
 
 ---
 
@@ -81,8 +89,8 @@ pip install -r requirements.txt
 | Quantity | Formula | Notes |
 |----------|---------|-------|
 | Schwarzschild radius | r_s = 2GM/c² | Fundamental scale |
-| Segment density (Weak) | Ξ = r_s/(2r) | r/r_s > 110 |
-| Segment density (Strong) | Ξ = 1 - exp(-φr/r_s) | r/r_s < 90 |
+| Segment density (Weak) | Ξ = r_s/(2r) | r/r_s > 10 |
+| Segment density (Strong) | Ξ = 1 - exp(-φ·r_s/r) | r/r_s < 1.8 |
 | SSZ time dilation | D_SSZ = 1/(1+Ξ) | For time comparisons |
 | GR time dilation | D_GR = √(1-r_s/r) | Standard GR |
 | **SSZ Redshift** | **z_SSZ = z_GR × (1 + Δ(M)/100)** | **Key result!** |
@@ -95,7 +103,7 @@ pip install -r requirements.txt
 | Constant | Value | Meaning |
 |----------|-------|---------|
 | φ (Golden Ratio) | 1.618034 | Fundamental SSZ parameter |
-| r*/r_s | 1.387 | Universal intersection point |
+| r*/r_s | 1.595 | Universal intersection point |
 | Ξ(r_s) | 0.802 | Segment density at horizon |
 | D_SSZ(r_s) | 0.555 | **FINITE** (no singularity!) |
 

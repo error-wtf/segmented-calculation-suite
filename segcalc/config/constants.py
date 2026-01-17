@@ -48,6 +48,7 @@ ALPHA_FS = 7.2973525693e-3        # Fine structure constant
 REGIME_BLEND_LOW = 1.8            # r/r_s < 1.8 → Inner (strong) field
 REGIME_BLEND_HIGH = 2.2           # r/r_s > 2.2 → Outer field
 # 1.8 < r/r_s < 2.2 → Blend zone (Hermite C²)
+REGIME_WEAK_START = 10.0          # r/r_s > 10 → Weak field (kanonisch)
 
 # Legacy thresholds (kept for backward compatibility with some plots)
 REGIME_WEAK_THRESHOLD = 110.0     # Legacy: weak field definition
@@ -65,9 +66,10 @@ XI_AT_HORIZON = 1.0 - np.exp(-PHI)  # ≈ 0.8017
 # Kept for backward compatibility - DO NOT use as configurable parameter
 XI_MAX_DEFAULT = 1.0  # Legacy: was used as scaling factor, now fixed at 1.0
 
-# Universal intersection point
-INTERSECTION_R_OVER_RS = 1.386562
-INTERSECTION_D_STAR = 0.528007
+# Universal intersection point (where D_SSZ = D_GR)
+# With xi_strong = 1 - exp(-φ * r_s/r), intersection is at r*/r_s ≈ 1.595
+INTERSECTION_R_OVER_RS = 1.594811
+INTERSECTION_D_STAR = 0.610710
 
 # App version
 APP_VERSION = "1.0.0"
@@ -86,10 +88,12 @@ class RunConfig:
     M_sun: float = M_SUN
     phi: float = PHI
     
-    # SSZ parameters (xi_max removed - it's computed from Xi(r_s) = 1 - exp(-PHI))
+    # SSZ parameters - kanonische segcalc Werte
     # xi_at_horizon is NOT configurable, it's 0.8017 by the formula
-    regime_weak: float = REGIME_WEAK_THRESHOLD
-    regime_strong: float = REGIME_STRONG_THRESHOLD
+    # NOTE: Diese Werte sind für Logging/Export, NICHT für Regime-Logik!
+    regime_blend_low: float = REGIME_BLEND_LOW    # 1.8 (kanonisch)
+    regime_blend_high: float = REGIME_BLEND_HIGH  # 2.2 (kanonisch)
+    regime_weak_boundary: float = 10.0            # r/r_s > 10 = weak
     
     # Run metadata
     run_id: str = field(default_factory=lambda: "")
@@ -107,7 +111,7 @@ class RunConfig:
     def _generate_run_id(self) -> str:
         """Generate unique run ID from timestamp + params hash."""
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        params_str = f"{self.phi}_{self.xi_mode}_{self.regime_weak}_{self.regime_strong}"
+        params_str = f"{self.phi}_{self.xi_mode}_{self.regime_blend_low}_{self.regime_blend_high}"
         hash_short = hashlib.md5(params_str.encode()).hexdigest()[:6]
         return f"run_{ts}_{hash_short}"
     
@@ -125,8 +129,9 @@ class RunConfig:
             },
             "ssz_params": {
                 "xi_at_horizon": XI_AT_HORIZON,  # computed: 1-exp(-PHI) = 0.8017
-                "regime_weak_threshold": self.regime_weak,
-                "regime_strong_threshold": self.regime_strong,
+                "regime_blend_low": self.regime_blend_low,   # 1.8 (kanonisch)
+                "regime_blend_high": self.regime_blend_high, # 2.2 (kanonisch)
+                "regime_weak_boundary": self.regime_weak_boundary,  # 10 (kanonisch)
                 "xi_mode": self.xi_mode,
                 "redshift_mode": self.redshift_mode
             }
@@ -147,27 +152,34 @@ def get_regime(r: float, r_s: float) -> str:
     Determine which regime applies based on r/r_s ratio.
     CORRECTED per Unified-Results stratified analysis.
     
+    KANONISCHE segcalc GRENZEN (KEIN OVERLAP):
+        - very_close:    r/r_s < 1.8
+        - blended:       1.8 ≤ r/r_s ≤ 2.2 (Hermite C²)
+        - photon_sphere: 2.2 < r/r_s ≤ 3.0 (SSZ OPTIMAL)
+        - strong:        3.0 < r/r_s ≤ 10.0
+        - weak:          r/r_s > 10.0
+    
+    NOTE: ssz-qubits nutzt 90/100/110 - das ist ein ANDERER Kontext!
+    
     Returns:
-        "very_close", "photon_sphere", "strong", "weak", or "blended"
+        "very_close", "blended", "photon_sphere", "strong", or "weak"
     """
     if r_s <= 0:
         return "weak"
     
     x = r / r_s
     
-    if x < REGIME_BLEND_LOW:
-        # Very close to horizon: r < 1.8 r_s
-        if x < 2.0:
-            return "very_close"  # SSZ struggles here (0% wins)
-        return "inner"
-    elif x <= REGIME_BLEND_HIGH:
-        return "blended"  # 1.8-2.2 r_s: Hermite blend zone
-    elif x <= 3.0:
-        return "photon_sphere"  # 2.2-3 r_s: SSZ OPTIMAL (82% wins)
-    elif x <= 10.0:
-        return "strong"  # 3-10 r_s: Strong field
-    else:
-        return "weak"  # r > 10 r_s: Weak field (~37% wins)
+    # Regime classification (kanonisch für segcalc, KEIN OVERLAP)
+    if x < REGIME_BLEND_LOW:      # x < 1.8
+        return "very_close"       # Near-horizon
+    elif x <= REGIME_BLEND_HIGH:  # 1.8 ≤ x ≤ 2.2
+        return "blended"          # Hermite C² blend zone
+    elif x <= 3.0:                # 2.2 < x ≤ 3.0
+        return "photon_sphere"    # SSZ OPTIMAL (82% wins)
+    elif x <= 10.0:               # 3.0 < x ≤ 10.0
+        return "strong"           # Strong field
+    else:                         # x > 10.0
+        return "weak"             # Weak field
 
 
 def get_regime_simple(r: float, r_s: float) -> str:

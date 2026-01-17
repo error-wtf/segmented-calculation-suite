@@ -8,7 +8,7 @@ Implements weak, strong, and blended field regimes.
 
 import numpy as np
 from typing import Union
-from ..config.constants import PHI, REGIME_STRONG_THRESHOLD, REGIME_WEAK_THRESHOLD
+from ..config.constants import PHI, REGIME_BLEND_LOW, REGIME_BLEND_HIGH
 
 
 def xi_weak(r: Union[float, np.ndarray], r_s: float) -> Union[float, np.ndarray]:
@@ -43,7 +43,11 @@ def xi_strong(r: Union[float, np.ndarray], r_s: float,
     """
     Strong field segment density.
     
-    Formula: Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))
+    Formula: Ξ(r) = ξ_max × (1 - exp(-φ × r_s/r))
+    
+    NOTE: The argument is r_s/r (not r/r_s) so that Xi DECREASES with r!
+    - At r = r_s: Xi = xi_max × (1 - exp(-φ)) ≈ 0.802
+    - As r → ∞: Xi → 0 (correct asymptotic behavior)
     
     Valid for: r/r_s < 1.8 (inner region near horizon)
     
@@ -60,7 +64,8 @@ def xi_strong(r: Union[float, np.ndarray], r_s: float,
         raise ValueError(f"Schwarzschild radius must be positive, got {r_s}")
     
     r = np.asarray(r)
-    xi = xi_max * (1.0 - np.exp(-phi * r / r_s))
+    # CRITICAL: r_s/r ensures Xi DECREASES as r increases (monotonic!)
+    xi = xi_max * (1.0 - np.exp(-phi * r_s / r))
     
     return float(xi) if np.ndim(xi) == 0 else xi
 
@@ -73,22 +78,23 @@ def _hermite_blend(t: float) -> float:
 
 def xi_blended(r: Union[float, np.ndarray], r_s: float,
                xi_max: float = 1.0, phi: float = PHI,
-               r_low: float = REGIME_STRONG_THRESHOLD,
-               r_high: float = REGIME_WEAK_THRESHOLD) -> Union[float, np.ndarray]:
+               r_low: float = REGIME_BLEND_LOW,
+               r_high: float = REGIME_BLEND_HIGH) -> Union[float, np.ndarray]:
     """
     Blended segment density using Quintic Hermite C² interpolation.
     
     Smoothly transitions between strong and weak field regimes.
     
-    Valid for: 90 < r/r_s < 110 (blend zone)
+    KANONISCH (segcalc): Blend-Zone bei [1.8, 2.2] r_s
+    (ssz-qubits nutzt 90-110 - anderer Kontext, NICHT segcalc!)
     
     Parameters:
         r: Radius [m]
         r_s: Schwarzschild radius [m]
         xi_max: Maximum saturation for strong field
         phi: Golden ratio parameter
-        r_low: Lower boundary (r/r_s) - strong field below this (default 90)
-        r_high: Upper boundary (r/r_s) - weak field above this (default 110)
+        r_low: Lower boundary (r/r_s) - strong field below this (default 1.8)
+        r_high: Upper boundary (r/r_s) - weak field above this (default 2.2)
     
     Returns:
         Segment density (dimensionless)
@@ -116,15 +122,15 @@ def xi_blended(r: Union[float, np.ndarray], r_s: float,
     else:
         result = np.zeros_like(r, dtype=float)
         
-        # Strong field region (r < 90 r_s)
+        # Strong field region (r < r_low r_s)
         mask_strong = x <= r_low
         result[mask_strong] = xi_s[mask_strong]
         
-        # Weak field region (r > 110 r_s)
+        # Weak field region (r > r_high r_s)
         mask_weak = x >= r_high
         result[mask_weak] = xi_w[mask_weak]
         
-        # Blend region (90 < r/r_s < 110)
+        # Blend region (r_low < r/r_s < r_high)
         mask_blend = ~mask_strong & ~mask_weak
         if np.any(mask_blend):
             t = (x[mask_blend] - r_low) / (r_high - r_low)

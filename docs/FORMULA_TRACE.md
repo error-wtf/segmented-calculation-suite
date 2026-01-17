@@ -25,7 +25,7 @@ xi = r_s / (2.0 * r)
 - **File:** ssz_qubits.py
 - **Function:** xi_segment_density()
 - **Lines:** 171-174
-- **Condition:** r/r_s > 100
+- **Condition:** r/r_s > 100 (ssz-qubits) / > 10 (segcalc)
 
 **Tests:**
 - test_validation.py::test_gravitational_redshift_formula
@@ -51,7 +51,7 @@ xi = xi_max * (1.0 - np.exp(-phi * r / r_s))
 - **File:** ssz_qubits.py
 - **Function:** xi_segment_density()
 - **Lines:** 176-178
-- **Condition:** r/r_s < 100
+- **Condition:** r/r_s < 100 (ssz-qubits) / < 10 (segcalc)
 
 - **Repo:** ssz-metric-pure
 - **File:** src/ssz_core/segment_density.py
@@ -70,10 +70,19 @@ xi = xi_max * (1.0 - np.exp(-phi * r / r_s))
 
 ### 1.3 Regime Transition
 
-**Rule:**
+**Rule (ssz-qubits):**
 ```
 r/r_s > 100  -->  WEAK FIELD
 r/r_s < 100  -->  STRONG FIELD
+```
+
+**Rule (segcalc - KANONISCH):**
+```
+r/r_s > 10   -->  WEAK FIELD
+r/r_s 3-10   -->  STRONG FIELD
+r/r_s 2-3    -->  PHOTON_SPHERE
+r/r_s < 2    -->  VERY_CLOSE
+Blend-Zone:  1.8-2.2 (Hermite C²)
 ```
 
 **Source Reference:**
@@ -93,8 +102,9 @@ else:
     # Hermite C² interpolation
 ```
 
-**Note:** segcalc uses r_low=90, r_high=110 with Hermite blend.
-ssz-qubits uses hard threshold at 100.
+**Note:** 
+- **segcalc (KANONISCH):** Blend-Zone r_low=1.8, r_high=2.2 mit Hermite C²
+- **ssz-qubits:** Hard threshold bei 100
 
 ---
 
@@ -218,7 +228,7 @@ def z_geom_hint(M_kg, r_m, phi=PHI):
 ```
 
 **Validation:**
-- ESO S-Star data: **47/48 = 97.9% win rate**
+- ESO S-Star data: **46/47 = 97.9% win rate**
 
 **Tests:**
 - test_ssz_physics.py::test_geom_hint_finite
@@ -231,13 +241,13 @@ def z_geom_hint(M_kg, r_m, phi=PHI):
 **LaTeX:**
 ```
 D_SSZ(r*) = D_GR(r*)
-r*/r_s = 1.386562
+r*/r_s = 1.594811  (korrigierte Formel)
 ```
 
 **Source Reference:**
 - **Repo:** Unified-Results
 - **File:** verify_theory_scientific.py
-- **Lines:** 102-109 (r_star_pub = 1.386562)
+- **Lines:** 102-109 (r_star_pub = 1.594811)
 
 **Tests:**
 - verify_theory_scientific.py::test3
@@ -265,7 +275,7 @@ r*/r_s = 1.386562
 | D_GR = √(1-r_s/r) | ✓ | ✓ | test_D_gr_at_horizon | ✅ VERIFIED |
 | z_SSZ = z_GR×(1+Δ/100) | ✓ | ✓ | test_ssz_predicts_higher | ✅ VERIFIED |
 | z_geom_hint | ✓ | ✓ | test_geom_hint_finite | ✅ VERIFIED |
-| r*/r_s = 1.387 | ✓ | ✓ | test_intersection_mass_independent | ✅ VERIFIED |
+| r*/r_s = 1.595 | ✓ | ✓ | test_intersection_mass_independent | ✅ VERIFIED |
 
 ---
 
@@ -273,7 +283,7 @@ r*/r_s = 1.386562
 
 | Value | Expected | Calculated | Status |
 |-------|----------|------------|--------|
-| Ξ(r_s) | 0.802 | 0.8017 | ✅ |
+| Ξ(r_s) | 0.8017 | 0.8017118 | ✅ |
 | D(r_s) | 0.555 | 0.5550 | ✅ |
 | D_GR(r_s) | 0 | 0 | ✅ (SSZ avoids singularity!) |
 
@@ -283,7 +293,8 @@ r*/r_s = 1.386562
 
 ```
 54 NEW Tests PASSED (100%) - Ported from ssz-qubits/ssz-metric-pure
-97.9% ESO Win Rate (47/48)
+15 Invarianten-Tests PASSED (100%)
+97.9% ESO Win Rate (46/47) - Golden Dataset: 47 Objekte, SEG wins 46, GR wins 1 (3C279_jet)
 ```
 
 ### New Test Modules (2025-01-17)
@@ -315,9 +326,9 @@ r*/r_s = 1.386562
 
 ## Related Documentation
 
-- **CRITICAL_ERRORS_PREVENTION.md** - All known errors and how to avoid them
-- **ANTI_CIRCULARITY.md** - Proof of no circular dependencies
-- **FORMULA_VERIFICATION.md** - Detailed formula verification with values
+- **INVARIANTS_SPECIFICATION.md** - 7 harte Invarianten
+- **GROUND_TRUTH_REFERENCE.md** - Kanonische Referenz
+- **FAILURE_MODES.md** - Bekannte Fehlerquellen
 
 ---
 

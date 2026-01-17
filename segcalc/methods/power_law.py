@@ -49,9 +49,10 @@ def inverse_compactness(M_Msun: float, R_km: float) -> float:
     """
     Calculate inverse compactness R/r_s.
     
-    This determines the gravitational regime:
-    - R/r_s > 110: Weak field
-    - R/r_s < 90: Strong field
+    This determines the gravitational regime (CANONICAL segcalc):
+    - R/r_s > 10: Weak field
+    - R/r_s < 1.8: Very close / Strong field
+    - 1.8 ≤ R/r_s ≤ 2.2: Blend zone
     """
     c_val = compactness(M_Msun, R_km)
     if c_val <= 0:

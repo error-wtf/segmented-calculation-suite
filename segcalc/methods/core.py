@@ -154,6 +154,13 @@ def calculate_single(name: str, M_Msun: float, R_km: float,
         else:
             result["winner"] = "GR"
             result["ssz_closer"] = False
+        
+        # WARN if z_obs matches GR suspiciously well (possible circular comparison)
+        # If GR residual < 1% of z_obs AND SSZ residual >> GR residual, flag it
+        if abs_gr < 0.01 * abs(z_obs) and abs_ssz > 10 * abs_gr:
+            result["z_obs_warning"] = "z_obs may be GR-derived (circular comparison)"
+        else:
+            result["z_obs_warning"] = None
     else:
         result["z_obs"] = None
         result["z_ssz_residual"] = None

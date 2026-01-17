@@ -95,9 +95,12 @@ def plot_xi_profile(M_Msun: float = 1.0, output_dir: str = "plots",
     ax.loglog(r_over_rs, xi_strong_vals, 'r--', label='Strong Field: Ξ = Ξₘₐₓ(1-e⁻ᶲʳ/ʳˢ)', alpha=0.6)
     ax.loglog(r_over_rs, xi_auto_vals, 'k-', label='Auto (Blend)', linewidth=2)
     
-    # Mark regime boundaries
-    ax.axvline(90, color='gray', linestyle=':', alpha=0.5, label='Blend region (90-110)')
-    ax.axvline(110, color='gray', linestyle=':', alpha=0.5)
+    # CANONICAL regime boundaries (1.8, 2.2, 10)
+    from ..config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
+    ax.axvline(REGIME_BLEND_LOW, color='orange', linestyle=':', alpha=0.7, 
+               label=f'Blend zone ({REGIME_BLEND_LOW}-{REGIME_BLEND_HIGH})')
+    ax.axvline(REGIME_BLEND_HIGH, color='orange', linestyle=':', alpha=0.7)
+    ax.axvline(10.0, color='blue', linestyle='--', alpha=0.5, label='Weak field (r > 10)')
     
     # Mark Xi_max
     ax.axhline(xi_max, color='orange', linestyle='--', alpha=0.5, 

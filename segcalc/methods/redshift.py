@@ -181,8 +181,9 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     """
     Complete SSZ redshift calculation with Δ(M) φ-based correction.
     
-    CRITICAL: Δ(M) correction only applies in STRONG FIELD (r/r_s < 110).
-    In weak field, SSZ = GR exactly (this is correct per "Dual Velocities" paper).
+    CRITICAL: Δ(M) correction only applies in STRONG FIELD (r/r_s < 10).
+    In weak field (r/r_s > 10), SSZ = GR exactly (per "Dual Velocities" paper).
+    NOTE: segcalc nutzt r/r_s < 10, NICHT 110 (das ist ssz-qubits Kontext).
     
     Modes:
     - use_delta_m=True, use_geom_hint=False: Standard Δ(M) correction (strong field only)

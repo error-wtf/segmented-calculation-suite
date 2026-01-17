@@ -97,16 +97,18 @@ def D_comparison(r: Union[float, np.ndarray], r_s: float,
     with np.errstate(divide='ignore', invalid='ignore'):
         delta_pct = np.where(d_gr > 0, 100.0 * delta / d_gr, np.nan)
     
-    # Determine regime
+    # Determine regime (CANONICAL segcalc thresholds)
+    from ..config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
     if np.isscalar(x):
-        if x > 110:
+        if x > REGIME_BLEND_HIGH:  # > 2.2
             regime = "weak"
-        elif x < 90:
+        elif x < REGIME_BLEND_LOW:  # < 1.8
             regime = "strong"
         else:
             regime = "blended"
     else:
-        regime = np.where(x > 110, "weak", np.where(x < 90, "strong", "blended"))
+        regime = np.where(x > REGIME_BLEND_HIGH, "weak",
+                         np.where(x < REGIME_BLEND_LOW, "strong", "blended"))
     
     return {
         "D_ssz": d_ssz,

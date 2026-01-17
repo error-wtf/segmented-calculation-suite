@@ -474,7 +474,8 @@ python app.py
    - Offen: Warum genau dort? Gibt es ein physikalisches Kriterium?
 
 4. **Δ(M) Herkunft:**
-   - Aktuell: Gefittete Parameter A, α, B
+   - Aktuell: Gefittete Parameter **A = 98.01, α = 2.7177×10⁴, B = 1.96**
+   - Formel: Δ(M) = (A × exp(-α × r_s) + B) × norm
    - Offen: Emergiert Δ(M) aus der φ-Geometrie?
 
 ---

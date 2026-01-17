@@ -18,7 +18,7 @@ import pandas as pd
 
 from ..config.constants import (
     PHI, G, c, M_SUN, XI_MAX_DEFAULT,
-    REGIME_WEAK_THRESHOLD, REGIME_STRONG_THRESHOLD,
+    REGIME_BLEND_LOW, REGIME_BLEND_HIGH,
     INTERSECTION_R_OVER_RS, APP_VERSION
 )
 
@@ -53,9 +53,10 @@ class RunBundle:
                 "xi_max": XI_MAX_DEFAULT
             },
             "regime_thresholds": {
-                "weak_above": REGIME_WEAK_THRESHOLD,
-                "strong_below": REGIME_STRONG_THRESHOLD,
-                "blend_zone": f"{REGIME_STRONG_THRESHOLD}-{REGIME_WEAK_THRESHOLD}"
+                "blend_low": REGIME_BLEND_LOW,      # 1.8 (kanonisch segcalc)
+                "blend_high": REGIME_BLEND_HIGH,    # 2.2 (kanonisch segcalc)
+                "weak_above": 10.0,                 # r/r_s > 10 = weak
+                "blend_zone": f"{REGIME_BLEND_LOW}-{REGIME_BLEND_HIGH}"
             },
             "universal_intersection": {
                 "r_star_over_rs": INTERSECTION_R_OVER_RS,
@@ -139,12 +140,14 @@ class RunBundle:
             f"| M☉ | {self.params['constants']['M_sun_kg']:.5e} kg |",
             f"| ξ_max | {self.params['constants']['xi_max']} |",
             f"",
-            f"### Regime Thresholds",
+            f"### Regime Thresholds (kanonisch segcalc)",
             f"| Regime | r/r_s |",
             f"|--------|-------|",
             f"| Weak | > {self.params['regime_thresholds']['weak_above']} |",
             f"| Blend | {self.params['regime_thresholds']['blend_zone']} |",
-            f"| Strong | < {self.params['regime_thresholds']['strong_below']} |",
+            f"| Strong | 3.0 - 10.0 |",
+            f"| Photon Sphere | 2.0 - 3.0 |",
+            f"| Very Close | < 2.0 |",
             f"",
             f"### Universal Intersection",
             f"- **r*/r_s = {self.params['universal_intersection']['r_star_over_rs']:.6f}**",

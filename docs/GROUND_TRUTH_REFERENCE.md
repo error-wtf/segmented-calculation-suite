@@ -13,7 +13,7 @@
 | **Combined Success Rate** | 111 | 110 | **99.1%** | <0.0001 | NEAR-PERFECT |
 | **ESO Spectroscopy** | 47 | 46 | **97.9%** | <0.0001 | PROFESSIONAL-GRADE |
 | Energy Framework | 64 | 64 | 100.0% | <0.0001 | PERFECT |
-| Test Suite | 63 | 63 | 100.0% | <0.0001 | ALL PASS |
+| Test Suite | 69 | 69 | 100.0% | <0.0001 | ALL PASS (54+15 Invarianten) |
 
 **Quelle:** `full-output.md`, Zeilen 6146-6154
 
@@ -82,7 +82,7 @@ Spalten: case, regime, x, M_msun, r_m, v_tot, z_obs, z_grsr, z_seg,
 | Goldener Schnitt | φ | 1.6180339887... | (1 + √5) / 2 |
 | Ξ am Horizont | Ξ(r_s) | 0.8017118... | 1 - exp(-φ) |
 | D am Horizont | D(r_s) | 0.5550667... | 1 / (1 + Ξ(r_s)) |
-| Universeller Schnittpunkt | r*/r_s | 1.386562 | Numerisch bestimmt |
+| Universeller Schnittpunkt | r*/r_s | 1.594811 | Numerisch bestimmt (korrigiert) |
 
 **Quelle:** `calc-full-math-physics.md`, Zeilen 44-57
 

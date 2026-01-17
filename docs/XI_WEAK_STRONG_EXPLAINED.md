@@ -77,7 +77,7 @@
 | Element | Zweck |
 |---------|-------|
 | Hermite C² Blend | Glatter Übergang zwischen Regimes |
-| Regime-Schwellen | r/r_s = 10, 100 für Weak/Strong/Blend |
+| Regime-Schwellen | Kanonisch: <1.8 very_close, [1.8,2.2] blend, >10 weak |
 | Winner-Logik eps | Numerische Tie-Behandlung |
 
 ---

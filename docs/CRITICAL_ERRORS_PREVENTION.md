@@ -230,7 +230,7 @@ Using arbitrary constants instead of φ = (1+√5)/2.
 | φ/2 | Geometric factor | 0.809017 |
 | Ξ(r_s) | 1 - exp(-φ) | 0.8017 |
 | D(r_s) | 1/(1+Ξ(r_s)) | 0.555 |
-| r*/r_s | Universal intersection | 1.387 |
+| r*/r_s | Universal intersection | 1.595 |
 
 ---
 

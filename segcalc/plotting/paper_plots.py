@@ -93,15 +93,17 @@ def plot_time_dilation_comparison(save_path: Optional[str] = None) -> plt.Figure
 
 def plot_xi_regimes(save_path: Optional[str] = None) -> plt.Figure:
     """
-    Plot Xi(r) across all three regimes.
+    Plot Xi(r) across all regimes.
     
-    Shows:
-    - Weak field (r/r_s > 110)
-    - Blend zone (90-110)
-    - Strong field (r/r_s < 90)
+    CANONICAL regime boundaries (segcalc):
+    - Very Close: r/r_s < 1.8
+    - Blended: 1.8 ≤ r/r_s ≤ 2.2
+    - Photon Sphere: 2.2 < r/r_s ≤ 3.0
+    - Strong: 3.0 < r/r_s ≤ 10.0
+    - Weak: r/r_s > 10.0
     """
     from segcalc.methods.xi import xi_weak, xi_strong, xi_blended
-    from segcalc.config.constants import PHI
+    from segcalc.config.constants import PHI, REGIME_BLEND_LOW, REGIME_BLEND_HIGH
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
     
@@ -117,11 +119,11 @@ def plot_xi_regimes(save_path: Optional[str] = None) -> plt.Figure:
     ax1.loglog(x_full, xi_w, 'b--', linewidth=1.5, alpha=0.7, label='$\\Xi_{weak} = r_s/2r$')
     ax1.loglog(x_full, xi_s, 'r--', linewidth=1.5, alpha=0.7, label='$\\Xi_{strong} = 1 - e^{-\\phi r/r_s}$')
     
-    # Regime boundaries
-    ax1.axvline(x=90, color='orange', linestyle=':', alpha=0.8, label='Blend zone [90, 110]')
-    ax1.axvline(x=110, color='orange', linestyle=':', alpha=0.8)
-    ax1.axhspan(0.001, 1.0, xmin=0, xmax=0.3, alpha=0.1, color='red')
-    ax1.axhspan(0.001, 1.0, xmin=0.7, xmax=1.0, alpha=0.1, color='blue')
+    # CANONICAL regime boundaries (1.8, 2.2, 10)
+    ax1.axvline(x=REGIME_BLEND_LOW, color='orange', linestyle=':', alpha=0.8, 
+                label=f'Blend zone [{REGIME_BLEND_LOW}, {REGIME_BLEND_HIGH}]')
+    ax1.axvline(x=REGIME_BLEND_HIGH, color='orange', linestyle=':', alpha=0.8)
+    ax1.axvline(x=10.0, color='blue', linestyle='--', alpha=0.5, label='Weak field (r > 10 r_s)')
     
     ax1.set_xlabel('$r / r_s$', fontsize=14)
     ax1.set_ylabel('Segment Density $\\Xi$', fontsize=14)
@@ -130,8 +132,8 @@ def plot_xi_regimes(save_path: Optional[str] = None) -> plt.Figure:
     ax1.set_xlim(1, 1000)
     ax1.set_ylim(0.0001, 1.0)
     
-    # Right panel: Blend zone detail
-    x_blend = np.linspace(70, 130, 200)
+    # Right panel: Blend zone detail (CANONICAL 1.8-2.2)
+    x_blend = np.linspace(1.0, 5.0, 200)
     xi_blend2 = np.array([xi_blended(xi * r_s, r_s) for xi in x_blend])
     xi_w2 = np.array([xi_weak(xi * r_s, r_s) for xi in x_blend])
     xi_s2 = np.array([xi_strong(xi * r_s, r_s) for xi in x_blend])
@@ -140,9 +142,10 @@ def plot_xi_regimes(save_path: Optional[str] = None) -> plt.Figure:
     ax2.plot(x_blend, xi_w2, 'b--', linewidth=1.5, alpha=0.7, label='$\\Xi_{weak}$')
     ax2.plot(x_blend, xi_s2, 'r--', linewidth=1.5, alpha=0.7, label='$\\Xi_{strong}$')
     
-    ax2.axvline(x=90, color='orange', linestyle=':', linewidth=2)
-    ax2.axvline(x=110, color='orange', linestyle=':', linewidth=2)
-    ax2.axvspan(90, 110, alpha=0.2, color='yellow', label='C² Hermite blend')
+    ax2.axvline(x=REGIME_BLEND_LOW, color='orange', linestyle=':', linewidth=2)
+    ax2.axvline(x=REGIME_BLEND_HIGH, color='orange', linestyle=':', linewidth=2)
+    ax2.axvspan(REGIME_BLEND_LOW, REGIME_BLEND_HIGH, alpha=0.2, color='yellow', 
+                label='C² Hermite blend')
     
     ax2.set_xlabel('$r / r_s$', fontsize=14)
     ax2.set_ylabel('Segment Density $\\Xi$', fontsize=14)

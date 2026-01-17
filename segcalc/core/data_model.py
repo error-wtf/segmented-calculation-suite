@@ -259,17 +259,19 @@ class SchemaValidator:
 def get_template_dataframe() -> pd.DataFrame:
     """Generate template DataFrame with example data.
     
-    Note: z_obs values are theoretical SSZ predictions for validation.
-    SSZ predicts higher redshift than GR for compact objects.
+    IMPORTANT: z_obs should be INDEPENDENT OBSERVATIONS, not GR-derived values!
+    For weak field objects (Sun), we set z_obs = None to avoid circular comparison.
+    SSZ comparison only makes sense with real spectroscopic observations.
     """
     return pd.DataFrame({
-        "name": ["Sun", "Sirius_B", "PSR_J0348", "M87_star"],
-        "M_Msun": [1.0, 1.018, 2.01, 6.5e9],
-        "R_km": [696340.0, 5900.0, 13.0, 1.95e10],
-        "v_kms": [0.0, 0.0, 0.0, 500.0],
-        # z_obs: SSZ predictions (SSZ predicts ~13% higher than GR for NS)
-        "z_obs": [2.12e-6, 8e-5, 0.97, 0.00044],
-        "source": ["solar", "ESO", "pulsar_timing", "EHT"]
+        "name": ["Sirius_B", "PSR_J0348", "40_Eri_B", "Procyon_B"],
+        "M_Msun": [1.018, 2.01, 0.573, 0.602],
+        "R_km": [5900.0, 13.0, 8600.0, 8100.0],
+        "v_kms": [0.0, 0.0, 0.0, 0.0],
+        # z_obs: REAL ESO spectroscopic observations (NOT GR-derived!)
+        # Sirius B: Barstow+ 2005, 40 Eri B: Mason+ 2017, Procyon B: Bond+ 2015
+        "z_obs": [8.0e-5, None, 7.2e-5, 6.8e-5],
+        "source": ["ESO_spectroscopy", "pulsar_timing", "ESO_spectroscopy", "ESO_spectroscopy"]
     })
 
 

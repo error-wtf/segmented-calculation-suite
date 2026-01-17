@@ -240,7 +240,15 @@ def create_regime_distribution(results_df: pd.DataFrame) -> go.Figure:
         return None
     
     regime_counts = results_df['regime'].value_counts()
-    colors = {'weak': '#3498db', 'strong': '#e74c3c', 'blend': '#f39c12'}
+    # Canonical regime colors (all 5 regimes)
+    colors = {
+        'very_close': '#9b59b6',      # Purple - near-horizon
+        'blended': '#f39c12',         # Orange - Hermite C² zone
+        'photon_sphere': '#e74c3c',   # Red - SSZ optimal
+        'strong': '#e67e22',          # Dark orange
+        'weak': '#3498db',            # Blue - GR-convergent
+        'blend': '#f39c12'            # Legacy alias
+    }
     
     fig = go.Figure(go.Pie(
         labels=regime_counts.index,

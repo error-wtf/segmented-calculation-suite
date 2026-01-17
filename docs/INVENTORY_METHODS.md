@@ -148,8 +148,8 @@
 ### 6.1 Universal Intersection
 | Funktion | `find_intersection()` |
 |----------|----------------------|
-| **Target** | r*/r_s = 1.386562 |
-| **D*** | 0.528007 |
+| **Target** | r*/r_s = 1.594811 (korrigiert) |
+| **D*** | 0.610710 |
 | **Toleranz** | 0.01 |
 
 ### 6.2 PPN Parameters
