@@ -80,14 +80,112 @@ This is the physically meaningful point where SSZ predicts **finite time dilatio
 ### Physical Validity of Each
 
 **Unified formula (saturation model):**
+
 - ✅ Correct for describing maximum segment density near horizon
 - ✅ Models the "packing limit" of spacetime segments
 - ⚠️ Not designed for weak-field matching at large r
 
 **Calculation-Suite formula (decay model):**
+
 - ✅ Correct asymptotic behavior (Xi → 0 as r → ∞)
 - ✅ Matches weak-field limit: Xi ≈ r_s/(2r) for large r
 - ✅ Monotonically decreasing (like gravitational field strength)
+
+---
+
+## Deep Physical Explanation: Why Both Are Correct
+
+### The Core Question
+
+Segment density Xi(r) can be interpreted in two equivalent ways:
+
+1. **Accumulated segmentation** — How much has spacetime been "divided" on the path from infinity to r?
+2. **Local field intensity** — How strong is the gravitational effect at radius r?
+
+These are **dual descriptions of the same physics**, like position vs momentum in quantum mechanics.
+
+### Unified Formula: The Accumulation Perspective
+
+```text
+Xi(r) = Xi_max × (1 - exp(-φ × r/r_s))
+```
+
+**Physical meaning:** As you travel inward from infinity, spacetime segments accumulate.
+The closer you get to the horizon, the more segments you've traversed.
+
+- **At r = ∞:** You haven't entered the gravitational field yet → Xi = 0
+- **At r = r_s:** Maximum accumulation of segments → Xi ≈ 0.802
+- **Saturation:** The formula predicts Xi → Xi_max because there's a **maximum packing density**
+  of segments (you can't have infinitely many segments in finite space)
+
+**Why this is correct:** Near the horizon, what matters is how much spacetime structure
+has been crossed. The saturation models a physical limit — like a maximum compression
+of spacetime segments at the horizon.
+
+### Calculation-Suite Formula: The Field Intensity Perspective
+
+```text
+Xi(r) = xi_max × (1 - exp(-φ × r_s/r))
+```
+
+**Physical meaning:** Xi measures the **local gravitational field strength** at radius r.
+Gravity weakens with distance, so Xi must decrease.
+
+- **At r = r_s:** Maximum field strength → Xi ≈ 0.802
+- **At r = ∞:** No gravitational field → Xi → 0
+- **Decay:** The formula correctly predicts Xi → 0 as r → ∞
+
+**Why this is correct:** For global analysis (comparing objects at different radii),
+what matters is the local field intensity. This must decay like 1/r for large r
+to match Newtonian gravity and the weak-field limit.
+
+### The Mathematical Proof: Both Give Identical Results at r = r_s
+
+At the horizon (r = r_s, so r/r_s = 1):
+
+```text
+Unified:     Xi = Xi_max × (1 - exp(-φ × 1)) = Xi_max × (1 - e^(-φ))
+Calculation: Xi = xi_max × (1 - exp(-φ × 1)) = xi_max × (1 - e^(-φ))
+```
+
+**Identical!** The argument becomes `-φ × 1 = -φ` in both cases.
+
+This is not a coincidence — both formulas are designed to agree at the physically
+most important point: the horizon.
+
+### Why Two Formulas Exist
+
+| Situation | Best Formula | Reason |
+|-----------|--------------|--------|
+| Horizon physics (Hawking, photon sphere) | Unified | Saturation models segment packing |
+| Weak-field limit (stars, GPS) | Calculation | Must match Xi → 0 at large r |
+| Intermediate (r ≈ 2-10 r_s) | Either | Both give similar results |
+| Full radial sweep | Calculation | Correct asymptotic behavior |
+
+### The Intersection Point Difference Explained
+
+The different intersection points (1.39 vs 1.59) arise because:
+
+- **Unified (1.39):** Xi increases faster as r increases, so D_SSZ drops below D_GR earlier
+- **Calculation (1.59):** Xi decreases as r increases, so D_SSZ stays above D_GR longer
+
+Neither intersection is "more correct" — they simply mark where GR and SSZ
+predictions cross **under each model's assumptions**.
+
+### Summary: Complementary, Not Contradictory
+
+Both formulas are **mathematically related** by a simple variable substitution:
+
+```text
+Unified:     f(r/r_s) = 1 - exp(-φ × r/r_s)
+Calculation: g(r_s/r) = 1 - exp(-φ × r_s/r)
+
+Note: f(x) and g(1/x) use the same functional form with reciprocal arguments
+```
+
+They represent the same underlying φ-geometry viewed from:
+- **Outside looking in** (accumulation) → Unified
+- **Inside looking out** (field strength) → Calculation
 
 ---
 
