@@ -1041,11 +1041,11 @@ def create_app():
                     outputs=[single_name, single_mass, single_radius, single_velocity, single_zobs]
                 )
                 btn_sgr_a.click(
-                    lambda: ("Sgr A*", 4.15e6, 2.2e7, 0.0, "0.36"),
+                    lambda: ("Sgr A*", 4.15e6, 2.2e7, 0.0, ""),
                     outputs=[single_name, single_mass, single_radius, single_velocity, single_zobs]
                 )
                 btn_m87.click(
-                    lambda: ("M87*", 6.5e9, 3.8e10, 0.0, "0.50"),
+                    lambda: ("M87*", 6.5e9, 3.8e10, 0.0, ""),
                     outputs=[single_name, single_mass, single_radius, single_velocity, single_zobs]
                 )
             
