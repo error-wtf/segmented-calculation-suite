@@ -151,6 +151,6 @@ This is anti-capitalist software, released for free use by individuals and organ
 - Organizations with annual expenses below $1,000,000 USD
 
 For academic/scientific use, please cite:
-> Wrede, C., Casu, L. (2025). *Segmented Spacetime - A Framework for Singularity-Free Gravity*. ResearchGate.
+> Wrede, C., Casu, L. (2025). *Segmented Spacetime Calculation Suite*. GitHub. https://github.com/error-wtf/segmented-calculation-suite
 
 **Contact:** mail@error.wtf
