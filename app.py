@@ -1212,22 +1212,22 @@ def create_app():
                     r_s_km = r_s / 1000
                     r_over_rs = r_m / r_s if r_s > 0 else float('inf')
                     
-                    # Regime thresholds from constants
-                    strong_thresh = REGIME_STRONG_THRESHOLD  # 90
-                    weak_thresh = REGIME_WEAK_THRESHOLD      # 110
+                    # SSZ Regime thresholds (CORRECTED per full-output.md)
+                    # Blend zone is at 1.8-2.2 r_s, NOT 90-110!
+                    from segcalc.config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
                     
                     # Determine regime with numeric justification
                     regime = res['regime']
-                    if r_over_rs < 2:
-                        regime_trigger = f"r/r_s={r_over_rs:.2f} < 2 → very_close"
-                    elif r_over_rs < 3:
-                        regime_trigger = f"r/r_s={r_over_rs:.2f} < 3 → photon_sphere"
-                    elif r_over_rs < strong_thresh:
-                        regime_trigger = f"r/r_s={r_over_rs:.2f} < {strong_thresh} → strong"
-                    elif r_over_rs > weak_thresh:
-                        regime_trigger = f"r/r_s={r_over_rs:.2f} > {weak_thresh} → weak"
+                    if r_over_rs < REGIME_BLEND_LOW:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} < {REGIME_BLEND_LOW} → very_close"
+                    elif r_over_rs <= REGIME_BLEND_HIGH:
+                        regime_trigger = f"{REGIME_BLEND_LOW} ≤ r/r_s={r_over_rs:.2f} ≤ {REGIME_BLEND_HIGH} → blend"
+                    elif r_over_rs <= 3.0:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} ≤ 3 → photon_sphere"
+                    elif r_over_rs <= 10.0:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} ≤ 10 → strong"
                     else:
-                        regime_trigger = f"{strong_thresh} ≤ r/r_s={r_over_rs:.2f} ≤ {weak_thresh} → blend"
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} > 10 → weak"
                     
                     # SSZ vs GR delta (NOT "advantage" - that implies winner)
                     z_ssz = res['z_ssz_total']
@@ -1253,14 +1253,14 @@ def create_app():
                         # WITHOUT observation: only show delta, NO winner claims
                         verdict = f"**Prediction only (no z_obs)** | Δ(SSZ-GR) = {delta_pct:+.2f}%"
                     
-                    # Numeric debug overlay for regime
+                    # Numeric debug overlay for regime (CORRECTED thresholds)
                     regime_debug = f"""
 ### Regime Classification (Numeric Trigger)
 | Parameter | Value |
 |-----------|-------|
 | r_s | {r_s_km:.4f} km |
 | r/r_s | {r_over_rs:.2f} |
-| Thresholds | strong<{strong_thresh}, weak>{weak_thresh} |
+| Blend Zone | {REGIME_BLEND_LOW}-{REGIME_BLEND_HIGH} r_s |
 | **Trigger** | {regime_trigger} |
 """
                     
@@ -1275,13 +1275,16 @@ def create_app():
             with gr.TabItem("🌀 Regimes"):
                 gr.Markdown("### SSZ Regime Classification")
                 gr.Markdown("""
-| Regime | r/r_s | Formula |
-|--------|-------|---------|
-| **Weak** | >110 | Ξ = r_s/(2r) |
-| **Blend** | 90-110 | C² Hermite |
-| **Strong** | <90 | Ξ = 1-e^(-φr/r_s) |
+| Regime | r/r_s | Formula | Notes |
+|--------|-------|---------|-------|
+| **Very Close** | <2 | Ξ = 1-e^(-φr/r_s) | SSZ struggles (0% wins) |
+| **Photon Sphere** | 2-3 | Ξ = 1-e^(-φr/r_s) | SSZ OPTIMAL (82% wins) |
+| **Strong** | 3-10 | Ξ = 1-e^(-φr/r_s) | Strong field |
+| **Weak** | >10 | Ξ = r_s/(2r) | Weak field (~37% wins) |
 
-**Key:** φ=1.618, Ξ_max≈0.802, D(r_s)≈0.555 (FINITE!), r*/r_s=1.387
+**Blend Zone:** 1.8 < r/r_s < 2.2 (Hermite C² join)
+
+**Key Constants:** φ=1.618, Ξ(r_s)=0.802, D(r_s)=0.555 (FINITE!), r*/r_s=1.387
                 """)
                 regime_fig = gr.Plot(label="Regime Zones", value=plot_regime_zones())
             

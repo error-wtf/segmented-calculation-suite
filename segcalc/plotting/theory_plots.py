@@ -311,60 +311,87 @@ def plot_power_law() -> go.Figure:
 
 def plot_regime_zones() -> go.Figure:
     """
-    Visualize the weak, strong, and blend zones.
+    Visualize the SSZ regime zones per full-output.md specification.
+    
+    CORRECTED: Blend zone is 1.8-2.2 r_s (NOT legacy 90-110!)
     """
+    from ..config.constants import REGIME_BLEND_LOW, REGIME_BLEND_HIGH
+    
     r_s = 3000.0
     
-    # Full range
-    r_range = np.linspace(1, 200, 500) * r_s
+    # Physical range: 0.5 to 20 r_s (NOT 1-200!)
+    r_range = np.linspace(0.5, 20, 500) * r_s
     
     xi_vals = [xi_auto(r, r_s) for r in r_range]
     
     fig = go.Figure()
     
-    # Color by regime
+    # Color by regime (CORRECTED per full-output.md)
     r_normalized = r_range / r_s
     
-    # Strong field (r < 90*r_s)
-    strong_mask = r_normalized < 90
+    # Very close / Inner (r < 1.8 r_s)
+    inner_mask = r_normalized < REGIME_BLEND_LOW
     fig.add_trace(go.Scatter(
-        x=r_normalized[strong_mask], y=np.array(xi_vals)[strong_mask],
-        mode='lines', name='Strong Field (r < 90·r_s)',
-        line=dict(color='#e74c3c', width=3),
-        fill='tozeroy', fillcolor='rgba(231, 76, 60, 0.2)'
+        x=r_normalized[inner_mask], y=np.array(xi_vals)[inner_mask],
+        mode='lines', name=f'Very Close (r < {REGIME_BLEND_LOW}·r_s)',
+        line=dict(color='#9b59b6', width=3),
+        fill='tozeroy', fillcolor='rgba(155, 89, 182, 0.2)'
     ))
     
-    # Blend zone (90 <= r <= 110)
-    blend_mask = (r_normalized >= 90) & (r_normalized <= 110)
+    # Blend zone (1.8-2.2 r_s) - CORRECTED!
+    blend_mask = (r_normalized >= REGIME_BLEND_LOW) & (r_normalized <= REGIME_BLEND_HIGH)
     fig.add_trace(go.Scatter(
         x=r_normalized[blend_mask], y=np.array(xi_vals)[blend_mask],
-        mode='lines', name='Blend Zone (90-110·r_s)',
+        mode='lines', name=f'Blend Zone ({REGIME_BLEND_LOW}-{REGIME_BLEND_HIGH}·r_s)',
         line=dict(color='#f39c12', width=3),
         fill='tozeroy', fillcolor='rgba(243, 156, 18, 0.2)'
     ))
     
-    # Weak field (r > 110*r_s)
-    weak_mask = r_normalized > 110
+    # Photon sphere (2.2-3 r_s)
+    photon_mask = (r_normalized > REGIME_BLEND_HIGH) & (r_normalized <= 3.0)
+    fig.add_trace(go.Scatter(
+        x=r_normalized[photon_mask], y=np.array(xi_vals)[photon_mask],
+        mode='lines', name='Photon Sphere (2.2-3·r_s)',
+        line=dict(color='#e74c3c', width=3),
+        fill='tozeroy', fillcolor='rgba(231, 76, 60, 0.2)'
+    ))
+    
+    # Strong field (3-10 r_s)
+    strong_mask = (r_normalized > 3.0) & (r_normalized <= 10.0)
+    fig.add_trace(go.Scatter(
+        x=r_normalized[strong_mask], y=np.array(xi_vals)[strong_mask],
+        mode='lines', name='Strong Field (3-10·r_s)',
+        line=dict(color='#e67e22', width=3),
+        fill='tozeroy', fillcolor='rgba(230, 126, 34, 0.2)'
+    ))
+    
+    # Weak field (r > 10 r_s)
+    weak_mask = r_normalized > 10.0
     fig.add_trace(go.Scatter(
         x=r_normalized[weak_mask], y=np.array(xi_vals)[weak_mask],
-        mode='lines', name='Weak Field (r > 110·r_s)',
+        mode='lines', name='Weak Field (r > 10·r_s)',
         line=dict(color='#3498db', width=3),
         fill='tozeroy', fillcolor='rgba(52, 152, 219, 0.2)'
     ))
     
-    # Mark boundaries
-    fig.add_vline(x=90, line_dash="dash", line_color="gray")
-    fig.add_vline(x=110, line_dash="dash", line_color="gray")
+    # Mark boundaries (CORRECTED)
+    fig.add_vline(x=REGIME_BLEND_LOW, line_dash="dash", line_color="gray")
+    fig.add_vline(x=REGIME_BLEND_HIGH, line_dash="dash", line_color="gray")
+    fig.add_vline(x=3.0, line_dash="dash", line_color="gray")
+    fig.add_vline(x=10.0, line_dash="dash", line_color="gray")
     
-    fig.add_annotation(x=45, y=0.7, text="STRONG<br>Ξ = 1-e^(-φr/r_s)", showarrow=False)
-    fig.add_annotation(x=100, y=0.3, text="BLEND<br>C² Hermite", showarrow=False)
-    fig.add_annotation(x=150, y=0.01, text="WEAK<br>Ξ = r_s/(2r)", showarrow=False)
+    fig.add_annotation(x=1.2, y=0.85, text="VERY CLOSE<br>(0% wins)", showarrow=False)
+    fig.add_annotation(x=2.0, y=0.75, text="BLEND", showarrow=False)
+    fig.add_annotation(x=2.6, y=0.65, text="PHOTON<br>SPHERE<br>(82% wins)", showarrow=False)
+    fig.add_annotation(x=6.0, y=0.3, text="STRONG", showarrow=False)
+    fig.add_annotation(x=15.0, y=0.05, text="WEAK<br>Ξ = r_s/(2r)", showarrow=False)
     
     fig.update_layout(
-        title="SSZ Regime Classification",
+        title="SSZ Regime Classification (per full-output.md)",
         xaxis_title="r/r_s",
         yaxis_title="Ξ(r)",
         xaxis_type="log",
+        xaxis_range=[-0.3, 1.4],  # 0.5 to ~25 on log scale
         height=450,
         showlegend=True,
         legend=dict(x=0.65, y=0.95)
