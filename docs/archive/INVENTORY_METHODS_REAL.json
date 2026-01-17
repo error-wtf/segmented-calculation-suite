@@ -1,0 +1,147 @@
+{
+  "_metadata": {
+    "generated": "2025-01-16",
+    "source_repo": "ssz-qubits",
+    "source_file": "ssz_qubits.py",
+    "purpose": "Real method inventory with exact source references"
+  },
+  "methods": [
+    {
+      "method_id": "schwarzschild_radius",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "schwarzschild_radius",
+      "line_start": 98,
+      "line_end": 114,
+      "inputs": [
+        {"name": "M", "type": "float", "unit": "kg", "description": "Mass"}
+      ],
+      "outputs": [
+        {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+      ],
+      "formula": "r_s = 2*G*M/c²",
+      "regime": "all"
+    },
+    {
+      "method_id": "xi_segment_density",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "xi_segment_density",
+      "line_start": 117,
+      "line_end": 178,
+      "inputs": [
+        {"name": "r", "type": "float", "unit": "m", "description": "Radial distance"},
+        {"name": "M", "type": "float", "unit": "kg", "description": "Central mass"},
+        {"name": "regime", "type": "str", "values": ["auto", "weak", "strong"]}
+      ],
+      "outputs": [
+        {"name": "xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}
+      ],
+      "formula_weak": "Xi = r_s/(2r)",
+      "formula_strong": "Xi = 1 - exp(-phi*r/r_s)",
+      "regime_threshold": 100,
+      "note": "NO BLEND in implementation - hard switch at 100"
+    },
+    {
+      "method_id": "xi_gradient",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "xi_gradient",
+      "line_start": 181,
+      "line_end": 221,
+      "inputs": [
+        {"name": "r", "type": "float", "unit": "m"},
+        {"name": "M", "type": "float", "unit": "kg"},
+        {"name": "regime", "type": "str"}
+      ],
+      "outputs": [
+        {"name": "dxi_dr", "type": "float", "unit": "1/m"}
+      ],
+      "formula_weak": "dXi/dr = -r_s/(2r²)",
+      "formula_strong": "dXi/dr = (phi/r_s)*exp(-phi*r/r_s)"
+    },
+    {
+      "method_id": "ssz_time_dilation",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "ssz_time_dilation",
+      "line_start": 224,
+      "line_end": 246,
+      "inputs": [
+        {"name": "r", "type": "float", "unit": "m"},
+        {"name": "M", "type": "float", "unit": "kg"}
+      ],
+      "outputs": [
+        {"name": "D_ssz", "type": "float", "unit": "dimensionless", "range": "(0, 1]"}
+      ],
+      "formula": "D_SSZ = 1/(1 + Xi(r))"
+    },
+    {
+      "method_id": "ssz_time_dilation_difference",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "ssz_time_dilation_difference",
+      "line_start": 249,
+      "line_end": 275,
+      "inputs": [
+        {"name": "r1", "type": "float", "unit": "m"},
+        {"name": "r2", "type": "float", "unit": "m"},
+        {"name": "M", "type": "float", "unit": "kg"}
+      ],
+      "outputs": [
+        {"name": "delta_D", "type": "float", "unit": "dimensionless"}
+      ],
+      "formula": "delta_D = D_SSZ(r2) - D_SSZ(r1)"
+    },
+    {
+      "method_id": "time_difference_per_second",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "function_name": "time_difference_per_second",
+      "line_start": 278,
+      "line_end": 304,
+      "inputs": [
+        {"name": "r1", "type": "float", "unit": "m"},
+        {"name": "r2", "type": "float", "unit": "m"},
+        {"name": "M", "type": "float", "unit": "kg"}
+      ],
+      "outputs": [
+        {"name": "dt", "type": "float", "unit": "s", "description": "Time difference per coordinate second"}
+      ]
+    }
+  ],
+  "constants": {
+    "C": {"value": 299792458.0, "unit": "m/s", "source_line": 29},
+    "G": {"value": 6.67430e-11, "unit": "m³/(kg·s²)", "source_line": 30},
+    "HBAR": {"value": 1.054571817e-34, "unit": "J·s", "source_line": 31},
+    "M_EARTH": {"value": 5.972e24, "unit": "kg", "source_line": 32},
+    "R_EARTH": {"value": 6.371e6, "unit": "m", "source_line": 33},
+    "PHI": {"value": 1.6180339887498948, "formula": "(1 + sqrt(5))/2", "source_line": 36}
+  },
+  "computed_values": {
+    "xi_at_horizon": {
+      "formula": "1 - exp(-PHI)",
+      "value": 0.8017,
+      "note": "NOT a parameter - computed from formula"
+    },
+    "D_at_horizon": {
+      "formula": "1/(1 + 0.8017)",
+      "value": 0.555,
+      "note": "NOT a parameter - computed from formula"
+    }
+  },
+  "regime_spec": {
+    "documented": {
+      "source": "E_transition.md",
+      "weak_threshold": 110,
+      "strong_threshold": 90,
+      "blend": "Quintic Hermite"
+    },
+    "implemented": {
+      "source": "ssz_qubits.py:166",
+      "threshold": 100,
+      "blend": "NONE - hard switch"
+    },
+    "inconsistency": true
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-01-16",
+  "description": "Complete inventory of SSZ calculation methods from all source repos",
+  "source_repos": [
+    "Segmented-Spacetime-Mass-Projection-Unified-Results",
+    "ssz-metric-pure",
+    "ssz-qubits",
+    "ssz-paper-plots"
+  ],
+  "methods": [
+    {
+      "method_id": "schwarzschild_radius",
+      "category": "core",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [{"name": "M", "type": "float", "unit": "kg", "description": "Mass"}],
+        "outputs": [{"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}]
+      },
+      "formula": "r_s = 2GM/c²",
+      "dependencies": ["G", "c"],
+      "implemented": true
+    },
+    {
+      "method_id": "xi_weak",
+      "category": "segment_density",
+      "source_repo": "ssz-qubits",
+      "source_file": "ssz_qubits.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "Xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
+      },
+      "formula": "Ξ(r) = r_s / (2r)",
+      "regime": "weak",
+      "validity": "r/r_s > 110",
+      "dependencies": [],
+      "implemented": true
+    },
+    {
+      "method_id": "xi_strong",
+      "category": "segment_density",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "Xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
+      },
+      "formula": "Ξ(r) = 1 - exp(-φ·r/r_s)",
+      "regime": "strong",
+      "validity": "r/r_s < 90",
+      "dependencies": ["PHI"],
+      "implemented": true
+    },
+    {
+      "method_id": "xi_blended",
+      "category": "segment_density",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/xi.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "Xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
+      },
+      "formula": "C² Hermite interpolation between weak and strong",
+      "regime": "blend",
+      "validity": "90 < r/r_s < 110",
+      "dependencies": ["xi_weak", "xi_strong"],
+      "implemented": true
+    },
+    {
+      "method_id": "xi_auto",
+      "category": "segment_density",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/xi.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "Xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
+      },
+      "formula": "Auto-selects xi_weak, xi_strong, or xi_blended based on r/r_s",
+      "regime": "auto",
+      "validity": "all r > 0",
+      "dependencies": ["xi_weak", "xi_strong", "xi_blended"],
+      "implemented": true
+    },
+    {
+      "method_id": "D_ssz",
+      "category": "time_dilation",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "D", "type": "float", "unit": "dimensionless", "description": "Time dilation factor"}]
+      },
+      "formula": "D_SSZ = 1 / (1 + Ξ(r))",
+      "key_property": "FINITE at r=r_s: D(r_s) ≈ 0.555",
+      "dependencies": ["xi_auto"],
+      "implemented": true
+    },
+    {
+      "method_id": "D_gr",
+      "category": "time_dilation",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "D", "type": "float", "unit": "dimensionless", "description": "Time dilation factor"}]
+      },
+      "formula": "D_GR = √(1 - r_s/r)",
+      "key_property": "SINGULAR at r=r_s: D(r_s) = 0",
+      "dependencies": [],
+      "implemented": true
+    },
+    {
+      "method_id": "find_intersection",
+      "category": "analysis",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [{"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}],
+        "outputs": [{"name": "r_star", "type": "float", "unit": "m", "description": "Intersection radius"}]
+      },
+      "formula": "Solve D_SSZ(r*) = D_GR(r*)",
+      "key_result": "r*/r_s = 1.387 (mass-independent)",
+      "dependencies": ["D_ssz", "D_gr"],
+      "implemented": true
+    },
+    {
+      "method_id": "z_gravitational",
+      "category": "redshift",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/redshift.py",
+      "signature": {
+        "inputs": [
+          {"name": "D", "type": "float", "unit": "dimensionless", "description": "Time dilation factor"}
+        ],
+        "outputs": [{"name": "z", "type": "float", "unit": "dimensionless", "description": "Gravitational redshift"}]
+      },
+      "formula": "z = 1/D - 1",
+      "dependencies": [],
+      "implemented": true
+    },
+    {
+      "method_id": "z_doppler",
+      "category": "redshift",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/redshift.py",
+      "signature": {
+        "inputs": [
+          {"name": "v", "type": "float", "unit": "m/s", "description": "Velocity"}
+        ],
+        "outputs": [{"name": "z", "type": "float", "unit": "dimensionless", "description": "Doppler redshift"}]
+      },
+      "formula": "z = √((1+β)/(1-β)) - 1, β = v/c",
+      "dependencies": ["c"],
+      "implemented": true
+    },
+    {
+      "method_id": "z_ssz_total",
+      "category": "redshift",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/redshift.py",
+      "signature": {
+        "inputs": [
+          {"name": "M", "type": "float", "unit": "solar_masses", "description": "Mass"},
+          {"name": "R", "type": "float", "unit": "km", "description": "Radius"},
+          {"name": "v", "type": "float", "unit": "km/s", "description": "Velocity"}
+        ],
+        "outputs": [{"name": "z", "type": "float", "unit": "dimensionless", "description": "Total SSZ redshift"}]
+      },
+      "formula": "z_total = (1+z_grav)(1+z_doppler) - 1 with Δ(M) correction",
+      "dependencies": ["z_gravitational", "z_doppler", "delta_M"],
+      "implemented": true
+    },
+    {
+      "method_id": "delta_M",
+      "category": "correction",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [{"name": "M", "type": "float", "unit": "kg", "description": "Mass"}],
+        "outputs": [{"name": "delta", "type": "float", "unit": "dimensionless", "description": "Mass correction"}]
+      },
+      "formula": "Δ(M) = A·exp(-α·r_s) + B",
+      "parameters": {"A": 98.01, "B": 1.96, "alpha": 27000},
+      "dependencies": ["schwarzschild_radius"],
+      "implemented": true
+    },
+    {
+      "method_id": "r_phi",
+      "category": "boundary",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [{"name": "M", "type": "float", "unit": "kg", "description": "Mass"}],
+        "outputs": [{"name": "r_phi", "type": "float", "unit": "m", "description": "Natural boundary"}]
+      },
+      "formula": "r_φ = (φ/2)·r_s·(1 + Δ(M))",
+      "dependencies": ["schwarzschild_radius", "delta_M", "PHI"],
+      "implemented": true
+    },
+    {
+      "method_id": "sigma",
+      "category": "segment_density_alternative",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "M", "type": "float", "unit": "kg", "description": "Mass"}
+        ],
+        "outputs": [{"name": "sigma", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
+      },
+      "formula": "σ(r) = ln(r_φ/r) / ln(r_φ/r_s)",
+      "note": "Alternative formulation from Unified Suite",
+      "dependencies": ["r_phi", "schwarzschild_radius"],
+      "implemented": false
+    },
+    {
+      "method_id": "tau",
+      "category": "time_dilation_alternative",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "M", "type": "float", "unit": "kg", "description": "Mass"},
+          {"name": "alpha", "type": "float", "unit": "dimensionless", "description": "Coupling", "default": 1.0}
+        ],
+        "outputs": [{"name": "tau", "type": "float", "unit": "dimensionless", "description": "Time dilation"}]
+      },
+      "formula": "τ(r) = φ^(-α·σ(r))",
+      "note": "Alternative formulation from Unified Suite",
+      "dependencies": ["sigma", "PHI"],
+      "implemented": false
+    },
+    {
+      "method_id": "n_index",
+      "category": "optics",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "M", "type": "float", "unit": "kg", "description": "Mass"},
+          {"name": "kappa", "type": "float", "unit": "dimensionless", "description": "Coupling", "default": 0.015}
+        ],
+        "outputs": [{"name": "n", "type": "float", "unit": "dimensionless", "description": "Refractive index"}]
+      },
+      "formula": "n(r) = 1 + κ·σ(r)",
+      "dependencies": ["sigma"],
+      "implemented": false
+    },
+    {
+      "method_id": "dual_velocity",
+      "category": "kinematics",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "M", "type": "float", "unit": "kg", "description": "Mass"}
+        ],
+        "outputs": [
+          {"name": "v_esc", "type": "float", "unit": "m/s", "description": "Escape velocity"},
+          {"name": "v_fall", "type": "float", "unit": "m/s", "description": "Fall velocity"}
+        ]
+      },
+      "formula": "v_esc · v_fall = c²",
+      "key_property": "Dual-velocity invariance",
+      "dependencies": ["c", "G"],
+      "implemented": false
+    },
+    {
+      "method_id": "euler_spiral",
+      "category": "geometry",
+      "source_repo": "Unified-Results",
+      "source_file": "ssz_unified_suite.py",
+      "signature": {
+        "inputs": [
+          {"name": "theta_max", "type": "float", "unit": "rad", "description": "Max angle", "default": "4π"},
+          {"name": "n_points", "type": "int", "unit": "count", "description": "Points", "default": 1000}
+        ],
+        "outputs": [
+          {"name": "theta", "type": "array", "unit": "rad", "description": "Angles"},
+          {"name": "x", "type": "array", "unit": "dimensionless", "description": "X coords"},
+          {"name": "y", "type": "array", "unit": "dimensionless", "description": "Y coords"},
+          {"name": "r", "type": "array", "unit": "dimensionless", "description": "Radii"}
+        ]
+      },
+      "formula": "z(θ) = z₀·exp((k+i)θ), k = 2ln(φ)/π",
+      "dependencies": ["PHI"],
+      "implemented": false
+    },
+    {
+      "method_id": "power_law_prediction",
+      "category": "empirical",
+      "source_repo": "segmented-calculation-suite",
+      "source_file": "segcalc/methods/core.py",
+      "signature": {
+        "inputs": [
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"},
+          {"name": "R", "type": "float", "unit": "m", "description": "Object radius"}
+        ],
+        "outputs": [{"name": "E_norm", "type": "float", "unit": "dimensionless", "description": "Normalized energy"}]
+      },
+      "formula": "E_norm = 1 + 0.3187·(r_s/R)^0.9821",
+      "fit_quality": "R² = 0.997",
+      "dependencies": [],
+      "implemented": true
+    },
+    {
+      "method_id": "ppn_lensing",
+      "category": "ppn",
+      "source_repo": "maxwell",
+      "source_file": "radial_scaling.py",
+      "signature": {
+        "inputs": [
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"},
+          {"name": "b", "type": "float", "unit": "m", "description": "Impact parameter"}
+        ],
+        "outputs": [{"name": "alpha", "type": "float", "unit": "rad", "description": "Deflection angle"}]
+      },
+      "formula": "α = (1+γ)·r_s/b = 2r_s/b",
+      "note": "PPN method, NOT Xi-based",
+      "dependencies": [],
+      "implemented": false
+    },
+    {
+      "method_id": "ppn_shapiro",
+      "category": "ppn",
+      "source_repo": "maxwell",
+      "source_file": "radial_scaling.py",
+      "signature": {
+        "inputs": [
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"},
+          {"name": "r1", "type": "float", "unit": "m", "description": "Source distance"},
+          {"name": "r2", "type": "float", "unit": "m", "description": "Observer distance"},
+          {"name": "b", "type": "float", "unit": "m", "description": "Closest approach"}
+        ],
+        "outputs": [{"name": "dt", "type": "float", "unit": "s", "description": "Time delay"}]
+      },
+      "formula": "Δt = (1+γ)·r_s/c · ln(...)",
+      "note": "PPN method, NOT Xi-based",
+      "dependencies": ["c"],
+      "implemented": false
+    },
+    {
+      "method_id": "segment_saturation_derivative",
+      "category": "calculus",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_core/segment_density.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"}
+        ],
+        "outputs": [{"name": "dXi_dr", "type": "float", "unit": "1/m", "description": "Xi derivative"}]
+      },
+      "formula": "dΞ/dr = (φ/r_s)·exp(-φ·r/r_s)",
+      "dependencies": ["PHI"],
+      "implemented": false
+    },
+    {
+      "method_id": "metric_tensor_ssz",
+      "category": "tensor",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_metric_pure/metric_tensor_4d.py",
+      "signature": {
+        "inputs": [
+          {"name": "r", "type": "float", "unit": "m", "description": "Radius"},
+          {"name": "r_s", "type": "float", "unit": "m", "description": "Schwarzschild radius"},
+          {"name": "theta", "type": "float", "unit": "rad", "description": "Polar angle"}
+        ],
+        "outputs": [{"name": "g_mu_nu", "type": "array[4,4]", "unit": "mixed", "description": "Metric tensor"}]
+      },
+      "formula": "ds² = -D_SSZ²·c²dt² + dr²/(1-r_s/r) + r²dΩ²",
+      "dependencies": ["D_ssz"],
+      "implemented": false
+    },
+    {
+      "method_id": "einstein_tensor",
+      "category": "tensor",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_metric_pure/einstein_ricci_4d.py",
+      "signature": {
+        "inputs": [{"name": "g_mu_nu", "type": "array[4,4]", "unit": "mixed", "description": "Metric tensor"}],
+        "outputs": [{"name": "G_mu_nu", "type": "array[4,4]", "unit": "mixed", "description": "Einstein tensor"}]
+      },
+      "formula": "G_μν = R_μν - (1/2)g_μν·R",
+      "dependencies": ["metric_tensor_ssz"],
+      "implemented": false
+    },
+    {
+      "method_id": "geodesic_equation",
+      "category": "dynamics",
+      "source_repo": "ssz-metric-pure",
+      "source_file": "src/ssz_metric_pure/geodesics.py",
+      "signature": {
+        "inputs": [
+          {"name": "initial_pos", "type": "array[4]", "unit": "m", "description": "Initial position"},
+          {"name": "initial_vel", "type": "array[4]", "unit": "m/s", "description": "Initial velocity"},
+          {"name": "M", "type": "float", "unit": "kg", "description": "Central mass"}
+        ],
+        "outputs": [{"name": "trajectory", "type": "array[N,4]", "unit": "m", "description": "Geodesic path"}]
+      },
+      "formula": "d²x^μ/dτ² + Γ^μ_νρ·dx^ν/dτ·dx^ρ/dτ = 0",
+      "dependencies": ["metric_tensor_ssz"],
+      "implemented": false
+    }
+  ],
+  "constants": [
+    {"id": "PHI", "value": 1.6180339887498948, "unit": "dimensionless", "description": "Golden ratio"},
+    {"id": "G", "value": 6.6743e-11, "unit": "m³/(kg·s²)", "description": "Gravitational constant"},
+    {"id": "c", "value": 299792458.0, "unit": "m/s", "description": "Speed of light"},
+    {"id": "M_SUN", "value": 1.98847e30, "unit": "kg", "description": "Solar mass"},
+    {"id": "HBAR", "value": 1.054571817e-34, "unit": "J·s", "description": "Reduced Planck constant"},
+    {"id": "REGIME_WEAK_THRESHOLD", "value": 110, "unit": "dimensionless", "description": "r/r_s for weak field"},
+    {"id": "REGIME_STRONG_THRESHOLD", "value": 90, "unit": "dimensionless", "description": "r/r_s for strong field"},
+    {"id": "XI_MAX", "value": 0.802, "unit": "dimensionless", "description": "Ξ(r_s) in strong field"},
+    {"id": "D_HORIZON", "value": 0.555, "unit": "dimensionless", "description": "D_SSZ(r_s)"},
+    {"id": "R_STAR_OVER_RS", "value": 1.387, "unit": "dimensionless", "description": "Universal intersection"}
+  ],
+  "summary": {
+    "total_methods": 26,
+    "implemented": 13,
+    "not_implemented": 13,
+    "categories": {
+      "core": 1,
+      "segment_density": 4,
+      "time_dilation": 2,
+      "analysis": 1,
+      "redshift": 3,
+      "correction": 1,
+      "boundary": 1,
+      "segment_density_alternative": 1,
+      "time_dilation_alternative": 1,
+      "optics": 1,
+      "kinematics": 1,
+      "geometry": 1,
+      "empirical": 1,
+      "ppn": 2,
+      "calculus": 1,
+      "tensor": 2,
+      "dynamics": 1
+    }
+  }
+}

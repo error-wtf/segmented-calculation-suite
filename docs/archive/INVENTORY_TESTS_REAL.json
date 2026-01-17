@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "generated": "2025-01-16",
+    "source_repo": "ssz-qubits",
+    "source_files": ["tests/test_ssz_physics.py", "tests/test_validation.py", "tests/test_edge_cases.py"],
+    "purpose": "Real test inventory with exact source references and tolerances"
+  },
+  "tests": [
+    {
+      "test_id": "test_earth_schwarzschild_radius",
+      "source_file": "ssz-qubits/tests/test_ssz_physics.py",
+      "class": "TestSchwarzschildRadius",
+      "method": "test_earth_schwarzschild_radius",
+      "line_start": 49,
+      "line_end": 67,
+      "method_ids": ["schwarzschild_radius"],
+      "expected": {
+        "type": "range",
+        "min": 8.8e-3,
+        "max": 8.9e-3,
+        "unit": "m"
+      },
+      "tolerance": {
+        "type": "rtol",
+        "value": 1e-10,
+        "source_line": 62
+      },
+      "assertion": "assert 8.8e-3 < r_s < 8.9e-3",
+      "assertion_line": 61
+    },
+    {
+      "test_id": "test_sun_schwarzschild_radius",
+      "source_file": "ssz-qubits/tests/test_ssz_physics.py",
+      "class": "TestSchwarzschildRadius",
+      "method": "test_sun_schwarzschild_radius",
+      "line_start": 69,
+      "line_end": 81,
+      "method_ids": ["schwarzschild_radius"],
+      "expected": {
+        "type": "range",
+        "min": 2.9e3,
+        "max": 3.0e3,
+        "unit": "m"
+      },
+      "assertion": "assert 2.9e3 < r_s < 3.0e3",
+      "assertion_line": 80
+    },
+    {
+      "test_id": "test_xi_at_earth_surface",
+      "source_file": "ssz-qubits/tests/test_ssz_physics.py",
+      "class": "TestSegmentDensityWeakField",
+      "method": "test_xi_at_earth_surface",
+      "line_start": 99,
+      "line_end": 116,
+      "method_ids": ["xi_segment_density"],
+      "expected": {
+        "type": "range",
+        "min": 6e-10,
+        "max": 8e-10,
+        "unit": "dimensionless"
+      },
+      "assertion": "assert 6e-10 < xi < 8e-10",
+      "assertion_line": 111
+    },
+    {
+      "test_id": "test_xi_decreases_with_radius",
+      "source_file": "ssz-qubits/tests/test_ssz_physics.py",
+      "class": "TestSegmentDensityWeakField",
+      "method": "test_xi_decreases_with_radius",
+      "line_start": 118,
+      "line_end": 140,
+      "method_ids": ["xi_segment_density"],
+      "expected": {
+        "type": "value",
+        "value": 2.0,
+        "description": "Xi(R)/Xi(2R) ratio"
+      },
+      "tolerance": {
+        "type": "rtol",
+        "value": 1e-10,
+        "source_line": 135
+      },
+      "assertion": "assert np.isclose(ratio, 2.0, rtol=1e-10)",
+      "assertion_line": 135
+    },
+    {
+      "test_id": "test_time_dilation_matches_gr_weak_field",
+      "source_file": "ssz-qubits/tests/test_validation.py",
+      "class": "TestGRWeakFieldComparison",
+      "method": "test_time_dilation_matches_gr_weak_field",
+      "line_start": 38,
+      "line_end": 77,
+      "method_ids": ["ssz_time_dilation", "xi_segment_density"],
+      "expected": {
+        "type": "formula",
+        "formula": "abs(D_SSZ - D_GR) < xi**2 * 10",
+        "description": "SSZ matches GR to O(Xi²)"
+      },
+      "assertion": "assert abs(d_ssz - d_gr_exact) < xi**2 * 10",
+      "assertion_line": 71
+    },
+    {
+      "test_id": "test_gravitational_redshift_formula",
+      "source_file": "ssz-qubits/tests/test_validation.py",
+      "class": "TestGRWeakFieldComparison",
+      "method": "test_gravitational_redshift_formula",
+      "line_start": 79,
+      "line_end": 114,
+      "method_ids": ["ssz_time_dilation"],
+      "expected": {
+        "type": "comparison",
+        "reference": "GR redshift z = g*h/c²"
+      },
+      "tolerance": {
+        "type": "rtol",
+        "value": 0.01,
+        "source_line": 109
+      },
+      "assertion": "assert np.isclose(z_ssz, z_gr, rtol=0.01)",
+      "assertion_line": 109
+    },
+    {
+      "test_id": "test_pound_rebka_experiment",
+      "source_file": "ssz-qubits/tests/test_validation.py",
+      "class": "TestGRWeakFieldComparison",
+      "method": "test_pound_rebka_experiment",
+      "line_start": 116,
+      "line_end": 152,
+      "method_ids": ["ssz_time_dilation"],
+      "expected": {
+        "type": "value",
+        "value": 2.46e-15,
+        "description": "Pound-Rebka measured frequency shift"
+      },
+      "tolerance": {
+        "type": "rtol",
+        "value": 1e-6,
+        "source_line": 146
+      },
+      "assertion": "assert np.isclose(z_ssz, z_theoretical, rtol=1e-6)",
+      "assertion_line": 146
+    },
+    {
+      "test_id": "test_gps_satellite_time_dilation",
+      "source_file": "ssz-qubits/tests/test_validation.py",
+      "class": "TestGPSValidation",
+      "method": "test_gps_satellite_time_dilation",
+      "line_start": 162,
+      "line_end": 203,
+      "method_ids": ["ssz_time_dilation"],
+      "expected": {
+        "type": "value",
+        "value": 45.7e-6,
+        "unit": "s/day",
+        "description": "GPS gravitational time correction"
+      },
+      "tolerance": {
+        "type": "rtol",
+        "value": 0.01,
+        "source_line": 197
+      },
+      "assertion": "assert np.isclose(dt_per_day, known_gr_effect, rtol=0.01)",
+      "assertion_line": 197
+    },
+    {
+      "test_id": "test_gps_position_error_without_correction",
+      "source_file": "ssz-qubits/tests/test_validation.py",
+      "class": "TestGPSValidation",
+      "method": "test_gps_position_error_without_correction",
+      "line_start": 205,
+      "line_end": 235,
+      "method_ids": ["ssz_time_dilation"],
+      "expected": {
+        "type": "range",
+        "min": 10,
+        "max": 15,
+        "unit": "km/day"
+      },
+      "assertion": "assert 10 < position_error_per_day_km < 15",
+      "assertion_line": 229
+    }
+  ],
+  "test_counts": {
+    "test_ssz_physics.py": {
+      "total": 17,
+      "classes": ["TestSchwarzschildRadius", "TestSegmentDensityWeakField", "TestTimeDilation", "TestStrongField", "TestBoundaryConditions"]
+    },
+    "test_validation.py": {
+      "total": 17,
+      "classes": ["TestGRWeakFieldComparison", "TestGPSValidation", "TestAtomicClockValidation", "TestConsistency"]
+    },
+    "test_edge_cases.py": {
+      "total": 25,
+      "categories": ["zero_inputs", "negative_inputs", "extreme_values", "boundary_conditions", "numerical_stability"]
+    }
+  },
+  "coverage_comparison": {
+    "original_total": 59,
+    "documented_here": 9,
+    "coverage_percent": 15.3,
+    "note": "Only core tests documented - full import required for real parity"
+  }
+}

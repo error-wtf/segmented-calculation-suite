@@ -1,0 +1,378 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-01-16",
+  "description": "Complete inventory of SSZ tests from all source repos",
+  "source_repos": [
+    "Segmented-Spacetime-Mass-Projection-Unified-Results",
+    "ssz-metric-pure",
+    "ssz-qubits"
+  ],
+  "test_categories": [
+    {
+      "category_id": "core_physics",
+      "description": "Fundamental SSZ physics validation",
+      "tests": [
+        {
+          "test_id": "test_golden_ratio",
+          "method_ids": ["PHI"],
+          "description": "Verify φ = (1+√5)/2 ≈ 1.618033988749895",
+          "expected": {"value": 1.618033988749895, "tolerance": 1e-15},
+          "pass_criteria": "exact match within tolerance",
+          "source": "ssz-qubits/tests/test_ssz_physics.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_schwarzschild_sun",
+          "method_ids": ["schwarzschild_radius"],
+          "description": "r_s(M_sun) ≈ 2953 m",
+          "expected": {"value": 2953.25, "tolerance": 0.01, "unit": "m"},
+          "pass_criteria": "within 0.01 m",
+          "source": "ssz-qubits/tests/test_ssz_physics.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_schwarzschild_earth",
+          "method_ids": ["schwarzschild_radius"],
+          "description": "r_s(M_earth) ≈ 8.87 mm",
+          "expected": {"value": 0.00887, "tolerance": 0.00001, "unit": "m"},
+          "pass_criteria": "within 10 μm",
+          "source": "ssz-qubits/tests/test_ssz_physics.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_xi_weak_field",
+          "method_ids": ["xi_weak"],
+          "description": "Xi = r_s/(2r) for r >> r_s",
+          "input": {"r_over_rs": 1000},
+          "expected": {"value": 0.0005, "tolerance": 1e-10},
+          "pass_criteria": "exact formula",
+          "source": "ssz-qubits/tests/test_ssz_physics.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_xi_strong_field",
+          "method_ids": ["xi_strong"],
+          "description": "Xi = 1 - exp(-φ·r/r_s) at r=r_s",
+          "input": {"r_over_rs": 1.0},
+          "expected": {"value": 0.8019, "tolerance": 0.001},
+          "pass_criteria": "within 0.1%",
+          "source": "ssz-metric-pure/tests/test_segment_density.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_xi_at_horizon",
+          "method_ids": ["xi_strong"],
+          "description": "Ξ(r_s) ≈ 0.802",
+          "expected": {"value": 0.802, "tolerance": 0.001},
+          "pass_criteria": "key SSZ result",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        },
+        {
+          "test_id": "test_D_ssz_finite_at_horizon",
+          "method_ids": ["D_ssz"],
+          "description": "D_SSZ(r_s) ≈ 0.555 (FINITE!)",
+          "expected": {"value": 0.555, "tolerance": 0.001},
+          "pass_criteria": "singularity-free",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        },
+        {
+          "test_id": "test_D_gr_singular_at_horizon",
+          "method_ids": ["D_gr"],
+          "description": "D_GR(r_s) = 0 or NaN",
+          "expected": {"value": 0.0, "or": "NaN"},
+          "pass_criteria": "confirms GR singularity",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        },
+        {
+          "test_id": "test_universal_intersection",
+          "method_ids": ["find_intersection"],
+          "description": "r*/r_s = 1.387 ± 0.002 (mass-independent)",
+          "expected": {"value": 1.387, "tolerance": 0.002},
+          "pass_criteria": "universal SSZ result",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "experimental_validation",
+      "description": "Validation against experimental data",
+      "tests": [
+        {
+          "test_id": "test_gps_timing",
+          "method_ids": ["D_ssz", "xi_weak"],
+          "description": "GPS satellite timing: ~45.7 μs/day",
+          "expected": {"value": 45.7e-6, "tolerance": 1e-6, "unit": "s/day"},
+          "pass_criteria": "matches observed GPS correction",
+          "source": "ssz-qubits/tests/test_validation.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_pound_rebka",
+          "method_ids": ["D_ssz", "z_gravitational"],
+          "description": "Pound-Rebka: Δν/ν = 2.46e-15",
+          "expected": {"value": 2.46e-15, "tolerance": 0.05e-15},
+          "pass_criteria": "matches Harvard tower experiment",
+          "source": "ssz-qubits/tests/test_validation.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_nist_clocks",
+          "method_ids": ["D_ssz", "xi_weak"],
+          "description": "NIST optical clocks at different heights",
+          "expected": {"relative_shift": "measurable at cm scale"},
+          "pass_criteria": "qualitative agreement",
+          "source": "ssz-qubits/tests/test_validation.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_tokyo_skytree",
+          "method_ids": ["D_ssz", "xi_weak"],
+          "description": "Tokyo Skytree clock comparison",
+          "expected": {"height_diff": 450, "unit": "m"},
+          "pass_criteria": "measurable time difference",
+          "source": "ssz-qubits/tests/test_validation.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "neutron_star_predictions",
+      "description": "SSZ predictions for neutron stars",
+      "tests": [
+        {
+          "test_id": "test_ns_psr_j0740",
+          "method_ids": ["D_ssz", "z_ssz_total"],
+          "description": "PSR J0740+6620: SSZ predicts +1.3% deviation from GR",
+          "object": {"M": 2.08, "R_km": 12.35, "unit": "M_sun"},
+          "expected": {"ssz_deviation": 0.013, "tolerance": 0.002},
+          "pass_criteria": "testable with XMM-Newton",
+          "source": "Unified-Results",
+          "implemented": true
+        },
+        {
+          "test_id": "test_ns_psr_j0348",
+          "method_ids": ["D_ssz", "z_ssz_total"],
+          "description": "PSR J0348+0432: SSZ predicts +1.3% deviation from GR",
+          "object": {"M": 2.01, "R_km": 13.0, "unit": "M_sun"},
+          "expected": {"ssz_deviation": 0.013, "tolerance": 0.002},
+          "pass_criteria": "testable with XMM-Newton",
+          "source": "Unified-Results",
+          "implemented": true
+        },
+        {
+          "test_id": "test_ns_psr_j0030",
+          "method_ids": ["D_ssz", "z_ssz_total"],
+          "description": "PSR J0030+0451: SSZ predicts +1.0% deviation from GR",
+          "object": {"M": 1.44, "R_km": 13.02, "unit": "M_sun"},
+          "expected": {"ssz_deviation": 0.010, "tolerance": 0.002},
+          "pass_criteria": "testable with XMM-Newton",
+          "source": "Unified-Results",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "regime_classification",
+      "description": "Regime boundary and blending tests",
+      "tests": [
+        {
+          "test_id": "test_weak_regime_boundary",
+          "method_ids": ["xi_auto"],
+          "description": "r/r_s > 110 uses weak formula",
+          "input": {"r_over_rs": 120},
+          "expected": {"regime": "weak"},
+          "pass_criteria": "correct regime selection",
+          "source": "segcalc/methods/xi.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_strong_regime_boundary",
+          "method_ids": ["xi_auto"],
+          "description": "r/r_s < 90 uses strong formula",
+          "input": {"r_over_rs": 80},
+          "expected": {"regime": "strong"},
+          "pass_criteria": "correct regime selection",
+          "source": "segcalc/methods/xi.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_blend_regime",
+          "method_ids": ["xi_blended"],
+          "description": "90 < r/r_s < 110 uses C² Hermite blend",
+          "input": {"r_over_rs": 100},
+          "expected": {"regime": "blended", "continuity": "C²"},
+          "pass_criteria": "smooth transition",
+          "source": "segcalc/methods/xi.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_blend_continuity",
+          "method_ids": ["xi_blended"],
+          "description": "Blended Xi is C² continuous at boundaries",
+          "expected": {"derivative_match": true},
+          "pass_criteria": "first and second derivatives match",
+          "source": "segcalc/methods/xi.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "power_law",
+      "description": "Empirical power law validation",
+      "tests": [
+        {
+          "test_id": "test_power_law_fit",
+          "method_ids": ["power_law_prediction"],
+          "description": "E_norm = 1 + 0.3187·(r_s/R)^0.9821",
+          "expected": {"R_squared": 0.997, "tolerance": 0.002},
+          "pass_criteria": "high correlation",
+          "source": "Unified-Results",
+          "implemented": true
+        },
+        {
+          "test_id": "test_power_law_coefficient",
+          "method_ids": ["power_law_prediction"],
+          "description": "Coefficient A = 0.3187 ± 0.01",
+          "expected": {"value": 0.3187, "tolerance": 0.01},
+          "pass_criteria": "correct scaling",
+          "source": "Unified-Results",
+          "implemented": true
+        },
+        {
+          "test_id": "test_power_law_exponent",
+          "method_ids": ["power_law_prediction"],
+          "description": "Exponent α = 0.9821 ± 0.02",
+          "expected": {"value": 0.9821, "tolerance": 0.02},
+          "pass_criteria": "near-linear in log-log",
+          "source": "Unified-Results",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "ssz_invariants",
+      "description": "SSZ-specific physical invariants",
+      "tests": [
+        {
+          "test_id": "test_singularity_free",
+          "method_ids": ["D_ssz"],
+          "description": "D_SSZ never reaches 0",
+          "expected": {"min_D": 0.5, "at": "r=0"},
+          "pass_criteria": "no singularity",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        },
+        {
+          "test_id": "test_dual_velocity_invariance",
+          "method_ids": ["dual_velocity"],
+          "description": "v_esc · v_fall = c²",
+          "expected": {"product": 8.98755e16, "tolerance": 1e13},
+          "pass_criteria": "invariant holds",
+          "source": "Unified-Results",
+          "implemented": false
+        },
+        {
+          "test_id": "test_energy_conservation",
+          "method_ids": ["z_ssz_total"],
+          "description": "E_obs/E_rest consistent",
+          "expected": {"conservation": true},
+          "pass_criteria": "energy balance",
+          "source": "Unified-Results",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "edge_cases",
+      "description": "Edge case and boundary testing",
+      "tests": [
+        {
+          "test_id": "test_zero_mass",
+          "method_ids": ["schwarzschild_radius"],
+          "description": "M=0 should give r_s=0",
+          "expected": {"value": 0.0},
+          "pass_criteria": "handles zero mass",
+          "source": "ssz-qubits/tests/test_edge_cases.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_negative_mass",
+          "method_ids": ["schwarzschild_radius"],
+          "description": "M<0 should raise error",
+          "expected": {"error": "ValueError"},
+          "pass_criteria": "proper error handling",
+          "source": "ssz-qubits/tests/test_edge_cases.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_r_equals_zero",
+          "method_ids": ["D_ssz"],
+          "description": "r=0 behavior",
+          "expected": {"D_ssz": 1.0},
+          "pass_criteria": "finite at origin",
+          "source": "ssz-metric-pure",
+          "implemented": true
+        },
+        {
+          "test_id": "test_r_very_large",
+          "method_ids": ["xi_weak", "D_ssz"],
+          "description": "r → ∞ gives Xi → 0, D → 1",
+          "expected": {"Xi": 0.0, "D": 1.0, "tolerance": 1e-10},
+          "pass_criteria": "asymptotic behavior",
+          "source": "ssz-qubits/tests/test_edge_cases.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "qubit_applications",
+      "description": "Quantum computing specific tests",
+      "tests": [
+        {
+          "test_id": "test_qubit_height_difference",
+          "method_ids": ["xi_weak", "D_ssz"],
+          "description": "1mm height diff gives ΔXi ~ 10⁻¹⁹",
+          "expected": {"delta_Xi": 1e-19, "order_of_magnitude": true},
+          "pass_criteria": "correct scaling",
+          "source": "ssz-qubits/tests/test_ssz_qubit_applications.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_decoherence_prediction",
+          "method_ids": ["xi_weak"],
+          "description": "SSZ predicts coherence modification",
+          "expected": {"coherence_factor": "calculable"},
+          "pass_criteria": "produces value",
+          "source": "ssz-qubits/tests/test_ssz_qubit_applications.py",
+          "implemented": true
+        },
+        {
+          "test_id": "test_gate_timing_correction",
+          "method_ids": ["D_ssz"],
+          "description": "Gate timing correction calculable",
+          "expected": {"correction": "sub-ps for mm scale"},
+          "pass_criteria": "physically reasonable",
+          "source": "ssz-qubits/tests/test_ssz_qubit_applications.py",
+          "implemented": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tests": 35,
+    "implemented": 31,
+    "not_implemented": 4,
+    "categories": 8,
+    "critical_tests": [
+      "test_D_ssz_finite_at_horizon",
+      "test_universal_intersection",
+      "test_gps_timing",
+      "test_pound_rebka",
+      "test_power_law_fit"
+    ]
+  }
+}

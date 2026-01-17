@@ -1,0 +1,11 @@
+name,M_solar,R_km,type,z_obs
+Sun,1.0,696340,star,0.0000021
+Sirius B,1.018,5900,white_dwarf,0.00008
+Procyon B,0.602,8600,white_dwarf,0.00006
+40 Eridani B,0.573,8200,white_dwarf,0.00007
+PSR J0348+0432,2.01,13,neutron_star,0.14
+PSR J0740+6620,2.08,12.35,neutron_star,0.15
+PSR J0030+0451,1.44,13.02,neutron_star,0.10
+Crab Pulsar,1.4,10,neutron_star,0.11
+Sgr A*,4297000,12700000,black_hole,0.0
+Cygnus X-1,21.2,44.5,black_hole,0.0

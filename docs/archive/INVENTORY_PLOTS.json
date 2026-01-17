@@ -1,0 +1,353 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-01-16",
+  "description": "Complete inventory of SSZ plots from all source repos",
+  "source_repos": [
+    "ssz-paper-plots",
+    "Segmented-Spacetime-Mass-Projection-Unified-Results",
+    "ssz-metric-pure"
+  ],
+  "plot_categories": [
+    {
+      "category_id": "core_theory",
+      "description": "Fundamental SSZ theory visualizations",
+      "plots": [
+        {
+          "plot_id": "xi_and_dilation",
+          "description": "Xi(r) and D(r) profiles",
+          "required_inputs": ["M_Msun", "r_range"],
+          "computed_series": [
+            {"name": "Xi_weak", "formula": "r_s/(2r)"},
+            {"name": "Xi_strong", "formula": "1-exp(-φr/r_s)"},
+            {"name": "D_ssz", "formula": "1/(1+Xi)"},
+            {"name": "D_gr", "formula": "√(1-r_s/r)"}
+          ],
+          "axes": {"x": "r/r_s", "y": "Xi or D"},
+          "artifacts": ["xi_dilation_profile.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "gr_vs_ssz_comparison",
+          "description": "Direct comparison of GR and SSZ time dilation",
+          "required_inputs": ["M_Msun", "r_range"],
+          "computed_series": [
+            {"name": "D_ssz", "formula": "1/(1+Xi)"},
+            {"name": "D_gr", "formula": "√(1-r_s/r)"},
+            {"name": "difference", "formula": "D_ssz - D_gr"}
+          ],
+          "axes": {"x": "r/r_s", "y": "D"},
+          "artifacts": ["gr_vs_ssz_comparison.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "universal_intersection",
+          "description": "r*/r_s = 1.387 intersection point",
+          "required_inputs": ["mass_range"],
+          "computed_series": [
+            {"name": "r_star_over_rs", "value": 1.387},
+            {"name": "D_at_intersection", "value": 0.528}
+          ],
+          "axes": {"x": "M/M_sun (log)", "y": "r*/r_s"},
+          "artifacts": ["universal_intersection.png"],
+          "key_result": "Mass-independent intersection",
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "regime_zones",
+          "description": "Weak/Blend/Strong regime visualization",
+          "required_inputs": ["r_range"],
+          "computed_series": [
+            {"name": "weak_zone", "range": "r/r_s > 110"},
+            {"name": "blend_zone", "range": "90 < r/r_s < 110"},
+            {"name": "strong_zone", "range": "r/r_s < 90"}
+          ],
+          "axes": {"x": "r/r_s", "y": "Xi"},
+          "artifacts": ["regime_zones.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "experimental_validation",
+      "description": "Comparison with experimental data",
+      "plots": [
+        {
+          "plot_id": "gps_validation",
+          "description": "GPS timing prediction vs observation",
+          "required_inputs": ["satellite_altitude", "earth_params"],
+          "computed_series": [
+            {"name": "ssz_prediction", "unit": "μs/day"},
+            {"name": "gr_prediction", "unit": "μs/day"},
+            {"name": "observed", "value": 45.7, "unit": "μs/day"}
+          ],
+          "axes": {"x": "altitude (km)", "y": "timing correction (μs/day)"},
+          "artifacts": ["gps_validation.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "pound_rebka_validation",
+          "description": "Pound-Rebka experiment comparison",
+          "required_inputs": ["tower_height"],
+          "computed_series": [
+            {"name": "ssz_prediction", "unit": "Δν/ν"},
+            {"name": "observed", "value": 2.46e-15}
+          ],
+          "axes": {"x": "height (m)", "y": "Δν/ν"},
+          "artifacts": ["pound_rebka_validation.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "neutron_star_predictions",
+          "description": "NS redshift: SSZ vs GR predictions",
+          "required_inputs": ["ns_catalog"],
+          "computed_series": [
+            {"name": "z_ssz", "formula": "SSZ redshift"},
+            {"name": "z_gr", "formula": "GR redshift"},
+            {"name": "deviation_percent", "formula": "(z_ssz-z_gr)/z_gr * 100"}
+          ],
+          "axes": {"x": "Object", "y": "z or deviation %"},
+          "artifacts": ["ns_predictions.png"],
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "empirical_analysis",
+      "description": "Data-driven analysis plots",
+      "plots": [
+        {
+          "plot_id": "power_law",
+          "description": "E_norm vs compactness power law",
+          "required_inputs": ["results_df"],
+          "computed_series": [
+            {"name": "E_norm", "formula": "calculated"},
+            {"name": "power_law_fit", "formula": "1 + 0.3187·(r_s/R)^0.9821"}
+          ],
+          "axes": {"x": "r_s/R (log)", "y": "E_norm - 1 (log)"},
+          "artifacts": ["power_law.png"],
+          "fit_params": {"A": 0.3187, "alpha": 0.9821, "R_squared": 0.997},
+          "source": "segcalc/plotting/theory_plots.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "comparison_scatter",
+          "description": "Predicted vs observed redshift",
+          "required_inputs": ["results_df with z_obs"],
+          "computed_series": [
+            {"name": "z_ssz_total", "formula": "SSZ prediction"},
+            {"name": "z_grsr", "formula": "GR×SR prediction"},
+            {"name": "z_obs", "formula": "observation"}
+          ],
+          "axes": {"x": "z_obs", "y": "z_predicted"},
+          "artifacts": ["comparison_scatter.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "residuals_plot",
+          "description": "Prediction residuals by object",
+          "required_inputs": ["results_df with z_obs"],
+          "computed_series": [
+            {"name": "ssz_residual", "formula": "z_ssz - z_obs"},
+            {"name": "grsr_residual", "formula": "z_grsr - z_obs"}
+          ],
+          "axes": {"x": "Object", "y": "Residual"},
+          "artifacts": ["residuals.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "regime_distribution",
+          "description": "Pie/bar chart of regime counts",
+          "required_inputs": ["results_df"],
+          "computed_series": [
+            {"name": "weak_count", "type": "count"},
+            {"name": "blend_count", "type": "count"},
+            {"name": "strong_count", "type": "count"}
+          ],
+          "axes": {"type": "pie or bar"},
+          "artifacts": ["regime_distribution.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "win_rate_chart",
+          "description": "SSZ vs GR×SR win rate by regime",
+          "required_inputs": ["results_df with z_obs"],
+          "computed_series": [
+            {"name": "ssz_wins", "type": "count"},
+            {"name": "grsr_wins", "type": "count"},
+            {"name": "by_regime", "type": "grouped"}
+          ],
+          "axes": {"x": "Regime", "y": "Win count or %"},
+          "artifacts": ["win_rate.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "single_object",
+      "description": "Per-object analysis plots",
+      "plots": [
+        {
+          "plot_id": "dilation_profile",
+          "description": "D(r) for specific object",
+          "required_inputs": ["M_Msun", "R_km"],
+          "computed_series": [
+            {"name": "D_ssz", "formula": "1/(1+Xi)"},
+            {"name": "D_gr", "formula": "√(1-r_s/r)"},
+            {"name": "object_radius_marker", "type": "vline"}
+          ],
+          "axes": {"x": "r/r_s", "y": "D"},
+          "artifacts": ["dilation_<name>.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "xi_profile",
+          "description": "Xi(r) for specific object",
+          "required_inputs": ["M_Msun", "R_km"],
+          "computed_series": [
+            {"name": "Xi", "formula": "auto-selected regime"},
+            {"name": "object_radius_marker", "type": "vline"}
+          ],
+          "axes": {"x": "r/r_s", "y": "Xi"},
+          "artifacts": ["xi_<name>.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        },
+        {
+          "plot_id": "redshift_breakdown",
+          "description": "Redshift components stacked",
+          "required_inputs": ["result_dict"],
+          "computed_series": [
+            {"name": "z_gravitational", "type": "bar"},
+            {"name": "z_doppler", "type": "bar"},
+            {"name": "z_total", "type": "bar"}
+          ],
+          "axes": {"x": "Component", "y": "z"},
+          "artifacts": ["redshift_breakdown_<name>.png"],
+          "source": "app_v3.py",
+          "implemented": true
+        }
+      ]
+    },
+    {
+      "category_id": "paper_plots",
+      "description": "Publication-ready plots from ssz-paper-plots",
+      "plots": [
+        {
+          "plot_id": "coherence_collapse_dynamics",
+          "description": "Coherence collapse visualization",
+          "required_inputs": ["time_range", "collapse_params"],
+          "source": "ssz-paper-plots/generate_paper_plots.py",
+          "implemented": false
+        },
+        {
+          "plot_id": "nested_submetric_analysis",
+          "description": "Nested submetric structure",
+          "required_inputs": ["metric_params"],
+          "source": "ssz-paper-plots/nested_ssz_metric_standalone.py",
+          "implemented": false
+        },
+        {
+          "plot_id": "continuity_series",
+          "description": "C² continuity demonstration (8 plots)",
+          "required_inputs": ["boundary_params"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "curvature_series",
+          "description": "Curvature visualizations (8 plots)",
+          "required_inputs": ["metric_tensor"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "energy_series",
+          "description": "Energy analysis (11 plots)",
+          "required_inputs": ["energy_params"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "ppn_analysis",
+          "description": "PPN parameter plots (3 plots)",
+          "required_inputs": ["ppn_params"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "proper_time_series",
+          "description": "Proper time visualizations (7 plots)",
+          "required_inputs": ["geodesic_params"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "qnm_series",
+          "description": "Quasi-normal modes (plots)",
+          "required_inputs": ["qnm_params"],
+          "source": "ssz-paper-plots",
+          "implemented": false
+        },
+        {
+          "plot_id": "real_data_plots",
+          "description": "Real data validations (multiple)",
+          "required_inputs": ["real_data_df"],
+          "source": "ssz-paper-plots/plots_real_*.py",
+          "implemented": false
+        }
+      ]
+    },
+    {
+      "category_id": "metric_visualization",
+      "description": "Metric tensor and curvature plots",
+      "plots": [
+        {
+          "plot_id": "metric_components",
+          "description": "g_tt, g_rr, g_θθ, g_φφ",
+          "required_inputs": ["r_range", "M"],
+          "source": "ssz-metric-pure/src/ssz_viz/",
+          "implemented": false
+        },
+        {
+          "plot_id": "ricci_scalar",
+          "description": "R(r) Ricci scalar",
+          "required_inputs": ["r_range", "M"],
+          "source": "ssz-metric-pure",
+          "implemented": false
+        },
+        {
+          "plot_id": "kretschmann_scalar",
+          "description": "K(r) Kretschmann scalar",
+          "required_inputs": ["r_range", "M"],
+          "source": "ssz-metric-pure",
+          "implemented": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_plots": 30,
+    "implemented": 15,
+    "not_implemented": 15,
+    "categories": 6,
+    "core_plots": [
+      "xi_and_dilation",
+      "gr_vs_ssz_comparison",
+      "universal_intersection",
+      "power_law",
+      "comparison_scatter"
+    ]
+  }
+}
