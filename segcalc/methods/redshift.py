@@ -80,9 +80,13 @@ def z_combined(z_gr: float, z_sr: float) -> float:
     return (1.0 + z_gr) * (1.0 + z_sr) - 1.0
 
 
+# deep_analysis: allow-gr-helper z_from_dilation
 def z_from_dilation(D: float) -> float:
     """
-    Redshift from time dilation factor.
+    GR Helper: Redshift from time dilation factor.
+    
+    NOTE: This is a standard GR formula (z = 1/D - 1), NOT the SSZ formula.
+    SSZ redshift uses z_ssz() which correctly applies z_gr × (1 + Δ(M)/100).
     
     Formula: z = 1/D - 1
     
@@ -90,7 +94,7 @@ def z_from_dilation(D: float) -> float:
         D: Time dilation factor
     
     Returns:
-        Redshift
+        Redshift (GR standard)
     """
     if D <= 0 or not math.isfinite(D):
         return float('nan')

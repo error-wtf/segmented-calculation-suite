@@ -281,10 +281,11 @@ deprecated_patterns = [
     ("(r_s/r)**2", "Deprecated Xi formula"),
 ]
 
-# Patterns that are OK in GR helper functions but NOT in SSZ functions
+# GR helper pragma: "# deep_analysis: allow-gr-helper <func_name>"
+# Patterns allowed ONLY in functions marked with this pragma
 gr_helper_patterns = [
-    ("z = 1/D", "z_from_dilation"),  # OK in z_from_dilation (GR helper)
-    ("1.0 / D - 1.0", "z_from_dilation"),  # OK in z_from_dilation (GR helper)
+    ("z = 1/D", "z_from_dilation"),
+    ("1.0 / D - 1.0", "z_from_dilation"),
 ]
 
 # Check deprecated patterns (should NOT exist anywhere)
@@ -292,10 +293,10 @@ for pattern, desc in deprecated_patterns:
     lines = redshift_source.split('\n')
     found_in_code = False
     for line in lines:
-        if pattern in line and not line.strip().startswith('#') and not line.strip().startswith('"""'):
+        stripped = line.strip()
+        if pattern in line and not stripped.startswith('#'):
             found_in_code = True
             break
-    
     if not found_in_code:
         passes.append(f"No deprecated pattern: {pattern}")
         print(f"  ✅ No '{pattern}' in code")
@@ -303,29 +304,39 @@ for pattern, desc in deprecated_patterns:
         issues.append(f"Found deprecated: {pattern}")
         print(f"  ❌ Found '{pattern}' - this is a bug!")
 
-# Check GR helper patterns (OK in specific GR helper functions)
+# Check GR helper patterns (OK only in pragma-marked functions)
 for pattern, allowed_func in gr_helper_patterns:
     lines = redshift_source.split('\n')
     found_outside_helper = False
     current_func = None
-    
+    pragma_funcs = set()
+    # First pass: find all pragma-marked functions
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if 'deep_analysis: allow-gr-helper' in stripped:
+            # Next def after this pragma is allowed
+            for j in range(i+1, min(i+5, len(lines))):
+                next_line = lines[j].strip()
+                if next_line.startswith('def '):
+                    func_name = next_line.split('(')[0].replace('def ', '')
+                    pragma_funcs.add(func_name)
+                    break
+    # Second pass: check if pattern is only in allowed functions
+    current_func = None
     for line in lines:
-        # Track which function we're in
-        if line.strip().startswith('def '):
-            current_func = line.split('(')[0].replace('def ', '').strip()
-        
-        # Check if pattern is found
-        if pattern in line and not line.strip().startswith('#'):
-            if current_func != allowed_func:
+        stripped = line.strip()
+        if stripped.startswith('def '):
+            current_func = stripped.split('(')[0].replace('def ', '')
+        if pattern in line and not stripped.startswith('#'):
+            if current_func not in pragma_funcs:
                 found_outside_helper = True
                 break
-    
     if not found_outside_helper:
-        passes.append(f"GR helper pattern '{pattern}' correctly in {allowed_func}()")
-        print(f"  ✅ '{pattern}' is in GR helper {allowed_func}() (intentional)")
+        passes.append(f"GR helper '{allowed_func}()' with pragma (intentional)")
+        print(f"  ✅ '{pattern}' in {allowed_func}() with pragma (intentional)")
     else:
-        issues.append(f"GR pattern '{pattern}' found outside {allowed_func}!")
-        print(f"  ❌ '{pattern}' found outside GR helper - this is a bug!")
+        issues.append(f"'{pattern}' outside pragma-marked GR helper!")
+        print(f"  ❌ '{pattern}' outside pragma-marked function!")
 
 # =============================================================================
 # FINAL SUMMARY
