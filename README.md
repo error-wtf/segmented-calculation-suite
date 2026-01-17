@@ -1,6 +1,6 @@
 # Segmented Spacetime Calculation Suite
 
-[![Tests](https://img.shields.io/badge/tests-53%2F53%20passing-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/tests-56%2F56%20passing-brightgreen)](.)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](.)
 [![License](https://img.shields.io/badge/license-Anti--Capitalist%20v1.4-red)](.)
 
@@ -120,4 +120,20 @@ Upload CSV files with columns:
 
 ## License
 
-Anti-Capitalist Software License v1.4
+**Anti-Capitalist Software License v1.4**
+
+© 2025 Carmen Wrede & Lino Casu
+
+This is anti-capitalist software, released for free use by individuals and organizations that do not operate by capitalist principles.
+
+**Permitted users:**
+- Individuals laboring for themselves
+- Non-profit organizations
+- Educational institutions
+- Worker-owned cooperatives
+- Organizations with annual expenses below $1,000,000 USD
+
+For academic/scientific use, please cite:
+> Wrede, C., Casu, L. (2025). *Segmented Spacetime - A Framework for Singularity-Free Gravity*. ResearchGate.
+
+**Contact:** mail@error.wtf
