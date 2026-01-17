@@ -137,6 +137,20 @@ Upload CSV files with columns:
 - `R_km` or `radius` - Radius in km
 - `z_obs` or `z` - Observed redshift (for comparison)
 
+## 🔗 Related SSZ Repositories
+
+| Repository | Description |
+|------------|-------------|
+| [**Unified Results**](https://github.com/error-wtf/Segmented-Spacetime-Mass-Projection-Unified-Results) | Comprehensive validation across 13 astronomical objects |
+| [**SSZ Metric Pure**](https://github.com/error-wtf/ssz-metric-pure) | 4D tensor formulation, Einstein/Ricci curvature |
+| [**SEGMENTED_SPACETIME**](https://github.com/error-wtf/SEGMENTED_SPACETIME) | Theoretical foundations and derivations |
+| [**SSZ Qubits**](https://github.com/error-wtf/ssz-qubits) | Quantum applications, 74 validation tests |
+| [**SSZ Paper Plots**](https://github.com/error-wtf/ssz-paper-plots) | Publication-ready visualizations |
+| [**Cygnus X-1 Tests**](https://github.com/error-wtf/g79-cygnus-tests) | Black hole validation dataset |
+| [**SSZ Schumann**](https://github.com/error-wtf/ssz-schumann) | Schumann resonance experiment |
+
+---
+
 ## License
 
 **Anti-Capitalist Software License v1.4**
