@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](.)
 [![License](https://img.shields.io/badge/license-Anti--Capitalist%20v1.4-red)](.)
 [![Regimes](https://img.shields.io/badge/regimes-kanonisch%201.8--2.2-orange)](.)
-[![Colab](https://img.shields.io/badge/Colab-Online%20Demo-yellow)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Calculation_Suite.ipynb)
+[![Colab](https://img.shields.io/badge/Colab-Full%20App-yellow)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Colab_Full_App.ipynb)
 
 **Production-ready toolkit for SSZ (Segmented Spacetime) calculations**  
 **Validated against GPS, Pound-Rebka, and 47 ESO spectroscopy measurements**
@@ -18,13 +18,13 @@ Contact: mail@error.wtf
 
 ### Option 1: 🌐 Online (Google Colab - No Installation)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Calculation_Suite.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Colab_Full_App.ipynb)
 
 1. Click the badge above to open in Google Colab
-2. Run all cells (Runtime → Run all)
-3. The last cell launches Gradio with `share=True`
+2. **Run all cells** (Runtime → Run all)
+3. The notebook clones this repository and launches the **full app**
 4. **You get a public shareable link** (e.g., `https://xxxxx.gradio.live`)
-5. Share this link with anyone - they can use the calculator without installation!
+5. Share this link - full features: Single Calc, Batch, Theory Plots, 186 Tests!
 
 ### Option 2: 💻 Offline (Local Gradio Web UI)
 
