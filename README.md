@@ -18,14 +18,23 @@ Contact: mail@error.wtf
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/segmented-calculation-suite/blob/main/SSZ_Calculation_Suite.ipynb)
 
-### Option 2: Local Installation
+### Option 2: Local Gradio Web UI
 
 ```bash
 git clone https://github.com/error-wtf/segmented-calculation-suite.git
 cd segmented-calculation-suite
 pip install -r requirements.txt
-python app.py  # Opens web UI at http://127.0.0.1:7860
+python app.py  # Opens web UI at http://127.0.0.1:7863
 ```
+
+**Features:**
+- **Single Object** - Calculate Ξ, D, z for any mass/radius
+- **Batch Processing** - Upload CSV with multiple objects
+- **Interactive Plots** - Time dilation & segment density curves
+- **Presets** - Sun, Sirius B, Neutron Stars
+- **Artifacts** - Every run saves to `./reports/<run_id>/`
+
+**Screenshot:** Run `python app.py` to see the interactive web interface.
 
 ### Option 3: CLI
 
