@@ -460,6 +460,67 @@ def create_comparison_scatter(results_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def create_ssz_vs_gr_plot(results_df: pd.DataFrame) -> go.Figure:
+    """Bar chart comparing SSZ vs GR×SR for each object (no z_obs needed)."""
+    if results_df is None or len(results_df) == 0:
+        fig = go.Figure()
+        fig.add_annotation(text="No data available", 
+                          xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
+                          font=dict(size=14, color="gray"))
+        fig.update_layout(title="SSZ vs GR×SR", height=400, template="plotly_white")
+        return fig
+    
+    # Use z_ssz_total and z_grsr columns
+    if "z_ssz_total" not in results_df.columns or "z_grsr" not in results_df.columns:
+        fig = go.Figure()
+        fig.add_annotation(text="Missing z_ssz_total or z_grsr columns", 
+                          xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
+                          font=dict(size=14, color="gray"))
+        fig.update_layout(title="SSZ vs GR×SR", height=400, template="plotly_white")
+        return fig
+    
+    names = results_df["name"].tolist()
+    z_ssz = results_df["z_ssz_total"].tolist()
+    z_grsr = results_df["z_grsr"].tolist()
+    regimes = results_df["regime"].tolist() if "regime" in results_df.columns else ["unknown"] * len(names)
+    
+    fig = go.Figure()
+    
+    # SSZ bars
+    fig.add_trace(go.Bar(
+        name='z_SSZ',
+        x=names,
+        y=z_ssz,
+        marker_color='#e74c3c',
+        text=[f"{z:.2e}" for z in z_ssz],
+        textposition='outside',
+        hovertemplate='%{x}<br>z_SSZ: %{y:.4e}<extra></extra>'
+    ))
+    
+    # GR×SR bars
+    fig.add_trace(go.Bar(
+        name='z_GR×SR',
+        x=names,
+        y=z_grsr,
+        marker_color='#3498db',
+        text=[f"{z:.2e}" for z in z_grsr],
+        textposition='outside',
+        hovertemplate='%{x}<br>z_GR×SR: %{y:.4e}<extra></extra>'
+    ))
+    
+    fig.update_layout(
+        title='SSZ vs GR×SR Redshift Comparison',
+        xaxis_title='Object',
+        yaxis_title='Total Redshift (z)',
+        barmode='group',
+        template='plotly_white',
+        height=400,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    
+    return fig
+
+
 # =============================================================================
 # CALCULATION HANDLERS
 # =============================================================================
@@ -847,10 +908,10 @@ def run_batch_calculation():
     
     summary_md = "\n".join(lines)
     
-    # Create all plots
-    fig_comparison = create_comparison_scatter(results_df) if summary.get("comparison_enabled") else None
+    # Create all plots (SSZ vs GR always shown, Pred vs Obs only if z_obs)
+    fig_ssz_gr = create_ssz_vs_gr_plot(results_df)  # Always show SSZ vs GR comparison
     fig_regime = create_regime_distribution(results_df)
-    fig_winrate = create_win_rate_chart(results_df) if summary.get("comparison_enabled") else None
+    fig_comparison = create_comparison_scatter(results_df)  # Shows placeholder if no z_obs
     fig_compactness = create_compactness_plot(results_df)
     
     # Results CSV for display
@@ -860,8 +921,8 @@ def run_batch_calculation():
     
     display_df = results_df[[c for c in display_cols if c in results_df.columns]]
     
-    return (summary_md, display_df, fig_comparison, fig_regime, 
-            fig_winrate, fig_compactness, gr.update(visible=True, value=results_df.to_csv(index=False)),
+    return (summary_md, display_df, fig_ssz_gr, fig_regime, 
+            fig_comparison, fig_compactness, gr.update(visible=True, value=results_df.to_csv(index=False)),
             bundle.run_id, gr.update(value=bundle_path, visible=True))
 
 
@@ -1101,11 +1162,11 @@ def create_app():
                 
                 gr.Markdown("#### Visualizations")
                 with gr.Row():
-                    batch_plot = gr.Plot(label="Prediction vs Observation")
+                    batch_ssz_gr_plot = gr.Plot(label="SSZ vs GR×SR")
                     batch_regime_plot = gr.Plot(label="Regime Distribution")
                 
                 with gr.Row():
-                    batch_winrate_plot = gr.Plot(label="Win Rate by Regime")
+                    batch_plot = gr.Plot(label="Prediction vs Observation")
                     batch_compactness_plot = gr.Plot(label="Power Law (E_norm)")
                 
                 gr.Markdown("---")
@@ -1124,8 +1185,8 @@ def create_app():
                 # Wire events
                 batch_btn.click(
                     run_batch_calculation,
-                    outputs=[batch_summary, batch_results, batch_plot, batch_regime_plot, 
-                            batch_winrate_plot, batch_compactness_plot, results_csv,
+                    outputs=[batch_summary, batch_results, batch_ssz_gr_plot, batch_regime_plot, 
+                            batch_plot, batch_compactness_plot, results_csv,
                             batch_run_id, batch_download_btn]
                 ).then(get_run_info, outputs=[run_banner])
             
