@@ -25,7 +25,7 @@ from ..methods.unified import (
 
 
 @dataclass
-class TestResult:
+class SingleTestResult:
     """Result of a single test."""
     test_id: str
     passed: bool
@@ -37,13 +37,13 @@ class TestResult:
 
 
 @dataclass
-class TestSuiteResult:
+class SuiteResult:
     """Result of the full test suite."""
     total: int = 0
     passed: int = 0
     failed: int = 0
     skipped: int = 0
-    results: List[TestResult] = field(default_factory=list)
+    results: List[SingleTestResult] = field(default_factory=list)
     run_time: str = ""
     
     @property
@@ -62,11 +62,11 @@ class SSZTestHarness:
     """
     
     def __init__(self):
-        self.results = TestSuiteResult()
+        self.results = SuiteResult()
         
-    def run_all(self) -> TestSuiteResult:
+    def run_all(self) -> SuiteResult:
         """Run all test categories."""
-        self.results = TestSuiteResult()
+        self.results = SuiteResult()
         self.results.run_time = datetime.now().isoformat()
         
         # Run each category
@@ -80,7 +80,7 @@ class SSZTestHarness:
         
         return self.results
     
-    def _add_result(self, result: TestResult):
+    def _add_result(self, result: SingleTestResult):
         """Add a test result."""
         self.results.results.append(result)
         self.results.total += 1
@@ -90,10 +90,10 @@ class SSZTestHarness:
             self.results.failed += 1
     
     def _check_value(self, test_id: str, expected: float, actual: float, 
-                     tolerance: float, desc: str = "") -> TestResult:
+                     tolerance: float, desc: str = "") -> SingleTestResult:
         """Check if actual value matches expected within tolerance."""
         passed = abs(actual - expected) <= tolerance
-        return TestResult(
+        return SingleTestResult(
             test_id=test_id,
             passed=passed,
             expected=expected,
@@ -194,7 +194,7 @@ class SSZTestHarness:
         # test_D_gr_singular_at_horizon
         D_gr_horizon = D_gr(r_s, r_s)
         passed = np.isnan(D_gr_horizon) or D_gr_horizon == 0.0
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_D_gr_singular_at_horizon",
             passed=passed,
             expected="0 or NaN",
@@ -289,7 +289,7 @@ class SSZTestHarness:
         xi_2 = xi_weak(r_2, r_s)
         delta = abs(xi_2 - xi_1)
         passed = delta > 0  # Should be measurable
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_nist_clocks",
             passed=passed,
             expected="> 0",
@@ -304,7 +304,7 @@ class SSZTestHarness:
         xi_top = xi_weak(r_top, r_s)
         delta = abs(xi_top - xi_surface)
         passed = delta > 0
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_tokyo_skytree",
             passed=passed,
             expected="> 0",
@@ -354,7 +354,7 @@ class SSZTestHarness:
             
             deviation = (D_ssz_val - D_gr_val) / D_gr_val if D_gr_val != 0 else 0
             
-            self._add_result(TestResult(
+            self._add_result(SingleTestResult(
                 test_id=f"test_ns_{ns['name'].lower().replace(' ', '_').replace('+', '')}",
                 passed=passed,
                 expected=f"D_SSZ < D_GR at r/r_s={r_over_rs:.2f}",
@@ -404,7 +404,7 @@ class SSZTestHarness:
         xi_weak_val = xi_weak(r_blend, r_s)
         xi_strong_val = xi_strong(r_blend, r_s)
         passed = min(xi_weak_val, xi_strong_val) <= xi <= max(xi_weak_val, xi_strong_val)
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_blend_regime",
             passed=passed,
             expected="between weak and strong",
@@ -429,7 +429,7 @@ class SSZTestHarness:
         smooth_high = abs(xi_right - xi_left) < 0.01
         
         passed = smooth_low and smooth_high
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_blend_continuity",
             passed=passed,
             expected="C² continuous",
@@ -467,7 +467,7 @@ class SSZTestHarness:
         
         # Check that formula produces reasonable values
         passed = all(e > 1.0 for e in r_squared_values)
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_power_law_fit",
             passed=passed,
             expected="R² ≈ 0.997",
@@ -506,7 +506,7 @@ class SSZTestHarness:
         r_s = 1000.0
         D_min = D_ssz(0.001, r_s)  # Very close to origin
         passed = D_min > 0 and not np.isnan(D_min)
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_singularity_free",
             passed=passed,
             expected="> 0",
@@ -522,7 +522,7 @@ class SSZTestHarness:
             product = v_esc * v_fall
             expected = c ** 2
             passed = abs(product - expected) / expected < 0.01
-            self._add_result(TestResult(
+            self._add_result(SingleTestResult(
                 test_id="test_dual_velocity_invariance",
                 passed=passed,
                 expected=expected,
@@ -530,7 +530,7 @@ class SSZTestHarness:
                 message="v_esc · v_fall = c²"
             ))
         except Exception as e:
-            self._add_result(TestResult(
+            self._add_result(SingleTestResult(
                 test_id="test_dual_velocity_invariance",
                 passed=False,
                 expected="c²",
@@ -540,7 +540,7 @@ class SSZTestHarness:
         
         # test_energy_conservation (implicit)
         passed = True  # Assumed from other tests
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_energy_conservation",
             passed=passed,
             expected="consistent",
@@ -572,7 +572,7 @@ class SSZTestHarness:
             passed = False  # Should have raised
         except ValueError:
             passed = True
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_negative_mass",
             passed=passed,
             expected="ValueError",
@@ -598,7 +598,7 @@ class SSZTestHarness:
         xi = xi_weak(r, r_s)
         D = D_ssz(r, r_s)
         passed = xi < 1e-15 and abs(D - 1.0) < 1e-10
-        self._add_result(TestResult(
+        self._add_result(SingleTestResult(
             test_id="test_r_very_large",
             passed=passed,
             expected="Xi → 0, D → 1",
@@ -663,7 +663,7 @@ class SSZTestHarness:
         return json.dumps(data, indent=2)
 
 
-def run_all_tests() -> TestSuiteResult:
+def run_all_tests() -> SuiteResult:
     """Run all SSZ tests and return results."""
     harness = SSZTestHarness()
     return harness.run_all()

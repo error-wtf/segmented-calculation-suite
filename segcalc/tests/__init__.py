@@ -6,7 +6,7 @@ Comprehensive tests based on Unified-Results test suite (161+ tests).
 © 2025 Carmen Wrede & Lino Casu
 """
 
-from .test_harness import SSZTestHarness, run_all_tests, run_and_print, TestResult, TestSuiteResult
+from .test_harness import SSZTestHarness, run_all_tests, run_and_print, SingleTestResult, SuiteResult
 
 # Lazy imports to avoid pytest dependency at import time
 def get_physics_tests():
