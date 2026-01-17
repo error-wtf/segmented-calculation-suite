@@ -26,6 +26,8 @@ Contact: mail@error.wtf
 4. **You get a public shareable link** (e.g., `https://xxxxx.gradio.live`)
 5. Share this link - full features: Single Calc, Batch, Theory Plots, 186 Tests!
 
+> **Tip:** If no public link appears, use **Runtime → Factory reset runtime** and run all cells again.
+
 ### Option 2: 💻 Offline (Local Gradio Web UI)
 
 ```bash
