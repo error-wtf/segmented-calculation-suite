@@ -1709,6 +1709,5 @@ if __name__ == "__main__":
         server_name=host,
         server_port=port,
         share=False,
-        show_error=True,
-        css=custom_css
+        show_error=True
     )
