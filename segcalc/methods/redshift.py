@@ -214,16 +214,10 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     d_ssz = D_ssz(r_m, r_s, xi_max, phi, mode)
     d_gr = D_gr(r_m, r_s)
     
-    # FIRST: Determine regime (needed for Δ(M) gating)
+    # FIRST: Determine regime using central function (single source of truth)
+    from .regime import detect_regime
+    regime = detect_regime(r_m, r_s)
     x = r_m / r_s if r_s > 0 else float('inf')
-    if x < 2.0:
-        regime = "very_close"      # r < 2 r_s: SSZ struggles here
-    elif x <= 3.0:
-        regime = "photon_sphere"   # r = 2-3 r_s: SSZ OPTIMAL (82% wins)
-    elif x <= 10.0:
-        regime = "strong"          # r = 3-10 r_s: Strong field
-    else:
-        regime = "weak"            # r > 10 r_s: SSZ ≈ GR (PPN β=γ=1)
     
     # SSZ gravitational redshift with Δ(M) φ-based correction
     # CRITICAL CONTRACT:

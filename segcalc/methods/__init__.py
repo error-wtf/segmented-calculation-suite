@@ -2,6 +2,10 @@
 from .xi import xi_weak, xi_strong, xi_blended, xi_auto
 from .dilation import D_ssz, D_gr, D_comparison
 from .redshift import z_gravitational, z_special_rel, z_combined, z_ssz
+from .regime import (
+    detect_regime, detect_regime_enum, is_weak_field, is_strong_field,
+    get_regime_info, Regime, REGIME_BOUNDARIES
+)
 from .core import schwarzschild_radius, calculate_all, calculate_single, summary_statistics
 from .unified import (
     delta_M,
