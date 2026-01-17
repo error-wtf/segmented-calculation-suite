@@ -282,9 +282,34 @@ r*/r_s = 1.386562
 ## Test Summary
 
 ```
-56/56 Tests PASSED (100%)
+54 NEW Tests PASSED (100%) - Ported from ssz-qubits/ssz-metric-pure
 97.9% ESO Win Rate (47/48)
 ```
+
+### New Test Modules (2025-01-17)
+
+| Module | Tests | Source | Status |
+|--------|-------|--------|--------|
+| test_experimental_validation.py | 10 | ssz-qubits | ✅ |
+| test_geodesics.py | 15 | ssz-metric-pure | ✅ |
+| test_qubit.py | 29 | ssz-qubits | ✅ |
+| **TOTAL NEW** | **54** | | ✅ |
+
+### Experimental Validations
+
+| Experiment | Expected | Status |
+|------------|----------|--------|
+| GPS (~45 us/day) | Match | ✅ |
+| Pound-Rebka (2.46e-15) | Match | ✅ |
+| NIST Clock (33cm) | Match | ✅ |
+| Tokyo Skytree (450m) | Match | ✅ |
+
+### New Modules Added
+
+| Module | Functions | Description |
+|--------|-----------|-------------|
+| `segcalc/methods/geodesics.py` | 12 | phi-Spiral geodesics |
+| `segcalc/methods/qubit.py` | 20+ | Qubit SSZ analysis |
 
 ---
 
