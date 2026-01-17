@@ -304,34 +304,35 @@ for pattern, desc in deprecated_patterns:
         issues.append(f"Found deprecated: {pattern}")
         print(f"  ❌ Found '{pattern}' - this is a bug!")
 
-# Check GR helper patterns with STRICT (file, function, pattern) pinning
+# Check GR helper patterns with BULLETPROOF (file, function, pattern) pinning
+# Pragma format: # deep_analysis: allow-gr-helper func=<name>
+import re
 for file_pat, allowed_func, pattern in GR_HELPER_ALLOWLIST:
-    # Get source for the specific file
     import segcalc.methods.redshift as target_module
     module_file = target_module.__file__
-    # Verify we're checking the right file
     if file_pat not in module_file.replace('\\', '/'):
         issues.append(f"Allowlist file mismatch: {file_pat}")
         print(f"  ❌ Allowlist file mismatch: {file_pat}")
         continue
     lines = redshift_source.split('\n')
+    # BULLETPROOF: Extract allowed functions directly from pragma
+    pragma_funcs = set()
+    for line in lines:
+        match = re.search(r'deep_analysis:\s*allow-gr-helper\s+func=(\w+)', line)
+        if match:
+            pragma_funcs.add(match.group(1))
+    # Check pattern only appears in pragma-allowed functions
     found_outside = False
     current_func = None
-    has_pragma = False
-    # Scan for pragma + function + pattern
-    for i, line in enumerate(lines):
+    for line in lines:
         stripped = line.strip()
-        if 'deep_analysis: allow-gr-helper' in stripped:
-            has_pragma = True
         if stripped.startswith('def '):
             current_func = stripped.split('(')[0].replace('def ', '')
-            if current_func != allowed_func:
-                has_pragma = False
         if pattern in line and not stripped.startswith('#'):
-            if current_func != allowed_func or not has_pragma:
+            if current_func not in pragma_funcs:
                 found_outside = True
                 break
-    if not found_outside:
+    if not found_outside and allowed_func in pragma_funcs:
         passes.append(f"[{file_pat}:{allowed_func}] '{pattern}' (pragma OK)")
         print(f"  ✅ [{file_pat}:{allowed_func}] '{pattern}' (pragma OK)")
     else:

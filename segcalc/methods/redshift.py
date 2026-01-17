@@ -80,7 +80,7 @@ def z_combined(z_gr: float, z_sr: float) -> float:
     return (1.0 + z_gr) * (1.0 + z_sr) - 1.0
 
 
-# deep_analysis: allow-gr-helper z_from_dilation
+# deep_analysis: allow-gr-helper func=z_from_dilation
 def z_from_dilation(D: float) -> float:
     """
     GR Helper: Redshift from time dilation factor.
