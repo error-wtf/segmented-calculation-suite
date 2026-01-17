@@ -1553,34 +1553,31 @@ def get_regime(r, r_s):
                         # ============================================================
                         pytest_passed = 0
                         pytest_failed = 0
-                        pytest_details = []
+                        pytest_summary = ""
                         
                         try:
+                            import re
                             result = subprocess.run(
                                 ["python", "-m", "pytest", "tests/", "segcalc/tests/", 
-                                 "-v", "--tb=no", "-q"],
+                                 "-q", "--tb=no"],
                                 capture_output=True, text=True,
                                 encoding='utf-8', errors='replace',
                                 timeout=120, cwd=os.path.dirname(__file__)
                             )
                             
-                            # Parse pytest output
+                            # Parse summary line: "145 passed in 9.51s" or "3 failed, 142 passed"
                             for line in result.stdout.split('\n'):
-                                if '::' in line and (' PASSED' in line or ' FAILED' in line):
-                                    if ' PASSED' in line:
-                                        pytest_passed += 1
-                                    else:
-                                        pytest_failed += 1
-                                    pytest_details.append(line.strip())
-                            
-                            # Extract summary from last lines
-                            if 'passed' in result.stdout:
-                                for line in result.stdout.split('\n')[-10:]:
-                                    if 'passed' in line:
-                                        pytest_details.append(f"\n**Summary:** {line.strip()}")
-                                        break
+                                # Match "X passed" pattern
+                                passed_match = re.search(r'(\d+)\s+passed', line)
+                                failed_match = re.search(r'(\d+)\s+failed', line)
+                                if passed_match:
+                                    pytest_passed = int(passed_match.group(1))
+                                    pytest_summary = line.strip()
+                                if failed_match:
+                                    pytest_failed = int(failed_match.group(1))
+                                    
                         except Exception as pytest_err:
-                            pytest_details.append(f"pytest error: {pytest_err}")
+                            pytest_summary = f"pytest error: {pytest_err}"
                         
                         if pytest_passed + pytest_failed > 0:
                             categories.append("pytest (tests/)")
@@ -1611,16 +1608,13 @@ def get_regime(r, r_s):
                         
                         # Build details
                         details_lines.append("## 🧪 pytest Results")
-                        details_lines.append(f"**{pytest_passed}/{pytest_passed + pytest_failed}** tests passed\n")
-                        details_lines.append("| Test | Status |")
-                        details_lines.append("|------|--------|")
-                        for line in pytest_details[:50]:  # Limit to 50 for UI
-                            if '::' in line:
-                                status = "✅" if "PASSED" in line else "❌"
-                                test_name = line.split('::')[-1].split()[0] if '::' in line else line[:40]
-                                details_lines.append(f"| {test_name} | {status} |")
-                        if len(pytest_details) > 50:
-                            details_lines.append(f"| ... +{len(pytest_details)-50} more | |")
+                        if pytest_passed + pytest_failed > 0:
+                            status_icon = "✅" if pytest_failed == 0 else "⚠️"
+                            details_lines.append(f"{status_icon} **{pytest_passed}/{pytest_passed + pytest_failed}** tests passed")
+                            if pytest_summary:
+                                details_lines.append(f"\n`{pytest_summary}`")
+                        else:
+                            details_lines.append("⚠️ pytest could not be executed")
                         
                         details_lines.append("\n---\n")
                         details_lines.append(format_validation_results(suite))
