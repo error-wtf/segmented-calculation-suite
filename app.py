@@ -1687,27 +1687,21 @@ The validation suite encountered an error. This may be due to:
 
 if __name__ == "__main__":
     import os
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="SSZ Calculation Suite")
+    parser.add_argument("--share", action="store_true", help="Create public link")
+    parser.add_argument("--port", type=int, default=7860, help="Port number")
+    args = parser.parse_args()
+    
     app = create_app()
     
-    # Cloud-friendly: use environment variables for host/port
     host = os.environ.get("HOST", "0.0.0.0")
-    port = int(os.environ.get("PORT", 7860))
-    
-    custom_css = """
-    .gradio-container {
-        max-width: 100% !important;
-        width: 100% !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-    }
-    .contain {
-        max-width: 100% !important;
-    }
-    """
+    port = int(os.environ.get("PORT", args.port))
     
     app.launch(
         server_name=host,
         server_port=port,
-        share=False,
+        share=args.share,
         show_error=True
     )
