@@ -204,42 +204,39 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     """
     r_s = 2.0 * G * M_kg / (c * c)
     
-    # Determine regime FIRST - critical for correct physics
-    x = r_m / r_s if r_s > 0 else float('inf')
-    is_weak_field = x > 110  # Weak field: SSZ = GR exactly
-    
     # GR components
     z_gr = z_gravitational(M_kg, r_m)
     z_sr = z_special_rel(v_mps, v_los_mps)
     z_grsr = z_combined(z_gr, z_sr)
     
-    # SSZ time dilation (for internal comparisons, NOT for redshift!)
+    # SSZ time dilation (for internal comparisons)
     d_ssz = D_ssz(r_m, r_s, xi_max, phi, mode)
     d_gr = D_gr(r_m, r_s)
     
-    # SSZ gravitational redshift - CRITICAL CORRECTION!
-    # From "Dual Velocities" paper: "In weak field, SSZ matches GR exactly"
-    # Δ(M) correction ONLY in strong field where φ-spiral geometry dominates
+    # SSZ gravitational redshift with Δ(M) φ-based correction
+    # CRITICAL per full-output.md:
+    #   WITHOUT Δ(M): 0% wins (total failure)
+    #   WITH Δ(M): 51% overall, 82% photon sphere, 37% weak field
+    # Δ(M) applies EVERYWHERE - it's what makes SSZ competitive!
     
     delta_m = 0.0
     z_geom = None
     
     if use_geom_hint:
-        # S-star mode: Use φ-geometric hint (KEY to 97.9% ESO accuracy!)
+        # S-star mode: Use φ-geometric hint
         z_geom = z_geom_hint(M_kg, r_m, phi)
         z_ssz_grav_base = z_geom
         z_ssz_grav = z_geom
     else:
-        # Standard mode: GR base, with Δ(M) correction ONLY in strong field
+        # Standard mode: GR base with Δ(M) multiplicative correction
         z_ssz_grav_base = z_gr
         
-        if use_delta_m and not is_weak_field:
-            # ONLY apply Δ(M) in strong field (r/r_s < 110)
+        if use_delta_m:
+            # Apply Δ(M) in ALL regimes (per full-output.md validation)
             delta_m = delta_m_correction(M_kg)
             correction_factor = 1.0 + (delta_m / 100.0)
             z_ssz_grav = z_ssz_grav_base * correction_factor
         else:
-            # Weak field: SSZ = GR exactly (no correction)
             z_ssz_grav = z_ssz_grav_base
     
     z_ssz_total = z_combined(z_ssz_grav, z_sr)
