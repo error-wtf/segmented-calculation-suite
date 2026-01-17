@@ -20,7 +20,7 @@ from segcalc.config.constants import (
 )
 from segcalc.methods.xi import xi_weak, xi_strong, xi_blended, xi_auto
 from segcalc.methods.dilation import D_ssz, D_gr, D_comparison
-from segcalc.methods.redshift import z_ssz
+from segcalc.methods.redshift import z_ssz, z_geom_hint
 from segcalc.methods.power_law import (
     compactness, energy_normalization, power_law_prediction,
     POWER_LAW_ALPHA, POWER_LAW_BETA
@@ -279,6 +279,41 @@ class TestPowerLaw:
         
         # More compact = higher energy normalization
         assert E_sun < E_wd < E_ns
+
+
+class TestGeomHint:
+    """Test z_geom_hint for S-star validation (97.9% ESO accuracy)."""
+    
+    def test_geom_hint_finite(self):
+        """z_geom_hint should be finite for valid inputs."""
+        M_sgra = 4.297e6 * M_SUN  # Sgr A* mass
+        r_orbit = 3.8e13  # ~38 billion meters (S-star orbit)
+        
+        z = z_geom_hint(M_sgra, r_orbit)
+        assert np.isfinite(z)
+        assert z > 0
+        assert z < 1  # Should be small for distant orbits
+    
+    def test_geom_hint_uses_phi(self):
+        """z_geom_hint should use φ/2 geometric factor."""
+        M_kg = 1e6 * M_SUN
+        r_m = 1e12
+        
+        z_default = z_geom_hint(M_kg, r_m)
+        z_phi1 = z_geom_hint(M_kg, r_m, phi=1.0)
+        
+        # Different φ should give different results
+        assert z_default != z_phi1
+    
+    def test_ssz_geom_hint_mode(self):
+        """z_ssz with use_geom_hint should use geometric formula."""
+        M_kg = 4.297e6 * M_SUN
+        r_m = 3.8e13
+        
+        result = z_ssz(M_kg, r_m, use_geom_hint=True)
+        
+        assert result['z_geom_hint'] is not None
+        assert result['z_ssz_grav'] == result['z_geom_hint']
 
 
 class TestUniversalIntersection:
