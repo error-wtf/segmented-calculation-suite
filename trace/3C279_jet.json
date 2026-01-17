@@ -1,0 +1,87 @@
+{
+  "object": "3C279_jet",
+  "inputs": {
+    "M_msun": 840000000.0,
+    "r_m": 7442415242808.535,
+    "v_tot": 293340000.0,
+    "z_obs": 0.536
+  },
+  "reference": {
+    "z_seg": 11.63642764315749,
+    "z_grsr": 10.61891888038141,
+    "winner": "GR",
+    "error_seg": 11.10042764315749,
+    "error_gr": 10.08291888038141
+  },
+  "step1_geometry": {
+    "M_kg": 1.6703148e+39,
+    "r_s": 2480805080936.178,
+    "r_over_rs": 3.0,
+    "r_s_formula": "2*G*M/(c^2)"
+  },
+  "step2_regime": {
+    "regime": "photon_sphere",
+    "blend_low": 1.8,
+    "blend_high": 2.2,
+    "thresholds": {
+      "very_close": "x < 1.8",
+      "blended": "1.8 <= x <= 2.2",
+      "photon_sphere": "2.2 < x <= 3",
+      "strong": "3 < x <= 10",
+      "weak": "x > 10"
+    }
+  },
+  "step3_xi": {
+    "xi_auto": 0.9922036684205935,
+    "xi_weak": 0.16666666666666666,
+    "xi_strong": 0.9922036684205935,
+    "xi_max": 0.8017118471377938,
+    "xi_formula_weak": "r_s / (2*r)",
+    "xi_formula_strong": "1 - exp(-phi * r / r_s)"
+  },
+  "step4_dilation": {
+    "D_ssz": 0.5019567104766922,
+    "D_gr": 0.816496580927726,
+    "D_formula": "1 / (1 + Xi)"
+  },
+  "step5_z_ssz_with_geom": {
+    "z_ssz_total": 4.691158156643556,
+    "z_ssz_grav": 0.17440634865818527,
+    "z_sr": 3.8459872199651954,
+    "z_grsr": 4.9350979944815565,
+    "z_gr": 0.22474487139158894,
+    "D_ssz": 0.5019567104766922,
+    "delta_m_applied": false,
+    "delta_m_pct": 0.0,
+    "use_geom_hint": true
+  },
+  "step5b_z_ssz_no_geom": {
+    "z_ssz_total": 4.954591949001218,
+    "z_ssz_grav": 0.22876757174856632,
+    "z_sr": 3.8459872199651954,
+    "z_grsr": 4.9350979944815565
+  },
+  "step6_comparison": {
+    "z_obs": 0.536,
+    "z_ssz_cur": 4.691158156643556,
+    "z_gr_cur": 4.9350979944815565,
+    "res_ssz": 4.155158156643555,
+    "res_gr": 4.399097994481556,
+    "eps": 4.399097994481556e-12,
+    "winner_cur": "SEG",
+    "winner_ref": "GR",
+    "winner_match": false
+  },
+  "diagnosis": [
+    "z_seg differs by 59.7%",
+    "z_grsr differs by 53.5%",
+    "Winner flipped: ref=GR, cur=SEG"
+  ],
+  "summary": {
+    "dz_seg": -6.945269486513934,
+    "dz_seg_pct": 59.68558134418449,
+    "dz_grsr": -5.683820885899853,
+    "dz_grsr_pct": 53.52541958297456,
+    "winner_match": false
+  }
+}

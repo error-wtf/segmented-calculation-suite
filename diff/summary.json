@@ -1,0 +1,11 @@
+{
+  "total_objects": 47,
+  "winner_matches": 46,
+  "winner_mismatches": 1,
+  "seg_wins_ref": 46,
+  "seg_wins_cur": 47,
+  "gr_wins_ref": 1,
+  "gr_wins_cur": 0,
+  "mean_abs_dz_seg": 0.2704153209083544,
+  "mean_abs_dz_grsr": 0.02531309934548759
+}
