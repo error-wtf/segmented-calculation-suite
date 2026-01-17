@@ -234,8 +234,10 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     delta_m = 0.0
     z_geom = None
     
-    if use_geom_hint:
-        # S-star mode: Use φ-geometric hint
+    # CRITICAL: use_geom_hint ONLY in strong field regimes, NOT weak!
+    # In weak field: SSZ = GR (contract from unified test suite)
+    if use_geom_hint and regime != "weak":
+        # S-star mode: Use φ-geometric hint (only strong field)
         z_geom = z_geom_hint(M_kg, r_m, phi)
         z_ssz_grav_base = z_geom
         z_ssz_grav = z_geom

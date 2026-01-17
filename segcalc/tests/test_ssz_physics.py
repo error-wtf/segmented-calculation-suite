@@ -308,14 +308,29 @@ class TestGeomHint:
         assert z_default != z_phi1
     
     def test_ssz_geom_hint_mode(self):
-        """z_ssz with use_geom_hint should use geometric formula."""
-        M_kg = 4.297e6 * M_SUN
-        r_m = 3.8e13
+        """z_ssz with use_geom_hint should use geometric formula in strong field."""
+        # Use strong field object (r/r_s < 10) where geom_hint applies
+        M_kg = 10.0 * M_SUN  # 10 solar mass black hole
+        r_s = 2 * G * M_kg / (c * c)
+        r_m = 5.0 * r_s  # r/r_s = 5 → strong field
         
         result = z_ssz(M_kg, r_m, use_geom_hint=True)
         
         assert result['z_geom_hint'] is not None
         assert result['z_ssz_grav'] == result['z_geom_hint']
+    
+    def test_ssz_geom_hint_disabled_weak_field(self):
+        """z_ssz with use_geom_hint should be ignored in weak field (SSZ = GR)."""
+        # Weak field: r/r_s > 10
+        M_kg = 4.297e6 * M_SUN
+        r_m = 3.8e13  # r/r_s ≈ 3000 → weak field
+        
+        result = z_ssz(M_kg, r_m, use_geom_hint=True)
+        
+        # In weak field, geom_hint should NOT be applied
+        assert result['z_geom_hint'] is None
+        # SSZ should equal GR in weak field
+        assert abs(result['z_ssz_grav'] - result['z_gr']) < 1e-15
 
 
 class TestUniversalIntersection:
