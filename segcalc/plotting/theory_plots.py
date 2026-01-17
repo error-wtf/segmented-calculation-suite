@@ -169,7 +169,7 @@ def plot_gr_vs_ssz_comparison() -> go.Figure:
 
 def plot_universal_intersection() -> go.Figure:
     """
-    Show mass-independence of the universal intersection point r*/r_s = 1.387.
+    Show mass-independence of the universal intersection point r*/r_s = 1.595.
     """
     masses = [1, 10, 100, 1000, 1e6]  # M_sun
     
@@ -582,7 +582,7 @@ def get_all_theory_plots() -> Dict[str, go.Figure]:
 PLOT_DESCRIPTIONS = {
     "xi_and_dilation": "**Ξ(r) & D(r)** - Core SSZ physics: segment density and time dilation",
     "gr_vs_ssz": "**GR vs SSZ** - Time dilation comparison showing singularity-free SSZ",
-    "universal_intersection": "**Universal Intersection** - r*/r_s = 1.387 (mass-independent)",
+    "universal_intersection": "**Universal Intersection** - r*/r_s = 1.595 (mass-independent)",
     "power_law": "**Power Law** - E_norm = 1 + 0.32·(r_s/R)^0.98 with R²=0.997",
     "regime_zones": "**Regime Classification** - Weak/Strong/Blend zones",
     "experimental_validation": "**Experimental Validation** - GPS, Pound-Rebka, NIST, Tokyo Skytree",
