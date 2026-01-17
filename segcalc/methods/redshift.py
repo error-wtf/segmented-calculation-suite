@@ -181,11 +181,11 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     """
     Complete SSZ redshift calculation with Δ(M) φ-based correction.
     
-    Uses the mass-dependent correction from φ-spiral geometry
-    to improve upon GR×SR predictions. This is CRITICAL for SSZ success!
+    CRITICAL: Δ(M) correction only applies in STRONG FIELD (r/r_s < 110).
+    In weak field, SSZ = GR exactly (this is correct per "Dual Velocities" paper).
     
     Modes:
-    - use_delta_m=True, use_geom_hint=False: Standard Δ(M) correction (51% wins)
+    - use_delta_m=True, use_geom_hint=False: Standard Δ(M) correction (strong field only)
     - use_geom_hint=True: S-star geometric hint mode (97.9% wins with ESO data!)
     
     Parameters:
@@ -204,6 +204,10 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     """
     r_s = 2.0 * G * M_kg / (c * c)
     
+    # Determine regime FIRST - critical for correct physics
+    x = r_m / r_s if r_s > 0 else float('inf')
+    is_weak_field = x > 110  # Weak field: SSZ = GR exactly
+    
     # GR components
     z_gr = z_gravitational(M_kg, r_m)
     z_sr = z_special_rel(v_mps, v_los_mps)
@@ -214,8 +218,8 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     d_gr = D_gr(r_m, r_s)
     
     # SSZ gravitational redshift - CRITICAL CORRECTION!
-    # From "Dual Velocities" paper and Verification Summary:
-    # "In the segmented model γ_s is matched identical, therefore z(r) is identical"
+    # From "Dual Velocities" paper: "In weak field, SSZ matches GR exactly"
+    # Δ(M) correction ONLY in strong field where φ-spiral geometry dominates
     
     delta_m = 0.0
     z_geom = None
@@ -226,15 +230,16 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
         z_ssz_grav_base = z_geom
         z_ssz_grav = z_geom
     else:
-        # Standard mode: GR base with Δ(M) multiplicative correction
+        # Standard mode: GR base, with Δ(M) correction ONLY in strong field
         z_ssz_grav_base = z_gr
         
-        if use_delta_m:
+        if use_delta_m and not is_weak_field:
+            # ONLY apply Δ(M) in strong field (r/r_s < 110)
             delta_m = delta_m_correction(M_kg)
-            # Apply as small percentage enhancement per φ-spiral geometry
             correction_factor = 1.0 + (delta_m / 100.0)
             z_ssz_grav = z_ssz_grav_base * correction_factor
         else:
+            # Weak field: SSZ = GR exactly (no correction)
             z_ssz_grav = z_ssz_grav_base
     
     z_ssz_total = z_combined(z_ssz_grav, z_sr)
