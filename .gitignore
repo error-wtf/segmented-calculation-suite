@@ -50,6 +50,7 @@ test_reports/
 reports/
 *.csv
 !sample_data.csv
+!data/*.csv
 
 # OS
 .DS_Store
