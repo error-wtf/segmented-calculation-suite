@@ -1450,13 +1450,13 @@ def get_regime(r, r_s):
             with gr.TabItem("✅ Validation"):
                 gr.Markdown("### 🧪 Unified SSZ Validation Suite")
                 gr.Markdown("""
-**144 Tests** aus 3 Kategorien:
+**186 Tests** aus 3 Kategorien:
 
 | Kategorie | Tests | Beschreibung |
 |-----------|-------|--------------|
-| **pytest tests/** | 82 | Core Physics, Regime, UI Canonicalization |
-| **pytest segcalc/tests/** | 62 | SSZ Physics, Power Law, Integration |
-| **Built-in Suite** | ~60 | GPS, Pound-Rebka, Neutron Stars, Invariants |
+| **pytest tests/** | 88 | Core Physics, Regime, UI Canonicalization |
+| **pytest segcalc/tests/** | 56 | SSZ Physics, Power Law, Integration |
+| **Built-in Suite** | 42 | GPS, Pound-Rebka, Neutron Stars, Invariants |
 
 **Kanonische Regime-Grenzen (segcalc):**
 - Very Close: r/r_s < 1.8
