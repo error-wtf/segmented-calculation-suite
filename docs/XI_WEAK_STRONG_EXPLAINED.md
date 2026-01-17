@@ -121,7 +121,7 @@ Idee: PPN ↔ Strong Matching in Überlappzone
 Weak (outer):  Ξ_w = r_s/(2r) + O(r_s²/r²)
 Strong (inner): Ξ_s = 1 - exp(-φr/r_s)
 
-Matching-Bedingung bei r* = 1.387 r_s:
+Matching-Bedingung bei r* = 1.595 r_s:
   Ξ_w(r*) = Ξ_s(r*) UND dΞ_w/dr|_r* = dΞ_s/dr|_r*
 ```
 
@@ -217,7 +217,7 @@ D_SSZ(r_s) = 0.555 (ENDLICH, nicht 0)
 ### Invariante 4: Universeller Schnittpunkt
 
 ```
-D_SSZ(r*) = D_GR(r*) bei r*/r_s = 1.386562
+D_SSZ(r*) = D_GR(r*) bei r*/r_s = 1.594811
 ```
 
 **Test:** `test_intersection.py`

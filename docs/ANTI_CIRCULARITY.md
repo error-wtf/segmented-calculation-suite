@@ -97,7 +97,7 @@ OUTPUT                               ┌─────────────�
 |----------|------------|-----------|
 | Ξ(r_s) = 0.802 | 1 - exp(-φ) | ❌ No (from φ) |
 | D(r_s) = 0.555 | 1/(1+0.802) | ❌ No (from Ξ) |
-| r*/r_s = 1.387 | Numerical solution | ❌ No (from Ξ equations) |
+| r*/r_s = 1.595 | Numerical solution | ❌ No (from Ξ equations) |
 
 ### Δ(M) Parameters (Calibrated)
 

@@ -130,7 +130,7 @@ z = 1/D - 1
 |------------|--------|-----------|
 | Energie-Erhaltung | D × (1 + Ξ) = 1 | g2 → g1 |
 | Duale Geschwindigkeit | v_esc × v_fall = c² | g1 |
-| Universeller Schnittpunkt | r*/r_s = 1.387 | g1 = GR |
+| Universeller Schnittpunkt | r*/r_s = 1.595 | g1 = GR |
 
 ### Tests
 

@@ -327,7 +327,7 @@ wobei w(r) **physikalisch motiviert** ist:
 
 $$w(r) = \frac{1}{1 + (r/r_*)^n}$$
 
-mit r* = 1.387 r_s (universeller Schnittpunkt!) und n als Fit-Parameter.
+mit r* = 1.595 r_s (universeller Schnittpunkt!) und n als Fit-Parameter.
 
 **Vorteile:**
 - Minimal invasiv (1-2 neue Parameter)

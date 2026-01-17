@@ -164,7 +164,7 @@ w(r) = 1 / (1 + exp(-k(r - r*)/r_s))
 
 | Aspekt | Bewertung |
 |--------|-----------|
-| **Vorteil** | Nutzt r* = 1.387 r_s als physikalischen Anker, C∞ glatt |
+| **Vorteil** | Nutzt r* = 1.595 r_s als physikalischen Anker, C∞ glatt |
 | **Risiko** | Parameter k ist phänomenologisch, nicht hergeleitet |
 | **Falsifizierer** | `test_invariants_hard.py` (15/15) muss weiter PASS sein |
 
