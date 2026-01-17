@@ -532,14 +532,25 @@ def calculate_single_object(name: str, M_Msun: float, R_km: float, v_kms: float,
     ]
     
     if z_obs is not None:
-        ssz_closer = result.get('ssz_closer', False)
+        winner = result.get('winner', 'GR')
+        # Determine display values - TIE shows both as winners
+        if winner == "TIE":
+            ssz_display = "**TIE**"
+            gr_display = "**TIE**"
+        elif winner == "SSZ":
+            ssz_display = "**YES**"
+            gr_display = "no"
+        else:
+            ssz_display = "no"
+            gr_display = "**YES**"
+        
         lines.extend([
             f"",
-            f"### Comparison",
+            f"### Comparison (Winner: {winner})",
             f"| | z_obs | z_pred | Residual | Closer? |",
             f"|---|-------|--------|----------|---------|",
-            f"| SSZ | {z_obs:.6e} | {result['z_ssz_total']:.6e} | {result['z_ssz_residual']:.6e} | {'**YES**' if ssz_closer else 'no'} |",
-            f"| GR×SR | {z_obs:.6e} | {result['z_grsr']:.6e} | {result['z_grsr_residual']:.6e} | {'**YES**' if not ssz_closer else 'no'} |",
+            f"| SSZ | {z_obs:.6e} | {result['z_ssz_total']:.6e} | {result['z_ssz_residual']:.6e} | {ssz_display} |",
+            f"| GR×SR | {z_obs:.6e} | {result['z_grsr']:.6e} | {result['z_grsr_residual']:.6e} | {gr_display} |",
         ])
     
     lines.extend([
@@ -1189,24 +1200,71 @@ def create_app():
                 eval_plt = gr.Plot()
                 
                 def do_eval(m, r, v, z):
-                    from segcalc.config.constants import RunConfig
+                    from segcalc.config.constants import RunConfig, G, c, M_SUN
+                    from segcalc.config.constants import REGIME_STRONG_THRESHOLD, REGIME_WEAK_THRESHOLD
                     z_val = z if z and z > 0 else None
                     res = calculate_single("Eval", m, r, v or 0, z_val, RunConfig())
                     
-                    # Calculate SSZ advantage
+                    # Calculate numeric regime trigger
+                    M_kg = m * M_SUN
+                    r_m = r * 1000  # km to m
+                    r_s = 2 * G * M_kg / (c * c)
+                    r_s_km = r_s / 1000
+                    r_over_rs = r_m / r_s if r_s > 0 else float('inf')
+                    
+                    # Regime thresholds from constants
+                    strong_thresh = REGIME_STRONG_THRESHOLD  # 90
+                    weak_thresh = REGIME_WEAK_THRESHOLD      # 110
+                    
+                    # Determine regime with numeric justification
+                    regime = res['regime']
+                    if r_over_rs < 2:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} < 2 → very_close"
+                    elif r_over_rs < 3:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} < 3 → photon_sphere"
+                    elif r_over_rs < strong_thresh:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} < {strong_thresh} → strong"
+                    elif r_over_rs > weak_thresh:
+                        regime_trigger = f"r/r_s={r_over_rs:.2f} > {weak_thresh} → weak"
+                    else:
+                        regime_trigger = f"{strong_thresh} ≤ r/r_s={r_over_rs:.2f} ≤ {weak_thresh} → blend"
+                    
+                    # SSZ vs GR delta (NOT "advantage" - that implies winner)
                     z_ssz = res['z_ssz_total']
                     z_gr = res['z_grsr']
-                    ssz_advantage = ((z_ssz - z_gr) / z_gr * 100) if z_gr > 0 else 0
+                    delta_pct = ((z_ssz - z_gr) / z_gr * 100) if z_gr > 0 else 0
                     
-                    regime = res['regime']
-                    if regime == "strong":
-                        verdict = f"**SSZ VORTEIL: +{ssz_advantage:.1f}% hohere Rotverschiebung** (Strong Field)"
-                    elif regime == "weak":
-                        verdict = f"SSZ ~ GR (Weak Field, nur +{ssz_advantage:.2f}% Unterschied)"
+                    # Build output - GATE winner language on has_obs
+                    has_obs = z_val is not None and z_val > 0
+                    
+                    if has_obs:
+                        # WITH observation: can show winner
+                        ssz_res = abs(z_ssz - z_val)
+                        gr_res = abs(z_gr - z_val)
+                        eps = 1e-12 * max(ssz_res, gr_res, 1e-20)
+                        if abs(ssz_res - gr_res) <= eps:
+                            winner = "TIE"
+                        elif ssz_res < gr_res:
+                            winner = "SSZ"
+                        else:
+                            winner = "GR×SR"
+                        verdict = f"**Winner: {winner}** | SSZ residual: {ssz_res:.4e} | GR residual: {gr_res:.4e}"
                     else:
-                        verdict = f"SSZ Vorteil: +{ssz_advantage:.1f}% (Blend Zone)"
+                        # WITHOUT observation: only show delta, NO winner claims
+                        verdict = f"**Prediction only (no z_obs)** | Δ(SSZ-GR) = {delta_pct:+.2f}%"
                     
-                    md = f"**Regime:** {regime} | **D_SSZ:** {res['D_ssz']:.6f} | **z_SSZ:** {res['z_ssz_total']:.4e}\n\n{verdict}"
+                    # Numeric debug overlay for regime
+                    regime_debug = f"""
+### Regime Classification (Numeric Trigger)
+| Parameter | Value |
+|-----------|-------|
+| r_s | {r_s_km:.4f} km |
+| r/r_s | {r_over_rs:.2f} |
+| Thresholds | strong<{strong_thresh}, weak>{weak_thresh} |
+| **Trigger** | {regime_trigger} |
+"""
+                    
+                    md = f"**Regime:** {regime} | **D_SSZ:** {res['D_ssz']:.6f} | **z_SSZ:** {res['z_ssz_total']:.4e}\n\n{verdict}\n{regime_debug}"
                     return md, create_redshift_breakdown(res)
                 
                 eval_btn.click(do_eval, inputs=[eval_m, eval_r, eval_v, eval_z], outputs=[eval_out, eval_plt])

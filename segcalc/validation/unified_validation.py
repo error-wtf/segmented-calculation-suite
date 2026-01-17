@@ -428,7 +428,7 @@ def run_neutron_star_tests() -> CategoryResult:
         # Regime check
         is_strong = r_ratio < 90
         
-        result = z_ssz(M_kg, R_m, mode="auto")
+        result = z_ssz(M_kg, R_m, mode="auto", use_delta_m=True, use_geom_hint=True)
         z_gr = result["z_gr"]
         z_ssz_grav = result["z_ssz_grav"]
         

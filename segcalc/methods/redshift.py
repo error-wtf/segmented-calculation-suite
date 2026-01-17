@@ -213,11 +213,22 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
     d_ssz = D_ssz(r_m, r_s, xi_max, phi, mode)
     d_gr = D_gr(r_m, r_s)
     
+    # FIRST: Determine regime (needed for Δ(M) gating)
+    x = r_m / r_s if r_s > 0 else float('inf')
+    if x < 2.0:
+        regime = "very_close"      # r < 2 r_s: SSZ struggles here
+    elif x <= 3.0:
+        regime = "photon_sphere"   # r = 2-3 r_s: SSZ OPTIMAL (82% wins)
+    elif x <= 10.0:
+        regime = "strong"          # r = 3-10 r_s: Strong field
+    else:
+        regime = "weak"            # r > 10 r_s: SSZ ≈ GR (PPN β=γ=1)
+    
     # SSZ gravitational redshift with Δ(M) φ-based correction
-    # CRITICAL per full-output.md:
-    #   WITHOUT Δ(M): 0% wins (total failure)
-    #   WITH Δ(M): 51% overall, 82% photon sphere, 37% weak field
-    # Δ(M) applies EVERYWHERE - it's what makes SSZ competitive!
+    # CRITICAL CONTRACT:
+    #   - WEAK FIELD: SSZ ≈ GR (no Δ(M) correction!) - PPN β=γ=1
+    #   - STRONG/BLEND/PHOTON: Δ(M) applies - this is where SSZ differs
+    # Applying Δ(M) in weak field BREAKS the SSZ ≈ GR contract!
     
     delta_m = 0.0
     z_geom = None
@@ -231,26 +242,17 @@ def z_ssz(M_kg: float, r_m: float, v_mps: float = 0.0, v_los_mps: float = 0.0,
         # Standard mode: GR base with Δ(M) multiplicative correction
         z_ssz_grav_base = z_gr
         
-        if use_delta_m:
-            # Apply Δ(M) in ALL regimes (per full-output.md validation)
+        # GATE Δ(M) on regime: ONLY in strong field regimes, NOT weak!
+        if use_delta_m and regime != "weak":
+            # Apply Δ(M) ONLY in strong/blend/photon_sphere/very_close
             delta_m = delta_m_correction(M_kg)
             correction_factor = 1.0 + (delta_m / 100.0)
             z_ssz_grav = z_ssz_grav_base * correction_factor
         else:
+            # Weak field: SSZ = GR (no correction)
             z_ssz_grav = z_ssz_grav_base
     
     z_ssz_total = z_combined(z_ssz_grav, z_sr)
-    
-    # Determine regime (Unified-Results classification)
-    x = r_m / r_s if r_s > 0 else float('inf')
-    if x < 2.0:
-        regime = "very_close"      # r < 2 r_s: SSZ struggles here
-    elif x <= 3.0:
-        regime = "photon_sphere"   # r = 2-3 r_s: SSZ OPTIMAL (82% wins)
-    elif x <= 10.0:
-        regime = "strong"          # r = 3-10 r_s: Strong field
-    else:
-        regime = "weak"            # r > 10 r_s: Weak field (~37% wins)
     
     return {
         "z_gr": z_gr,

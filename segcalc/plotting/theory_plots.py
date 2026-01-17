@@ -472,10 +472,10 @@ def plot_neutron_star_predictions() -> go.Figure:
         M_kg = M_msun * M_SUN
         R_m = R_km * 1000
         
-        # Calculate WITH Δ(M) correction (correct SSZ)
-        result_with = calc_z_ssz(M_kg, R_m, mode="auto", use_delta_m=True)
-        # Calculate WITHOUT Δ(M) correction (for comparison)
-        result_without = calc_z_ssz(M_kg, R_m, mode="auto", use_delta_m=False)
+        # Calculate WITH Δ(M) + geom_hint (correct SSZ per CONTRACT)
+        result_with = calc_z_ssz(M_kg, R_m, mode="auto", use_delta_m=True, use_geom_hint=True)
+        # Calculate WITHOUT corrections (for comparison)
+        result_without = calc_z_ssz(M_kg, R_m, mode="auto", use_delta_m=False, use_geom_hint=False)
         
         names.append(name)
         z_gr_vals.append(result_with["z_gr"])

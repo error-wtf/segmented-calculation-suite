@@ -88,8 +88,10 @@ def calculate_single(name: str, M_Msun: float, R_km: float,
     d_ssz = D_ssz(R_m, r_s, 1.0, config.phi, config.xi_mode)
     d_gr = D_gr(R_m, r_s)
     
-    # Full redshift calculation
-    z_result = z_ssz(M_kg, R_m, v_mps, 0.0, 1.0, config.phi, config.xi_mode)
+    # Full redshift calculation with geometric hint mode (CONTRACT: full-output.md:L4618)
+    # use_geom_hint=True is CRITICAL for 97.9% SSZ win rate!
+    z_result = z_ssz(M_kg, R_m, v_mps, 0.0, 1.0, config.phi, config.xi_mode,
+                     use_delta_m=True, use_geom_hint=True)
     
     # Power Law prediction
     pl = power_law_prediction(M_Msun, R_km)
@@ -130,16 +132,34 @@ def calculate_single(name: str, M_Msun: float, R_km: float,
     }
     
     # Comparison with observation
+    # CRITICAL: Proper tie handling to avoid NO/YES inconsistency bug
     if z_obs is not None and np.isfinite(z_obs):
         result["z_obs"] = z_obs
         result["z_ssz_residual"] = z_result["z_ssz_total"] - z_obs
         result["z_grsr_residual"] = z_result["z_grsr"] - z_obs
-        result["ssz_closer"] = abs(result["z_ssz_residual"]) < abs(result["z_grsr_residual"])
+        
+        # Proper winner determination with tie handling
+        abs_ssz = abs(result["z_ssz_residual"])
+        abs_gr = abs(result["z_grsr_residual"])
+        
+        # Use relative epsilon for tie detection
+        eps = 1e-12 * max(abs_ssz, abs_gr, 1e-20)
+        
+        if abs(abs_ssz - abs_gr) <= eps:
+            result["winner"] = "TIE"
+            result["ssz_closer"] = True  # Tie goes to SSZ (consistent behavior)
+        elif abs_ssz < abs_gr:
+            result["winner"] = "SSZ"
+            result["ssz_closer"] = True
+        else:
+            result["winner"] = "GR"
+            result["ssz_closer"] = False
     else:
         result["z_obs"] = None
         result["z_ssz_residual"] = None
         result["z_grsr_residual"] = None
         result["ssz_closer"] = None
+        result["winner"] = None
     
     return result
 
@@ -199,15 +219,28 @@ def calculate_all(df: pd.DataFrame, config: RunConfig = None) -> pd.DataFrame:
             if pd.notna(z_grsr_precalc):
                 result["z_grsr"] = z_grsr_precalc
             
-            # Recalculate residuals and ssz_closer with correct values
+            # Recalculate residuals and winner with correct values
             if z_obs is not None and np.isfinite(z_obs):
                 result["z_ssz_residual"] = result["z_ssz_total"] - z_obs
                 result["z_grsr_residual"] = result["z_grsr"] - z_obs
                 # Use pre-calculated winner if available
                 if pd.notna(winner):
+                    result["winner"] = winner
                     result["ssz_closer"] = (winner == "SEG")
                 else:
-                    result["ssz_closer"] = abs(result["z_ssz_residual"]) < abs(result["z_grsr_residual"])
+                    # Apply consistent tie handling
+                    abs_ssz = abs(result["z_ssz_residual"])
+                    abs_gr = abs(result["z_grsr_residual"])
+                    eps = 1e-12 * max(abs_ssz, abs_gr, 1e-20)
+                    if abs(abs_ssz - abs_gr) <= eps:
+                        result["winner"] = "TIE"
+                        result["ssz_closer"] = True
+                    elif abs_ssz < abs_gr:
+                        result["winner"] = "SSZ"
+                        result["ssz_closer"] = True
+                    else:
+                        result["winner"] = "GR"
+                        result["ssz_closer"] = False
         
         results.append(result)
     
