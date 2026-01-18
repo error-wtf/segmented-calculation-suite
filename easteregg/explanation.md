@@ -1,36 +1,30 @@
-# 🐈 Schrödingers Katze in SSZ — Easter-Egg / Toy-Model
+# 🐈 Schrödingers Katze (Easter-Egg) — QM-Testfall innerhalb von SSZ
 
 ![Schrödinger's Cat Plans Revenge](schrodinger.jpg)
 
 > *"Meanwhile, inside the box, Schrödinger's cat plans its revenge..."*
->
-> *(Die Katze kritzelt Formeln an die Box-Wand — aber ob sie richtig sind, weiß niemand so genau.)*
 
 ---
 
-## ⚠️ WICHTIG: Was ist das hier?
+## ⚠️ Wichtige Klarstellung vorweg
 
-**Dies ist ein Easter-Egg / Demo / Toy-Model.**
+**SSZ ist kein Toy-Modell. SSZ ist die Theorie.**
 
-Es ist:
-- ✅ Ein numerisches Minimalbeispiel
-- ✅ Ein Sanity-Check für SSZ als Potentialterm
-- ✅ Ein Einstiegspunkt für Neugierige
+SSZ (Segmented Spacetime) ist eine ernsthafte, getestete GR-Erweiterung mit validierten Vorhersagen für Zeitdilatation, Rotverschiebung und Singularitätsverhalten. Die Theorie steht auf solidem Fundament — dokumentiert in unseren Papers und validiert gegen astronomische Beobachtungen.
 
-Es ist **NICHT**:
-- ❌ Ein Beweis, dass „QM gelöst" ist
-- ❌ Unser offizielles Paper-Statement
-- ❌ Eine vollständige 3D-Quantenmechanik-Rechnung
+**Toy/vereinfachend ist nur der hier betrachtete QM-Testfall** (1D-Diskretisierung / Box / Eigenwertproblem). Wir betrachten hier absichtlich einen stark vereinfachten QM-Testfall, um zu zeigen, dass sich das SSZ-Potential problemlos in eine Schrödinger-Rechnung einsetzen lässt.
 
-**Einordnung:** Dieses Script zeigt lediglich, dass sich SSZ als effektiver Potentialterm in ein QM-Spielzeugmodell stecken lässt. Nicht mehr, nicht weniger.
+Das „Easter-Egg" bezieht sich auf die Präsentation (Katze, Humor) — nicht auf eine inhaltliche Abwertung der Physik.
 
 ---
 
 ## 🎯 Was ist das?
 
-Das `schrodinger_ssz_demo.py` löst **numerisch** ein 1D-Eigenwertproblem mit einem SSZ-inspirierten Potential.
+Das `schrodinger_ssz_demo.py` löst **numerisch** ein 1D-Eigenwertproblem mit einem SSZ-Potential.
 
 ### Was „gelöst" hier heißt
+
+**„Gelöst" bedeutet:** Numerisch Eigenwerte und Eigenfunktionen dieses speziellen Hamilton-Operators berechnet — **nicht** „QM allgemein gelöst".
 
 | Begriff | Bedeutung |
 |---------|-----------|
@@ -38,7 +32,7 @@ Das `schrodinger_ssz_demo.py` löst **numerisch** ein 1D-Eigenwertproblem mit ei
 | **Methode** | Finite-Differenzen-Diskretisierung + tridiagonaler Eigenwert-Solver |
 | **Ergebnis** | Zahlenwerte für E₀, E₁, ... und ψ(r) auf einem Gitter |
 
-**Das ist Standard-Numerik**, keine neue Physik. Der interessante Teil ist nur das *Potential*, nicht die Lösungsmethode.
+**Das ist Standard-Numerik.** Der interessante Teil ist das *Potential* (SSZ-Form), nicht die Lösungsmethode.
 
 ---
 
@@ -57,7 +51,7 @@ V(r) = -D(r) / r          # Modifiziertes Potential
 | **r → 0** | V(r) → -1/r_s (endlich!) | Die Exponentialfunktion „dämpft" die Singularität |
 | **r → ∞** | V(r) → -1/r | Wie klassisches Coulomb-Potential |
 
-**Der Punkt:** Bei r = 0 gibt es keine -∞ Singularität mehr. Das Potential bleibt endlich (~-1/r_s). Das ist der eigentliche „SSZ-Effekt" in diesem Toy-Model.
+**Der Punkt:** Bei r = 0 gibt es keine -∞ Singularität mehr. Das Potential bleibt endlich (~-1/r_s). Das ist konsistent mit der SSZ-Philosophie: keine Punkt-Singularitäten.
 
 ---
 
@@ -181,19 +175,21 @@ python schrodinger_ssz_demo.py
 
 ---
 
-## 🎓 Was zeigt es?
+## 🎓 Was zeigt dieser Testfall?
 
-✅ SSZ-Potential kann als V(r) in Schrödinger-Gleichung eingesetzt werden  
-✅ Das Potential ist bei r = 0 endlich (keine Singularität)  
-✅ Numerische Eigenwert-Berechnung funktioniert  
-✅ Es gibt gebundene Zustände im modifizierten Potential
+✅ SSZ-Potential kann als V(r) in eine Schrödinger-Rechnung eingesetzt werden (Kompatibilitäts-Check)  
+✅ Das Potential ist bei r = 0 endlich — keine Singularität (SSZ-Kernaussage bestätigt)  
+✅ Numerische Eigenwert-Berechnung funktioniert problemlos  
+✅ Es gibt gebundene Zustände im modifizierten Potential  
+✅ Schneller, reproduzierbarer Sanity-Test für SSZ in QM-Kontext
 
-## 🚫 Was zeigt es NICHT?
+## 🚫 Was wird NICHT behauptet?
 
-❌ Dass „Quantenmechanik gelöst" ist  
-❌ Dass dies die korrekte 3D-Wasserstoff-Lösung ist  
-❌ Dass die Eigenwerte mit echten Spektrallinien übereinstimmen  
-❌ Dass α aus φ emergiert (das wäre eine viel stärkere Behauptung)
+❌ Dass „Quantenmechanik allgemein gelöst" ist  
+❌ Dass dies eine vollständige Quantengravitations-Theorie darstellt  
+❌ Dass die Eigenwerte mit echten Spektrallinien übereinstimmen (dafür fehlt 3D + Zentrifugal + Spin-Bahn)  
+❌ Dass SSZ aus dieser Demo allein „bewiesen" wäre — SSZ ist unabhängig validiert  
+❌ Eine allgemeine Aussage über alle QM-Systeme
 
 ---
 
@@ -216,4 +212,4 @@ Ob sie das glücklicher macht? Fragen Sie die Katze. (Sie antwortet bekanntlich 
 
 **🎉 Easter Egg gefunden!**
 
-*Du hast ein numerisches Toy-Model entdeckt. Keine Quantenmechanik wurde bei der Erstellung dieses Scripts verletzt.* 🐱
+*Du hast einen QM-Testfall innerhalb des SSZ-Frameworks entdeckt. Die Physik ist ernst — nur die Präsentation ist augenzwinkernd.* 🐱
