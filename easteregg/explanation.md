@@ -217,6 +217,10 @@ Does that make it happier? Ask the cat. (As we know, it won't answer until you o
 
 ---
 
+https://hearthis.at/lino.casu/set/researchgate-illusions/
+
+---
+
 **🎉 Easter Egg Found!**
 
 *You have discovered a QM test case within the SSZ framework. The physics is serious — only the presentation is tongue-in-cheek.* 🐱
