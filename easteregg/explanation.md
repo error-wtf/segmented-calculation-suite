@@ -6,37 +6,27 @@
 
 ---
 
-## ⚠️ Important Clarification
+## ⚠️ SSZ Validation (Brief)
 
 **SSZ is not a toy model. SSZ is the theory.**
 
-SSZ (Segmented Spacetime) is a serious, **empirically validated** extension of General Relativity. This is not philosophy — these are **260+ automated tests** and **99.1% agreement** with astronomical observations:
+SSZ is empirically tested; the main test suites are documented in the repositories:
 
-### Validated Predictions
+- **GPS Time Dilation (~45 μs/day):** [`ssz-qubits/tests/test_validation.py`](https://github.com/error-wtf/ssz-qubits/blob/main/tests/test_validation.py)
+- **Pound-Rebka Experiment:** [`ssz-qubits/tests/test_validation.py`](https://github.com/error-wtf/ssz-qubits/blob/main/tests/test_validation.py)
+- **ESO Spectroscopy (47 objects):** [`Unified-Results/unified_validation.py`](https://github.com/error-wtf/Segmented-Spacetime-Mass-Projection-Unified-Results)
+- **Cygnus X-1 Predictions:** [`g79-cygnus-test/`](https://github.com/error-wtf/g79-cygnus-tests) → `FINDINGS.md`
+- **Mercury Perihelion:** [`ssz-full-metric/tests/`](https://github.com/error-wtf/ssz-metric-final)
 
-| Test | Result | Repo |
-|------|--------|------|
-| GPS Time Dilation (~45 μs/day) | ✅ PASS | `ssz-qubits` |
-| Pound-Rebka (2.46×10⁻¹⁵) | ✅ PASS | `ssz-qubits` |
-| ESO Spectroscopy (47 objects) | ✅ 97.9% wins | `Unified-Results` |
-| Cygnus X-1 (6/6 predictions) | ✅ PASS | `g79-cygnus-test` |
-| Black Hole Stabilization | ✅ 81/81 | `Unified-Results` |
-| Mercury Perihelion | ✅ PASS | `ssz-full-metric` |
+Full test overview: [`WORKSPACE_MASTER_INDEX.md`](https://github.com/error-wtf/ssz-qubits/blob/main/README.md)
 
-### Test Repositories
+---
 
-| Repository | Tests | Status |
-|------------|-------|--------|
-| [`ssz-qubits`](https://github.com/error-wtf/ssz-qubits) | 74 | ✅ 100% |
-| [`ssz-schumann`](https://github.com/error-wtf/ssz-schumann) | 94 | ✅ 100% |
-| [`ssz-metric-pure`](https://github.com/error-wtf/ssz-metric-pure) | 12+ | ✅ 100% |
-| [`ssz-full-metric`](https://github.com/error-wtf/ssz-metric-final) | 41 | ✅ 100% |
-| [`g79-cygnus-test`](https://github.com/error-wtf/g79-cygnus-tests) | 14 | ✅ 100% |
-| [`Unified-Results`](https://github.com/error-wtf/Segmented-Spacetime-Mass-Projection-Unified-Results) | 25 Suites | ✅ 100% |
+## 🐈 This Demo: A Single QM Test Case
 
-**Only the QM test case considered here is toy/simplified** (1D discretization / box / eigenvalue problem). We deliberately use a highly simplified QM test case to demonstrate that the SSZ potential can be seamlessly integrated into a Schrödinger calculation.
+**The Schrödinger demo here is a deliberately simplified QM test case** (1D discretization / box / eigenvalue problem). It demonstrates that the SSZ potential form can be integrated into a Schrödinger calculation without issues.
 
-The "Easter Egg" refers to the presentation (cat, humor) — not a trivialization of the physics.
+The "Easter Egg" label refers to the presentation (cat meme, light tone) — not to the physics content.
 
 ---
 
@@ -73,7 +63,7 @@ V(r) = -D(r) / r          # Modified potential
 | **r → 0** | V(r) → -1/r_s (finite!) | The exponential "damps" the singularity |
 | **r → ∞** | V(r) → -1/r | Like classical Coulomb potential |
 
-**The point:** At r = 0, there is no -∞ singularity. The potential remains finite (~-1/r_s). This is consistent with SSZ's core principle: no point singularities.
+**The point:** At r = 0, there is no -∞ singularity. The potential remains finite (~-1/r_s). This corresponds to the SSZ design principle (singularity-free interior structure): in this potential ansatz, V(r) remains finite as r → 0.
 
 ---
 
@@ -142,11 +132,11 @@ Boundary conditions: u(0) = 0, u(∞) = 0
 
 - **Compatibility Check:** Shows that SSZ can be used as an effective potential term in a QM calculation — the framework doesn't "break".
 
-- **Singularity Sanity Check:** The modified potential has no -∞ singularity at r → 0. This is consistent with SSZ's core principle (no point singularities).
+- **Singularity Sanity Check:** The modified potential has no -∞ singularity at r → 0. This matches the SSZ design principle (singularity-free interior).
 
 - **Entry Point:** For future, serious spectral calculations (e.g., hydrogen-like systems with SSZ corrections) — without claiming this is already done here.
 
-- **Fun:** It's an Easter Egg. The cat is happy. 🐱
+- **Presentation:** Easter Egg format (the cat approves). 🐱
 
 ---
 
@@ -168,6 +158,7 @@ Boundary conditions: u(0) = 0, u(∞) = 0
 | **No relativistic corrections** | No spin-orbit, no fine structure |
 | **Dimensionless units** | No direct eV values without scaling |
 | **1D instead of 3D** | Quantitative comparisons with real spectra not meaningful |
+| **Parameter choice is illustrative** | `r_s`, `r_min`, `r_max`, `N` are arbitrary/demo values → results are qualitative, not fitted |
 
 ---
 
@@ -199,19 +190,13 @@ python schrodinger_ssz_demo.py
 
 ## 🎓 What Does This Test Case Show?
 
-✅ SSZ potential can be used as V(r) in a Schrödinger calculation (compatibility check)  
-✅ The potential is finite at r = 0 — no singularity (SSZ core claim confirmed)  
-✅ Numerical eigenvalue computation works without issues  
-✅ Bound states exist in the modified potential  
-✅ Quick, reproducible sanity test for SSZ in QM context
+**Shows:**
+- In this parameterized SSZ potential, the 1/r singularity at the origin is effectively damped; V(r) remains finite.
+- Standard QM numerics (FD + tridiagonal solver) work without special tricks; bound states appear.
 
-## 🚫 What Is NOT Claimed?
-
-❌ That "quantum mechanics is generally solved"  
-❌ That this represents a complete quantum gravity theory  
-❌ That the eigenvalues match real spectral lines (missing 3D + centrifugal + spin-orbit)  
-❌ That SSZ is "proven" by this demo alone — SSZ is independently validated  
-❌ A general statement about all QM systems
+**Does NOT show:**
+- Full 3D radial QM, fine structure/spin, or direct spectral comparisons — that would require a separate, more complete setup.
+- That SSZ is "proven" by this demo alone — SSZ is independently validated (see links above).
 
 ---
 
