@@ -14,6 +14,41 @@ The **Unified-Results** repository shows:
 r*/r_s ≈ 1.387  (D* ≈ 0.528)
 ```
 
+---
+
+## ⚠️ CRITICAL: Two Definitions of "Time Dilation"
+
+Before comparing numbers, you **must** understand that "Time Dilation" can mean two different things:
+
+| Definition | Symbol | Formula | Physical Meaning |
+|------------|--------|---------|------------------|
+| **(A) Metric Factor** | D_GR | √g_tt = √(1 - r_s/r) | Local clock rate from metric |
+| **(B) Effective Pace** | D_SSZ | 1/(1 + Ξ) | Energy-equivalent effective tick rate |
+
+### Why This Matters
+
+Without this clarification:
+- The different intersection points **look like an inconsistency**
+- But they are actually just a **non-declared perspective switch**
+
+**The key insight:**
+
+> "In this document, 'Time Dilation' refers to either:
+> (A) the local metric factor √g_tt, or
+> (B) an energy-equivalent effective pace factor.
+> The stated intersection points each relate to these different definitions."
+
+### When to Use Which
+
+| Use Case | Definition | Why |
+|----------|------------|-----|
+| Comparing to GR predictions | (A) Metric | Direct √g_tt comparison |
+| Calculating redshift/frequency | (B) Effective | Includes segment effects |
+| Weak-field limit | Both equivalent | Ξ ≈ r_s/(2r) gives same result |
+| Strong-field (near horizon) | (B) Effective | Captures saturation physics |
+
+---
+
 ## ⚠️ IMPORTANT: Both Formulas Are Physically Correct
 
 **Neither formula is "wrong"** — they describe the same physics from different perspectives

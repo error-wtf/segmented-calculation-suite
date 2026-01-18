@@ -120,6 +120,28 @@ z_SSZ ≈ z_GR × (1 + 1.25%)   # For neutron stars
 This is proven in the "Dual Velocities" paper:
 > *"In the segmented model γ_s is matched identical, therefore z(r) is identical"*
 
+---
+
+## 📖 Important Documentation
+
+### ⚠️ [GR-SSZ Intersection Points Explained](docs/gr-ssz-match.md)
+
+**Why do different SSZ repositories show different intersection points (1.39 vs 1.59)?**
+
+This is **NOT an inconsistency** — it's a perspective switch:
+
+| Definition | Formula | Intersection |
+|------------|---------|--------------|
+| **(A) Metric Factor** | D = √g_tt | r*/r_s ≈ 1.39 |
+| **(B) Effective Pace** | D = 1/(1+Ξ) | r*/r_s ≈ 1.59 |
+
+**Both are correct** — they model the same physics from complementary viewpoints.
+At the horizon (r = r_s), both give **identical results**: Ξ = 0.802, D = 0.555.
+
+📄 **Full explanation:** [`docs/gr-ssz-match.md`](docs/gr-ssz-match.md)
+
+---
+
 ## Built-in Datasets
 
 - Sample Objects (15 stars, planets, compact objects)
