@@ -1,4 +1,4 @@
-# 🐈 Schrödingers Katze (Easter-Egg) — QM-Testfall innerhalb von SSZ
+# 🐈 Schrödinger's Cat (Easter Egg) — QM Test Case Within SSZ
 
 ![Schrödinger's Cat Plans Revenge](schrodinger.jpg)
 
@@ -6,24 +6,24 @@
 
 ---
 
-## ⚠️ Wichtige Klarstellung vorweg
+## ⚠️ Important Clarification
 
-**SSZ ist kein Toy-Modell. SSZ ist die Theorie.**
+**SSZ is not a toy model. SSZ is the theory.**
 
-SSZ (Segmented Spacetime) ist eine ernsthafte, **empirisch validierte** GR-Erweiterung. Das ist keine Philosophie — das sind **260+ automatisierte Tests** und **99.1% Übereinstimmung** mit astronomischen Beobachtungen:
+SSZ (Segmented Spacetime) is a serious, **empirically validated** extension of General Relativity. This is not philosophy — these are **260+ automated tests** and **99.1% agreement** with astronomical observations:
 
-### Validierte Vorhersagen
+### Validated Predictions
 
-| Test | Ergebnis | Repo |
-|------|----------|------|
-| GPS-Zeitdilatation (~45 μs/Tag) | ✅ PASS | `ssz-qubits` |
+| Test | Result | Repo |
+|------|--------|------|
+| GPS Time Dilation (~45 μs/day) | ✅ PASS | `ssz-qubits` |
 | Pound-Rebka (2.46×10⁻¹⁵) | ✅ PASS | `ssz-qubits` |
-| ESO Spectroscopy (47 Objekte) | ✅ 97.9% wins | `Unified-Results` |
-| Cygnus X-1 (6/6 Vorhersagen) | ✅ PASS | `g79-cygnus-test` |
-| Schwarze-Loch-Stabilisierung | ✅ 81/81 | `Unified-Results` |
-| Mercury Perihel | ✅ PASS | `ssz-full-metric` |
+| ESO Spectroscopy (47 objects) | ✅ 97.9% wins | `Unified-Results` |
+| Cygnus X-1 (6/6 predictions) | ✅ PASS | `g79-cygnus-test` |
+| Black Hole Stabilization | ✅ 81/81 | `Unified-Results` |
+| Mercury Perihelion | ✅ PASS | `ssz-full-metric` |
 
-### Test-Repositories
+### Test Repositories
 
 | Repository | Tests | Status |
 |------------|-------|--------|
@@ -34,188 +34,188 @@ SSZ (Segmented Spacetime) ist eine ernsthafte, **empirisch validierte** GR-Erwei
 | [`g79-cygnus-test`](https://github.com/error-wtf/g79-cygnus-tests) | 14 | ✅ 100% |
 | [`Unified-Results`](https://github.com/error-wtf/Segmented-Spacetime-Mass-Projection-Unified-Results) | 25 Suites | ✅ 100% |
 
-**Toy/vereinfachend ist nur der hier betrachtete QM-Testfall** (1D-Diskretisierung / Box / Eigenwertproblem). Wir betrachten hier absichtlich einen stark vereinfachten QM-Testfall, um zu zeigen, dass sich das SSZ-Potential problemlos in eine Schrödinger-Rechnung einsetzen lässt.
+**Only the QM test case considered here is toy/simplified** (1D discretization / box / eigenvalue problem). We deliberately use a highly simplified QM test case to demonstrate that the SSZ potential can be seamlessly integrated into a Schrödinger calculation.
 
-Das „Easter-Egg" bezieht sich auf die Präsentation (Katze, Humor) — nicht auf eine inhaltliche Abwertung der Physik.
-
----
-
-## 🎯 Was ist das?
-
-Das `schrodinger_ssz_demo.py` löst **numerisch** ein 1D-Eigenwertproblem mit einem SSZ-Potential.
-
-### Was „gelöst" hier heißt
-
-**„Gelöst" bedeutet:** Numerisch Eigenwerte und Eigenfunktionen dieses speziellen Hamilton-Operators berechnet — **nicht** „QM allgemein gelöst".
-
-| Begriff | Bedeutung |
-|---------|-----------|
-| **„Gelöst"** | Numerische Berechnung von Eigenwerten/-vektoren einer diskretisierten Matrix |
-| **Methode** | Finite-Differenzen-Diskretisierung + tridiagonaler Eigenwert-Solver |
-| **Ergebnis** | Zahlenwerte für E₀, E₁, ... und ψ(r) auf einem Gitter |
-
-**Das ist Standard-Numerik.** Der interessante Teil ist das *Potential* (SSZ-Form), nicht die Lösungsmethode.
+The "Easter Egg" refers to the presentation (cat, humor) — not a trivialization of the physics.
 
 ---
 
-## 📐 A) Potentialdefinition im Script
+## 🎯 What Is This?
+
+The `schrodinger_ssz_demo.py` **numerically** solves a 1D eigenvalue problem with an SSZ potential.
+
+### What "Solved" Means Here
+
+**"Solved" means:** Numerically computed eigenvalues and eigenfunctions of this specific Hamiltonian — **not** "QM in general solved".
+
+| Term | Meaning |
+|------|---------|
+| **"Solved"** | Numerical computation of eigenvalues/eigenvectors of a discretized matrix |
+| **Method** | Finite difference discretization + tridiagonal eigenvalue solver |
+| **Result** | Numerical values for E₀, E₁, ... and ψ(r) on a grid |
+
+**This is standard numerics.** The interesting part is the *potential* (SSZ form), not the solution method.
+
+---
+
+## 📐 A) Potential Definition in the Script
 
 ```python
-Ξ(r) = exp(-r / r_s)      # SSZ-inspirierter Dämpfungsterm
-D(r) = 1 - Ξ(r)           # Effektiver Faktor
-V(r) = -D(r) / r          # Modifiziertes Potential
+Ξ(r) = exp(-r / r_s)      # SSZ-inspired damping term
+D(r) = 1 - Ξ(r)           # Effective factor
+V(r) = -D(r) / r          # Modified potential
 ```
 
-### Grenzverhalten
+### Limiting Behavior
 
-| Bereich | Verhalten | Erklärung |
-|---------|-----------|-----------|
-| **r → 0** | V(r) → -1/r_s (endlich!) | Die Exponentialfunktion „dämpft" die Singularität |
-| **r → ∞** | V(r) → -1/r | Wie klassisches Coulomb-Potential |
+| Region | Behavior | Explanation |
+|--------|----------|-------------|
+| **r → 0** | V(r) → -1/r_s (finite!) | The exponential "damps" the singularity |
+| **r → ∞** | V(r) → -1/r | Like classical Coulomb potential |
 
-**Der Punkt:** Bei r = 0 gibt es keine -∞ Singularität mehr. Das Potential bleibt endlich (~-1/r_s). Das ist konsistent mit der SSZ-Philosophie: keine Punkt-Singularitäten.
+**The point:** At r = 0, there is no -∞ singularity. The potential remains finite (~-1/r_s). This is consistent with SSZ's core principle: no point singularities.
 
 ---
 
-## 🔧 B) Diskretisierung und Hamilton-Operator
+## 🔧 B) Discretization and Hamiltonian
 
-Der Hamilton-Operator lautet:
+The Hamiltonian operator is:
 
 ```
 H = -½ d²/dr² + V(r)
 ```
 
-### Finite-Differenzen-Schema
+### Finite Difference Scheme
 
-Die zweite Ableitung wird approximiert als:
+The second derivative is approximated as:
 
 ```
 d²ψ/dr² ≈ (ψ[i+1] - 2ψ[i] + ψ[i-1]) / dr²
 ```
 
-Das ergibt eine **tridiagonale Matrix**:
+This yields a **tridiagonal matrix**:
 
-| Element | Formel |
-|---------|--------|
-| **Diagonale** | `1/dr² + V(r_i)` |
-| **Nebendiagonale** | `-0.5/dr²` |
+| Element | Formula |
+|---------|---------|
+| **Diagonal** | `1/dr² + V(r_i)` |
+| **Off-diagonal** | `-0.5/dr²` |
 
-**Lösung:** `scipy.linalg.eigh_tridiagonal` berechnet Eigenwerte (Energien) und Eigenvektoren (Wellenfunktionen).
+**Solution:** `scipy.linalg.eigh_tridiagonal` computes eigenvalues (energies) and eigenvectors (wavefunctions).
 
-### Ergebnis-Interpretation
+### Result Interpretation
 
-- **E < 0:** Gebundene Zustände (echte Bindung im Potential)
-- **E > 0:** Box-Kontinuum (Artefakt der endlichen Box [r_min, r_max])
+- **E < 0:** Bound states (true binding in the potential)
+- **E > 0:** Box continuum (artifact of the finite box [r_min, r_max])
 
 ---
 
-## ⚖️ C) Klarstellung: Radial vs. 1D
+## ⚖️ C) Clarification: Radial vs. 1D
 
-### Was das Script macht
+### What the Script Does
 
 ```
-1D-Schrödinger auf r-Gitter: H ψ(r) = E ψ(r)
+1D Schrödinger on r-grid: H ψ(r) = E ψ(r)
 ```
 
-### Was echte 3D-radiale QM braucht
+### What True 3D Radial QM Requires
 
 ```
 Transformation: u(r) = r · R(r)
-Zentrifugalterm: + l(l+1)/(2mr²)
-Randbedingungen: u(0) = 0, u(∞) = 0
+Centrifugal term: + l(l+1)/(2mr²)
+Boundary conditions: u(0) = 0, u(∞) = 0
 ```
 
-### Unterschied
+### Difference
 
-| Aspekt | Dieses Script | Echte 3D-radial |
-|--------|---------------|-----------------|
-| **Dimension** | 1D auf r | 3D → reduziert auf r |
-| **Zentrifugalterm** | ❌ Nicht enthalten | ✅ l(l+1)/(2mr²) |
-| **Transformation** | ψ(r) direkt | u(r) = rR(r) |
-| **Randbedingung r=0** | r_min > 0 (umgangen) | u(0) = 0 (exakt) |
+| Aspect | This Script | True 3D Radial |
+|--------|-------------|----------------|
+| **Dimension** | 1D on r | 3D → reduced to r |
+| **Centrifugal term** | ❌ Not included | ✅ l(l+1)/(2mr²) |
+| **Transformation** | ψ(r) directly | u(r) = rR(r) |
+| **Boundary at r=0** | r_min > 0 (bypassed) | u(0) = 0 (exact) |
 
-**Das Demo behauptet NICHT, die vollständige 3D-Form abzudecken.**
-
----
-
-## 💡 D) Warum wir das gemacht haben
-
-- **Kompatibilitäts-Check:** Zeigt, dass SSZ als effektiver Potentialterm in eine QM-Rechnung eingesetzt werden kann — das Framework „bricht" nicht.
-
-- **Sanity-Check Singularität:** Das modifizierte Potential hat bei r → 0 keine -∞ Singularität. Das ist konsistent mit der SSZ-Philosophie (keine Punkt-Singularitäten).
-
-- **Einstiegspunkt:** Für spätere, ernsthafte Spektralrechnungen (z.B. Wasserstoff-ähnliche Systeme mit SSZ-Korrekturen) — ohne zu behaupten, dass das hier schon erledigt ist.
-
-- **Spaß:** Es ist ein Easter-Egg. Die Katze freut sich. 🐱
+**This demo does NOT claim to cover the full 3D form.**
 
 ---
 
-## 🐛 E) Known Issues / Limitierungen
+## 💡 D) Why We Did This
 
-### Technische Issues
+- **Compatibility Check:** Shows that SSZ can be used as an effective potential term in a QM calculation — the framework doesn't "break".
+
+- **Singularity Sanity Check:** The modified potential has no -∞ singularity at r → 0. This is consistent with SSZ's core principle (no point singularities).
+
+- **Entry Point:** For future, serious spectral calculations (e.g., hydrogen-like systems with SSZ corrections) — without claiming this is already done here.
+
+- **Fun:** It's an Easter Egg. The cat is happy. 🐱
+
+---
+
+## 🐛 E) Known Issues / Limitations
+
+### Technical Issues
 
 | Issue | Details |
 |-------|---------|
-| **`np.trapezoid`** | Erst ab NumPy 2.0 verfügbar. Ältere Versionen brauchen `np.trapz`. |
-| **r_min > 0** | Das Script umgeht r = 0 durch `r_min = 0.01`. Der Docstring erwähnt „epsilon", aber der Code nutzt einfach r_min. |
-| **Box-Effekte** | Positive Eigenwerte (E > 0) sind Box-Artefakte, kein echtes Kontinuum. |
+| **`np.trapezoid`** | Only available from NumPy 2.0. Older versions need `np.trapz`. |
+| **r_min > 0** | The script bypasses r = 0 via `r_min = 0.01`. The docstring mentions "epsilon", but the code just uses r_min. |
+| **Box effects** | Positive eigenvalues (E > 0) are box artifacts, not true continuum. |
 
-### Physikalische Limitierungen
+### Physical Limitations
 
-| Limitation | Konsequenz |
-|------------|------------|
-| **Kein Zentrifugalterm** | Nur l = 0 Zustände (s-Orbitale) modelliert |
-| **Keine relativistischen Korrekturen** | Kein Spin-Bahn, keine Feinstruktur |
-| **Dimensionslose Einheiten** | Keine direkten eV-Werte ohne Skalierung |
-| **1D statt 3D** | Quantitative Vergleiche mit echten Spektren nicht sinnvoll |
+| Limitation | Consequence |
+|------------|-------------|
+| **No centrifugal term** | Only l = 0 states (s-orbitals) modeled |
+| **No relativistic corrections** | No spin-orbit, no fine structure |
+| **Dimensionless units** | No direct eV values without scaling |
+| **1D instead of 3D** | Quantitative comparisons with real spectra not meaningful |
 
 ---
 
-## 📊 Beispiel-Output
+## 📊 Example Output
 
 ```
 Lowest five energy eigenvalues in the SSZ potential:
-  E[0] = -0.25602  ← Grundzustand (gebunden)
-  E[1] = -0.05157  ← 1. angeregter (gebunden)
-  E[2] = +0.17896  ← Box-Kontinuum
-  E[3] = +0.51565  ← Box-Kontinuum
-  E[4] = +0.95433  ← Box-Kontinuum
+  E[0] = -0.25602  ← Ground state (bound)
+  E[1] = -0.05157  ← 1st excited (bound)
+  E[2] = +0.17896  ← Box continuum
+  E[3] = +0.51565  ← Box continuum
+  E[4] = +0.95433  ← Box continuum
 ```
 
-**Interpretation:** Zwei gebundene Zustände (E < 0), der Rest sind Diskretisierungs-Artefakte der endlichen Box.
+**Interpretation:** Two bound states (E < 0), the rest are discretization artifacts of the finite box.
 
 ---
 
-## 🚀 Ausführung
+## 🚀 Execution
 
 ```bash
 cd easteregg
 python schrodinger_ssz_demo.py
 ```
 
-**Voraussetzungen:** NumPy, SciPy
+**Requirements:** NumPy, SciPy
 
 ---
 
-## 🎓 Was zeigt dieser Testfall?
+## 🎓 What Does This Test Case Show?
 
-✅ SSZ-Potential kann als V(r) in eine Schrödinger-Rechnung eingesetzt werden (Kompatibilitäts-Check)  
-✅ Das Potential ist bei r = 0 endlich — keine Singularität (SSZ-Kernaussage bestätigt)  
-✅ Numerische Eigenwert-Berechnung funktioniert problemlos  
-✅ Es gibt gebundene Zustände im modifizierten Potential  
-✅ Schneller, reproduzierbarer Sanity-Test für SSZ in QM-Kontext
+✅ SSZ potential can be used as V(r) in a Schrödinger calculation (compatibility check)  
+✅ The potential is finite at r = 0 — no singularity (SSZ core claim confirmed)  
+✅ Numerical eigenvalue computation works without issues  
+✅ Bound states exist in the modified potential  
+✅ Quick, reproducible sanity test for SSZ in QM context
 
-## 🚫 Was wird NICHT behauptet?
+## 🚫 What Is NOT Claimed?
 
-❌ Dass „Quantenmechanik allgemein gelöst" ist  
-❌ Dass dies eine vollständige Quantengravitations-Theorie darstellt  
-❌ Dass die Eigenwerte mit echten Spektrallinien übereinstimmen (dafür fehlt 3D + Zentrifugal + Spin-Bahn)  
-❌ Dass SSZ aus dieser Demo allein „bewiesen" wäre — SSZ ist unabhängig validiert  
-❌ Eine allgemeine Aussage über alle QM-Systeme
+❌ That "quantum mechanics is generally solved"  
+❌ That this represents a complete quantum gravity theory  
+❌ That the eigenvalues match real spectral lines (missing 3D + centrifugal + spin-orbit)  
+❌ That SSZ is "proven" by this demo alone — SSZ is independently validated  
+❌ A general statement about all QM systems
 
 ---
 
-## 📜 Lizenz
+## 📜 License
 
 ```
 © 2025 Carmen Wrede & Lino Casu
@@ -224,14 +224,14 @@ ANTI-CAPITALIST SOFTWARE LICENSE v1.4
 
 ---
 
-## 🐱 Und die Katze?
+## 🐱 And the Cat?
 
-Die Katze plant natürlich weiterhin ihre Rache — aber jetzt in einem Potential ohne Singularität.
+The cat naturally continues to plan its revenge — but now in a potential without singularity.
 
-Ob sie das glücklicher macht? Fragen Sie die Katze. (Sie antwortet bekanntlich nicht, bis Sie die Box öffnen.)
+Does that make it happier? Ask the cat. (As we know, it won't answer until you open the box.)
 
 ---
 
-**🎉 Easter Egg gefunden!**
+**🎉 Easter Egg Found!**
 
-*Du hast einen QM-Testfall innerhalb des SSZ-Frameworks entdeckt. Die Physik ist ernst — nur die Präsentation ist augenzwinkernd.* 🐱
+*You have discovered a QM test case within the SSZ framework. The physics is serious — only the presentation is tongue-in-cheek.* 🐱
