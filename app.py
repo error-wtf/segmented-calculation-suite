@@ -1389,9 +1389,9 @@ def create_app():
                 gr.Markdown("""
 | Regime | r/r_s | Formula | Notes |
 |--------|-------|---------|-------|
-| **Very Close** | <2 | Ξ = 1-e^(-φr/r_s) | SSZ struggles (0% wins) |
-| **Photon Sphere** | 2-3 | Ξ = 1-e^(-φr/r_s) | SSZ OPTIMAL (82% wins) |
-| **Strong** | 3-10 | Ξ = 1-e^(-φr/r_s) | Strong field |
+| **Very Close** | <2 | Ξ = 1-e^(-φr_s / r) | SSZ struggles (0% wins) |
+| **Photon Sphere** | 2-3 | Ξ = 1-e^(-φr_s / r) | SSZ OPTIMAL (82% wins) |
+| **Strong** | 3-10 | Ξ = 1-e^(-φr_s / r) | Strong field |
 | **Weak** | >10 | Ξ = r_s/(2r) | Weak field (~37% wins) |
 
 **Blend Zone:** 1.8 < r/r_s < 2.2 (Hermite C² join)

@@ -114,7 +114,7 @@ elif x < REGIME_BLEND_LOW: regime = "strong"  # < 1.8
 
 ```
 Ξ(r) = r_s/(2r)              [Weak, r/r_s > 2.2]
-Ξ(r) = 1-exp(-φr/r_s)        [Strong, r/r_s < 1.8]
+Ξ(r) = 1-exp(-φr_s / r)        [Strong, r/r_s < 1.8]
 D_SSZ = 1/(1+Ξ)              [Time Dilation]
 z = 1/D - 1                   [Redshift]
 z_SSZ = z_GR × (1 + Δ(M)/100) [Strong Field only!]

@@ -194,7 +194,7 @@ class TestXiFormulas:
         """Xi_weak = r_s / (2r)"""
         
     def test_xi_strong_formula(self):
-        """Xi_strong = xi_max * (1 - exp(-phi * r / r_s))"""
+        """Xi_strong = xi_max * (1 - exp(-phi * r_s / r))"""
         
     def test_xi_at_horizon_value(self):
         """Xi(r_s) = 1 - exp(-phi) ~ 0.802"""

@@ -318,7 +318,7 @@ r_s = 2 * G * M / c²
 
 # Segment-Dichte
 Xi_weak = r_s / (2*r)           # r/r_s > 110
-Xi_strong = 1 - exp(-φ*r/r_s)   # r/r_s < 90
+Xi_strong = 1 - exp(-φ*r_s / r)   # r/r_s < 90
 
 # Zeit-Dilatation
 D_SSZ = 1 / (1 + Xi)
@@ -361,7 +361,7 @@ E_norm = 1 + 0.32 * (r_s/R)^0.98
 | Phase | Komponente | Status |
 |-------|------------|--------|
 | 1.1 | Xi Weak Field: `Xi = r_s/(2r)` | ✅ Implementiert |
-| 1.2 | Xi Strong Field: `Xi = 1-exp(-φr/r_s)` | ✅ Implementiert |
+| 1.2 | Xi Strong Field: `Xi = 1-exp(-φr_s / r)` | ✅ Implementiert |
 | 1.3 | Xi Blend Zone: Hermite C² | ✅ Implementiert |
 | 2.1 | D_SSZ = 1/(1+Xi) | ✅ Validiert |
 | 2.2 | D_SSZ(r_s) = 0.555 | ✅ FINIT (kein Singularität) |

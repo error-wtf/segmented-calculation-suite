@@ -48,7 +48,7 @@
 def xi_segment_density(r, M, regime='auto'):
     ...
     if regime == 'strong':
-        return 1.0 - np.exp(-PHI * r / r_s)
+        return 1.0 - np.exp(-PHI * r_s / r)
 ```
 
 **At horizon (r = r_s):**

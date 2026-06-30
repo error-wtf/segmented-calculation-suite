@@ -103,7 +103,7 @@ Xi = (r_s/r)² × exp(-r/r_φ)
 Xi_weak = r_s / (2*r)
 
 # ✅ CORRECT - Strong Field (r/r_s < 90)
-Xi_strong = 1 - exp(-φ*r/r_s)
+Xi_strong = 1 - exp(-φ*r_s / r)
 
 # Blend Zone (90 < r/r_s < 110): C² Quintic Hermite Interpolation
 ```
@@ -240,7 +240,7 @@ Before any physics code change, verify:
 
 - [ ] z_ssz = z_gr × (1 + Δ(M)/100), NOT 1/D_ssz - 1
 - [ ] Xi_weak = r_s/(2r) for weak field
-- [ ] Xi_strong = 1 - exp(-φr/r_s) for strong field
+- [ ] Xi_strong = 1 - exp(-φr_s / r) for strong field
 - [ ] Δ(M) includes normalization factor
 - [ ] φ = 1.618034 (golden ratio)
 - [ ] D(r_s) = 0.555 (finite, not zero!)

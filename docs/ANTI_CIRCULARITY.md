@@ -45,7 +45,7 @@ DERIVED (Level 2)                               ┌─────────�
 DERIVED (Level 3)                      ┌────────────────────────────────┐
     │                                  │ Ξ(r) = f(x, φ)                 │
     │                                  │ - weak: r_s/(2r)               │
-    │                                  │ - strong: 1 - exp(-φr/r_s)     │
+    │                                  │ - strong: 1 - exp(-φr_s / r)     │
     │                                  └───────────────┬────────────────┘
     │                                                  │
     ▼                                                  ▼
@@ -157,7 +157,7 @@ Our approach:
 ### Level 1: Direct Consequences
 
 From Axiom 1 + 2:
-- Segment density: Ξ(r) = 1 - exp(-φr/r_s) [strong field]
+- Segment density: Ξ(r) = 1 - exp(-φr_s / r) [strong field]
 
 From Axiom 3:
 - Weak field limit: Ξ(r) → r_s/(2r) as r → ∞

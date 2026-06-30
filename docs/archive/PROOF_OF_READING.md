@@ -14,7 +14,7 @@
 INPUT:  r (radius in m), r_s (Schwarzschild radius in m)
 COMPUTE: 
   - Weak: Xi = r_s / (2*r)
-  - Strong: Xi = 1 - exp(-PHI * r / r_s)
+  - Strong: Xi = 1 - exp(-PHI * r_s / r)
 OUTPUT: Xi (dimensionless, 0 to ~0.8)
 ```
 
@@ -297,7 +297,7 @@ def xi_segment_density(r, M, regime='auto'):
     if regime == 'weak':
         return r_s / (2 * r)
     else:
-        return 1.0 - np.exp(-PHI * r / r_s)
+        return 1.0 - np.exp(-PHI * r_s / r)
 ```
 
 **Note:** Boundary at r/r_s = 100, no blend in this implementation.

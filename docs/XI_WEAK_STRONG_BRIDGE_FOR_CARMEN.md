@@ -127,7 +127,7 @@ Hier gilt: Ξ_weak(r*) = Ξ_strong(r*) — der natürliche Kandidat für ein Mat
 
 ```
 Outer (weak):   Ξ = r_s/(2r) + O(r_s²/r²)
-Inner (strong): Ξ = 1 - exp(-φr/r_s)
+Inner (strong): Ξ = 1 - exp(-φr_s / r)
 
 Matching bei r* ≈ 1.387 r_s:
   Ξ_outer(r*) = Ξ_inner(r*)

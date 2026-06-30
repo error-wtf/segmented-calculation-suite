@@ -221,7 +221,7 @@ def segment_saturation_derivative(r: Union[float, np.ndarray], r_s: float) -> Un
         raise ValueError(f"Schwarzschild radius must be positive, got {r_s}")
     
     r = np.asarray(r)
-    dxi_dr = (PHI / r_s) * np.exp(-PHI * r / r_s)
+    dxi_dr = (PHI / r_s) * np.exp(-PHI * r_s / r)
     
     return float(dxi_dr) if np.ndim(dxi_dr) == 0 else dxi_dr
 

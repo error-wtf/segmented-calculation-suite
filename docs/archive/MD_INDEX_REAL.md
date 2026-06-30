@@ -67,7 +67,7 @@ def xi_complete(r, r_s, phi=1.618):
 | §2 | Two regime definitions |
 | §3 | Time dilation D = 1/(1+Xi) |
 | §4 | Weak field: Xi = r_s/(2r) |
-| §5 | Strong field: Xi = 1 - exp(-φr/r_s) |
+| §5 | Strong field: Xi = 1 - exp(-φr_s / r) |
 | §6 | Applications |
 
 ---

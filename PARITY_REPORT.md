@@ -108,7 +108,7 @@ PHI = (1.0 + np.sqrt(5.0)) / 2.0  # ≈ 1.618034
 
 ### 5.1 Ξ(r) Strong Field
 **Contract:** `Ξ(r) = Ξ_max × (1 - exp(-φ × r/r_s))`  
-**Suite:** `xi = xi_max * (1.0 - np.exp(-phi * r / r_s))`  
+**Suite:** `xi = xi_max * (1.0 - np.exp(-phi * r_s / r))`  
 **STATUS:** ✅ MATCHES
 
 ### 5.2 D_SSZ

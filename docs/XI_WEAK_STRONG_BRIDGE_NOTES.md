@@ -123,7 +123,7 @@ $$\Xi_{strong}(r) = \xi_{max} \cdot \left(1 - e^{-\varphi \cdot r/r_s}\right) = 
 def xi_strong(r: Union[float, np.ndarray], r_s: float, 
               xi_max: float = 1.0, phi: float = PHI) -> Union[float, np.ndarray]:
     """Strong field segment density. Formula: Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))"""
-    return xi_max * (1.0 - np.exp(-phi * r / r_s))
+    return xi_max * (1.0 - np.exp(-phi * r_s / r))
 ```
 
 **Gültigkeitsbereich:** x = r/r_s ~ O(1...10), insbesondere Neutronenstern-Regime
@@ -158,7 +158,7 @@ def xi_strong(r: Union[float, np.ndarray], r_s: float,
 
 | Eigenschaft | Ξ_weak | Ξ_strong |
 |-------------|--------|----------|
-| Formel | r_s/(2r) | ξ_max(1 - e^(-φr/r_s)) |
+| Formel | r_s/(2r) | ξ_max(1 - e^(-φr_s / r)) |
 | Ξ(r→0) | ∞ (divergiert!) | 0 |
 | Ξ(r_s) | 0.5 | 0.8017 |
 | Ξ(r→∞) | 0 | ξ_max |
@@ -248,7 +248,7 @@ In der Überlappung (ρ >> 1, R << 1, also r >> r_s):
 **Problem:** Die Limits matchen **nicht**! Das ist genau das Gap.
 
 **Lösung:** Modifiziere Ξ_strong zu:
-$$\Xi_{strong,mod}(r) = \xi_{max} \cdot \left(1 - e^{-\varphi r/r_s}\right) \cdot f(r/r_s)$$
+$$\Xi_{strong,mod}(r) = \xi_{max} \cdot \left(1 - e^{-\varphi r_s / r}\right) \cdot f(r/r_s)$$
 
 wobei f(x) → r_s/(2r·ξ_max) für x >> 1.
 
@@ -280,7 +280,7 @@ wobei f(r) die "Segment-Dichte-Quelle" ist.
 
 **Für weak field:** f(r) = r² → u = 1/r → Ξ ~ r_s/r ✓
 
-**Für strong field:** f(r) = r_s · e^(φr/r_s) → u = (1/φ)e^(-φr/r_s) → Ξ ~ 1 - e^(-φr/r_s) ✓
+**Für strong field:** f(r) = r_s · e^(φr/r_s) → u = (1/φ)e^(-φr_s / r) → Ξ ~ 1 - e^(-φr_s / r) ✓
 
 **Unified Form:**
 $$f(r) = r^2 \cdot g(r/r_s)$$
@@ -391,7 +391,7 @@ mit r* = 1.595 r_s (universeller Schnittpunkt!) und n als Fit-Parameter.
 | Element | Status |
 |---------|--------|
 | Ξ_weak = r_s/(2r) | **Derivation** (PPN-Matching) |
-| Ξ_strong = 1 - e^(-φr/r_s) | **Postulat** (funktioniert, nicht abgeleitet) |
+| Ξ_strong = 1 - e^(-φr_s / r) | **Postulat** (funktioniert, nicht abgeleitet) |
 | φ = 1.618... | **Empirisch erfolgreich** (Herkunft unklar) |
 | Hermite-Blend | **Engineering Glue** |
 | Δ(M)-Korrektur | **Empirisch gefittet** |

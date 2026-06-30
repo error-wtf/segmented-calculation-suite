@@ -217,7 +217,7 @@ class TestNumericalInvariants:
     def test_xi_monotonic_in_weak_field(self):
         """Invariant: Xi monoton fallend mit zunehmendem r (WEAK FIELD ONLY)
         
-        Note: In strong field, Xi_strong = 1 - exp(-φr/r_s) INCREASES with r.
+        Note: In strong field, Xi_strong = 1 - exp(-φr_s / r) INCREASES with r.
         This test only validates weak field behavior (r > 110*r_s).
         """
         r_s = 3000.0

@@ -67,7 +67,7 @@ def xi_strong_field(r: float, r_s: float, xi_max: float = 1.0) -> float:
     
     Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))
     """
-    return xi_max * (1 - np.exp(-PHI * r / r_s))
+    return xi_max * (1 - np.exp(-PHI * r_s / r))
 
 def xi_blended(r: float, r_s: float, xi_max: float = 1.0, 
                r_weak: float = 110, r_strong: float = 90) -> float:

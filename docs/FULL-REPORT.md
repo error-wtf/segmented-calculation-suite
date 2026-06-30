@@ -160,7 +160,7 @@ Die ursprüngliche xi_strong Formel hatte das falsche Argument:
 
 ```python
 # FALSCH
-xi = 1 - exp(-φ * r / r_s)  # Xi steigt mit r!
+xi = 1 - exp(-φ * r_s / r)  # Xi steigt mit r!
 ```
 
 ### 4.2 Lösung

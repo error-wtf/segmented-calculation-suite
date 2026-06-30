@@ -43,7 +43,7 @@ xi = r_s / (2.0 * r)
 **Implemented:**
 ```python
 # segcalc/methods/xi.py:63
-xi = xi_max * (1.0 - np.exp(-phi * r / r_s))
+xi = xi_max * (1.0 - np.exp(-phi * r_s / r))
 ```
 
 **Source References:**
@@ -270,7 +270,7 @@ r*/r_s = 1.594811  (korrigierte Formel)
 | Formula | Paper Match | Code Match | Test | Status |
 |---------|-------------|------------|------|--------|
 | Ξ_weak = r_s/(2r) | ✓ | ✓ | test_weak_field_earth | ✅ VERIFIED |
-| Ξ_strong = 1-exp(-φr/r_s) | ✓ | ✓ | test_strong_field_horizon | ✅ VERIFIED |
+| Ξ_strong = 1-exp(-φr_s / r) | ✓ | ✓ | test_strong_field_horizon | ✅ VERIFIED |
 | D_SSZ = 1/(1+Ξ) | ✓ | ✓ | test_D_ssz_at_horizon | ✅ VERIFIED |
 | D_GR = √(1-r_s/r) | ✓ | ✓ | test_D_gr_at_horizon | ✅ VERIFIED |
 | z_SSZ = z_GR×(1+Δ/100) | ✓ | ✓ | test_ssz_predicts_higher | ✅ VERIFIED |

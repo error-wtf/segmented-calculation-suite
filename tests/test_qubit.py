@@ -101,7 +101,7 @@ class TestSegmentDensity:
         assert np.isclose(xi, expected, rtol=1e-10)
 
     def test_xi_strong_field_formula(self):
-        """Xi = 1 - exp(-phi*r/r_s) in strong field."""
+        """Xi = 1 - exp(-phi*r_s / r) in strong field."""
         from segcalc.config.constants import PHI
 
         M = 10 * M_SUN

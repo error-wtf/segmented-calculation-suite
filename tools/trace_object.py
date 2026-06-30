@@ -107,7 +107,7 @@ def trace_object(name: str, output_dir: str = None):
         "xi_strong": xi_s,
         "xi_max": XI_AT_HORIZON,
         "xi_formula_weak": "r_s / (2*r)",
-        "xi_formula_strong": "1 - exp(-phi * r / r_s)",
+        "xi_formula_strong": "1 - exp(-phi * r_s / r)",
     }
     
     # Step 4: Dilation factors

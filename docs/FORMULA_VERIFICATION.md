@@ -11,7 +11,7 @@
 | Formula ID | Mathematical Form | Paper Source | Code Location | Test |
 |------------|------------------|--------------|---------------|------|
 | F-001 | Ξ_weak = r_s/(2r) | WEAK_STRONG_FIELD_SPEC §2.1 | `xi.py:xi_weak()` | `test_weak_field_earth` |
-| F-002 | Ξ_strong = 1-exp(-φr/r_s) | WEAK_STRONG_FIELD_SPEC §2.2 | `xi.py:xi_strong()` | `test_strong_field_horizon` |
+| F-002 | Ξ_strong = 1-exp(-φr_s / r) | WEAK_STRONG_FIELD_SPEC §2.2 | `xi.py:xi_strong()` | `test_strong_field_horizon` |
 | F-003 | D_ssz = 1/(1+Ξ) | SSZ_MATHEMATICAL_PHYSICS §3 | `dilation.py:D_ssz()` | `test_D_ssz_at_horizon` |
 | F-004 | D_gr = √(1-r_s/r) | Standard GR | `dilation.py:D_gr()` | `test_D_gr_at_horizon` |
 | F-005 | z_gr = 1/√(1-r_s/r) - 1 | Standard GR | `redshift.py:z_gravitational()` | `test_pound_rebka_redshift` |

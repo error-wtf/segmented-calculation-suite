@@ -254,7 +254,7 @@ R_STAR_OVER_RS = 1.595        # Universal intersection (corrected)
 | Specification | Source File | Line Reference |
 |---------------|-------------|----------------|
 | Weak field: Ξ = r_s/(2r) | 01_MATHEMATICAL_FOUNDATIONS.md | §16.2 |
-| Strong field: Ξ = 1-exp(-φr/r_s) | 01_MATHEMATICAL_FOUNDATIONS.md | §3.2 |
+| Strong field: Ξ = 1-exp(-φr_s / r) | 01_MATHEMATICAL_FOUNDATIONS.md | §3.2 |
 | Boundary r/r_s = 100 | SSZ_FORMULA_DOCUMENTATION.md | §2 |
 | Blend zone [90, 110] | 01_MATHEMATICAL_FOUNDATIONS.md | §16.1 |
 | C² Hermite interpolation | 01_MATHEMATICAL_FOUNDATIONS.md | §12.2 |

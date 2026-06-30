@@ -92,7 +92,7 @@ def xi_segment_density(r: float, M: float = M_EARTH, regime: str = 'auto') -> fl
 
     Two regimes:
     - WEAK FIELD (r >> r_s): Xi(r) = r_s / (2r)
-    - STRONG FIELD (r ~ r_s): Xi(r) = 1 - exp(-phi * r / r_s)
+    - STRONG FIELD (r ~ r_s): Xi(r) = 1 - exp(-phi * r_s / r)
     """
     if r <= 0:
         raise ValueError(f"Radius must be positive, got r={r}")
@@ -106,7 +106,7 @@ def xi_segment_density(r: float, M: float = M_EARTH, regime: str = 'auto') -> fl
     if regime == 'weak':
         return r_s / (2 * r)
     else:
-        return 1.0 - np.exp(-PHI * r / r_s)
+        return 1.0 - np.exp(-PHI * r_s / r)
 
 
 def xi_gradient(r: float, M: float = M_EARTH, regime: str = 'auto') -> float:
@@ -114,7 +114,7 @@ def xi_gradient(r: float, M: float = M_EARTH, regime: str = 'auto') -> float:
     Calculate gradient of segment density dXi/dr.
 
     - WEAK FIELD: dXi/dr = -r_s / (2r^2)
-    - STRONG FIELD: dXi/dr = (phi / r_s) * exp(-phi * r / r_s)
+    - STRONG FIELD: dXi/dr = (phi / r_s) * exp(-phi * r_s / r)
     """
     if r <= 0:
         raise ValueError(f"Radius must be positive, got r={r}")
@@ -128,7 +128,7 @@ def xi_gradient(r: float, M: float = M_EARTH, regime: str = 'auto') -> float:
     if regime == 'weak':
         return -r_s / (2 * r**2)
     else:
-        return (PHI / r_s) * np.exp(-PHI * r / r_s)
+        return (PHI / r_s) * np.exp(-PHI * r_s / r)
 
 
 def ssz_time_dilation(r: float, M: float = M_EARTH) -> float:

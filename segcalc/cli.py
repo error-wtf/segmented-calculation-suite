@@ -114,7 +114,7 @@ def cmd_info(args):
     print(f"{'-'*60}")
     print("KEY FORMULAS")
     print(f"  Xi_weak:     r_s / (2r)")
-    print(f"  Xi_strong:   1 - exp(-phi*r/r_s)")
+    print(f"  Xi_strong:   1 - exp(-phi*r_s / r)")
     print(f"  D_SSZ:       1 / (1 + Xi)")
     print(f"  z_SSZ:       1/D_SSZ - 1")
     print(f"{'='*60}")

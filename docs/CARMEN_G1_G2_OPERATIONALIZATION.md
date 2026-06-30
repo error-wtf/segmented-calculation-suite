@@ -74,10 +74,10 @@ der die Segmentstruktur der Raumzeit definiert.
 
 | Regime | r/r_s | Ξ-Formel | g1-Status |
 |--------|-------|----------|-----------|
-| Very Close | < 2 | 1 - e^(-φr/r_s) | ⚠️ 0% wins |
+| Very Close | < 2 | 1 - e^(-φr_s / r) | ⚠️ 0% wins |
 | Blended | 1.8-2.2 | Hermite C² | Übergang |
-| Photon Sphere | 2-3 | 1 - e^(-φr/r_s) | ✅ 82% wins |
-| Strong | 3-10 | 1 - e^(-φr/r_s) | ✅ Robust |
+| Photon Sphere | 2-3 | 1 - e^(-φr_s / r) | ✅ 82% wins |
+| Strong | 3-10 | 1 - e^(-φr_s / r) | ✅ Robust |
 | Weak | > 10 | r_s/(2r) | ✅ = GR |
 
 ### SSZ vs GR Methoden-Zuordnung

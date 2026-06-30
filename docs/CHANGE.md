@@ -66,7 +66,7 @@ Kritischer Mathematik-Bug in der `xi_strong` Formel behoben. Die Korrektur ände
 
 ### Vorher (FALSCH)
 ```python
-xi_strong = xi_max * (1 - exp(-φ * r / r_s))
+xi_strong = xi_max * (1 - exp(-φ * r_s / r))
 ```
 
 **Problem:** Xi steigt mit r → unphysikalisch!

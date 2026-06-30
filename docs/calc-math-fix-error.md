@@ -25,7 +25,7 @@ The `xi_strong` function had an incorrect formula that caused:
 ### Wrong Formula (BEFORE)
 ```python
 def xi_strong(r, r_s, xi_max=1.0, phi=PHI):
-    xi = xi_max * (1.0 - np.exp(-phi * r / r_s))  # ❌ WRONG!
+    xi = xi_max * (1.0 - np.exp(-phi * r_s / r))  # ❌ WRONG!
     return xi
 ```
 

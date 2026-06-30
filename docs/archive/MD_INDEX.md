@@ -91,7 +91,7 @@ Blend Zone:   90 < r/r_s < 110 (C² Hermite interpolation)
 Xi = r_s / (2 * r)
 
 # Strong Field (r/r_s < 100)
-Xi = 1 - exp(-PHI * r / r_s)
+Xi = 1 - exp(-PHI * r_s / r)
 
 # Time Dilation (BOTH regimes)
 D_SSZ = 1 / (1 + Xi)

@@ -119,7 +119,7 @@ Die Verbindung zwischen Weak und Strong ist derzeit:
 Idee: PPN ↔ Strong Matching in Überlappzone
 
 Weak (outer):  Ξ_w = r_s/(2r) + O(r_s²/r²)
-Strong (inner): Ξ_s = 1 - exp(-φr/r_s)
+Strong (inner): Ξ_s = 1 - exp(-φr_s / r)
 
 Matching-Bedingung bei r* = 1.595 r_s:
   Ξ_w(r*) = Ξ_s(r*) UND dΞ_w/dr|_r* = dΞ_s/dr|_r*

@@ -22,7 +22,7 @@
 x = r / r_s
 
 WEAK FIELD:   x > 110  →  Ξ(r) = 1/(2x) = r_s/(2r)
-STRONG FIELD: x < 90   →  Ξ(r) = 1 - exp(-φx) = 1 - exp(-φr/r_s)
+STRONG FIELD: x < 90   →  Ξ(r) = 1 - exp(-φx) = 1 - exp(-φr_s / r)
 TRANSITION:   90 ≤ x ≤ 110  →  Quintic Hermite Blend
 ```
 
@@ -63,7 +63,7 @@ where φ = (1 + √5) / 2 = 1.6180339887498948
 - Valid for: r/r_s < 90
 - Saturation: Ξ → 1 as r → ∞ (within strong field context)
 - At horizon (r = r_s): Ξ(r_s) = 1 - exp(-φ) = 0.8017
-- Gradient: dΞ/dr = (φ/r_s) × exp(-φr/r_s) > 0
+- Gradient: dΞ/dr = (φ/r_s) × exp(-φr_s / r) > 0
 
 **CRITICAL: Ξ(r_s) = 0.8017 is COMPUTED, not a parameter!**
 

@@ -1229,7 +1229,7 @@ def create_app():
 |--------|-------|---------|
 | **Weak** | >110 | Ξ = r_s/(2r) |
 | **Blend** | 90-110 | C² Hermite |
-| **Strong** | <90 | Ξ = 1-e^(-φr/r_s) |
+| **Strong** | <90 | Ξ = 1-e^(-φr_s / r) |
 
 **Key:** φ=1.618, Ξ_max≈0.802, D(r_s)≈0.555 (FINITE!), r*/r_s=1.387
                 """)
@@ -1288,7 +1288,7 @@ def create_app():
 |---------|------------|-------------|
 | **Schwarzschild Radius** | r_s = 2GM/c² | Event horizon radius |
 | **Segment Density (Weak)** | Ξ(r) = r_s/(2r) | Newtonian limit |
-| **Segment Density (Strong)** | Ξ(r) = Ξ_max·(1-e^(-φr/r_s)) | Near-horizon |
+| **Segment Density (Strong)** | Ξ(r) = Ξ_max·(1-e^(-φr_s / r)) | Near-horizon |
 | **Time Dilation SSZ** | D_SSZ = 1/(1+Ξ) | Always finite! |
 | **Time Dilation GR** | D_GR = √(1-r_s/r) | Singular at r=r_s |
 | **Gravitational Redshift** | z = 1/D - 1 | Observable |
@@ -1310,7 +1310,7 @@ def get_regime(r, r_s):
     if ratio > 110:
         return "weak"      # Ξ = r_s/(2r)
     elif ratio < 90:
-        return "strong"    # Ξ = Ξ_max·(1-e^(-φr/r_s))
+        return "strong"    # Ξ = Ξ_max·(1-e^(-φr_s / r))
     else:
         return "blend"     # C² Hermite interpolation
 ```

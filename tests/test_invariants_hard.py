@@ -243,13 +243,13 @@ class TestXiFormulas:
             f"Xi_weak Formel falsch: {xi} != {expected}"
 
     def test_xi_strong_formula(self):
-        """Xi_strong = xi_max * (1 - exp(-phi * r / r_s))"""
+        """Xi_strong = xi_max * (1 - exp(-phi * r_s / r))"""
         r_s = 1000
         r = r_s  # At horizon
         xi_max = 1.0
         
         xi = xi_strong(r, r_s, xi_max=xi_max, phi=PHI)
-        expected = xi_max * (1.0 - np.exp(-PHI * r / r_s))
+        expected = xi_max * (1.0 - np.exp(-PHI * r_s / r))
         
         assert np.isclose(xi, expected, rtol=1e-14), \
             f"Xi_strong Formel falsch: {xi} != {expected}"

@@ -105,7 +105,7 @@ check("D(r_s) > 0 (no singularity)",
      D_horizon > 0,
      f"D(r_s) = {D_horizon}")
 
-check("Strong field formula: Ξ = 1 - exp(-φr/r_s)",
+check("Strong field formula: Ξ = 1 - exp(-φr_s / r)",
      abs(xi_horizon - (1 - math.exp(-PHI))) < 0.001,
      f"Ξ = {xi_horizon}, expected = {1 - math.exp(-PHI):.4f}")
 
