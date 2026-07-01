@@ -92,7 +92,7 @@ pip install -r requirements.txt
 |----------|---------|-------|
 | Schwarzschild radius | r_s = 2GM/c² | Fundamental scale |
 | Segment density (Weak) | Ξ = r_s/(2r) | r/r_s > 10 |
-| Segment density (Strong) | Ξ = 1 - exp(-φ·r_s/r) | r/r_s < 1.8 |
+| Segment density (Strong) | Ξ = 1 - exp(-φ·r_s/r) | r_s/r < 1.8 |
 | SSZ time dilation | D_SSZ = 1/(1+Ξ) | For time comparisons |
 | GR time dilation | D_GR = √(1-r_s/r) | Standard GR |
 | **SSZ Redshift** | **z_SSZ = z_GR × (1 + Δ(M)/100)** | **Key result!** |

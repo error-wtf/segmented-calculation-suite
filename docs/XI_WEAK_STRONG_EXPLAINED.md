@@ -31,7 +31,7 @@
 ### Ξ_strong: Starkes Feld (Horizont-finit)
 
 ```
-Ξ_strong(r) = ξ_max × (1 - exp(-φ × r / r_s))
+Ξ_strong(r) = ξ_max × (1 - exp(-φ × r_s / r))
 ```
 
 | Parameter | Wert | Bedeutung |

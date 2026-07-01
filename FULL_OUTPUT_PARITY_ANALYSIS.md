@@ -51,7 +51,7 @@ delta_pct = (A_DM * math.exp(-ALPHA_DM * r_s) + B_DM) * norm
 
 | Aspekt | full-output.md | Repo (xi.py:41-65) | Status |
 |--------|----------------|---------------------|--------|
-| Formel | Ξ = 1 - exp(-φ×r/r_s) | Ξ = ξ_max × (1 - exp(-φ×r/r_s)) | ✅ MATCH |
+| Formel | Ξ = 1 - exp(-φ×r_s / r) | Ξ = ξ_max × (1 - exp(-φ×r_s / r)) | ✅ MATCH |
 | ξ_max | 1.0 | 1.0 (default) | ✅ MATCH |
 | Ξ(r_s) | 0.802 | 1 - exp(-1.618) = 0.802 | ✅ MATCH |
 

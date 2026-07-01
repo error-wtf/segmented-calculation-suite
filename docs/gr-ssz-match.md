@@ -61,7 +61,7 @@ and are valid in different radial domains. At the horizon (r = r_s), both give *
 ### Unified-Results: Near-Horizon Perspective
 
 ```text
-Xi(r) = Xi_max × (1 - exp(-φ × r/r_s))
+Xi(r) = Xi_max × (1 - exp(-φ × r_s / r))
 ```
 
 **Physical interpretation:** Measures how much spacetime segmentation has *accumulated* 
@@ -142,7 +142,7 @@ These are **dual descriptions of the same physics**, like position vs momentum i
 ### Unified Formula: The Accumulation Perspective
 
 ```text
-Xi(r) = Xi_max × (1 - exp(-φ × r/r_s))
+Xi(r) = Xi_max × (1 - exp(-φ × r_s / r))
 ```
 
 **Physical meaning:** As you travel inward from infinity, spacetime segments accumulate.
@@ -212,7 +212,7 @@ predictions cross **under each model's assumptions**.
 Both formulas are **mathematically related** by a simple variable substitution:
 
 ```text
-Unified:     f(r/r_s) = 1 - exp(-φ × r/r_s)
+Unified:     f(r/r_s) = 1 - exp(-φ × r_s / r)
 Calculation: g(r_s/r) = 1 - exp(-φ × r_s/r)
 
 Note: f(x) and g(1/x) use the same functional form with reciprocal arguments
@@ -261,7 +261,7 @@ print(f"D* = {D_gr(x_star):.6f}")              # 0.610710
 
 | Aspect | Unified-Results | Calculation-Suite |
 |--------|-----------------|-------------------|
-| **Xi formula** | `1 - exp(-φ·r/r_s)` | `1 - exp(-φ·r_s/r)` |
+| **Xi formula** | `1 - exp(-φ·r_s / r)` | `1 - exp(-φ·r_s/r)` |
 | **Xi(r_s)** | 0.802 ✅ | 0.802 ✅ |
 | **Xi asymptotic** | → Xi_max | → 0 |
 | **Best for** | Horizon physics | Global analysis |

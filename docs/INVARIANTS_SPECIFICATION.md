@@ -175,7 +175,7 @@ class TestGoldenDatasetMatch:
 ```
 Ξ_weak(r) = r_s / (2r)
 
-Ξ_strong(r) = ξ_max × (1 - exp(-φ × r / r_s))
+Ξ_strong(r) = ξ_max × (1 - exp(-φ × r_s / r))
 
 Ξ(r_s) = 1 - exp(-φ) ≈ 0.802
 ```

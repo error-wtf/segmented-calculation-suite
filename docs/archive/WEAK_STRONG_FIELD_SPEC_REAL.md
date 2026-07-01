@@ -54,7 +54,7 @@ assert 6e-10 < xi < 8e-10  # At Earth surface
 **Source:** E_transition.md Line 21, ssz_qubits.py Line 178
 
 ```
-Ξ_strong(r) = 1 - exp(-φ × r / r_s)
+Ξ_strong(r) = 1 - exp(-φ × r_s / r)
 
 where φ = (1 + √5) / 2 = 1.6180339887498948
 ```

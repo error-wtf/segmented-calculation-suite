@@ -30,7 +30,7 @@ Mit **Außen-Operationalisierung** meinen wir die Beschreibung dessen, was aus e
 ### Strong Field (r/r_s < 10)
 
 ```
-Ξ_strong(r) = ξ_max × (1 - exp(-φ × r / r_s))
+Ξ_strong(r) = ξ_max × (1 - exp(-φ × r_s / r))
 ```
 
 | Parameter | Wert | Bedeutung |

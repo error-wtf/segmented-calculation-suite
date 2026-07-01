@@ -261,7 +261,7 @@ Segmented-Spacetime-Mass-Projection-Unified-Results/
 Xi(r) = r_s / (2r)
 
 # Segment Density (Strong Field)
-Xi(r) = 1 - exp(-φ·r/r_s)
+Xi(r) = 1 - exp(-φ·r_s / r)
 
 # Time Dilation
 D_ssz = 1 / (1 + Xi)

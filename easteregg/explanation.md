@@ -51,7 +51,7 @@ The `schrodinger_ssz_demo.py` **numerically** solves a 1D eigenvalue problem wit
 ## 📐 A) Potential Definition in the Script
 
 ```python
-Ξ(r) = exp(-r / r_s)      # SSZ-inspired damping term
+Ξ(r) = exp(-r_s / r)      # SSZ-inspired damping term
 D(r) = 1 - Ξ(r)           # Effective factor
 V(r) = -D(r) / r          # Modified potential
 ```

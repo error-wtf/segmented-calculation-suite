@@ -65,7 +65,7 @@ def xi_strong_field(r: float, r_s: float, xi_max: float = 1.0) -> float:
     """
     Strong field segment density (exponential model).
     
-    Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))
+    Ξ(r) = ξ_max × (1 - exp(-φ × r_s / r))
     """
     return xi_max * (1 - np.exp(-PHI * r_s / r))
 

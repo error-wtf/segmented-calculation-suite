@@ -206,7 +206,7 @@ def segment_saturation_derivative(r: Union[float, np.ndarray], r_s: float) -> Un
     """
     Derivative of segment saturation factor dΞ/dr.
     
-    Formula: dΞ/dr = (φ/r_s)·exp(-φ·r/r_s)
+    Formula: dΞ/dr = (φ/r_s)·exp(-φ·r_s / r)
     
     Used for curvature calculations and metric derivatives.
     

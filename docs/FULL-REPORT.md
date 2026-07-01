@@ -47,7 +47,7 @@ D_SSZ(r_s) = 1 / (1 + 0.802) = 0.555
 | Regime | Formel | Gültigkeitsbereich |
 |--------|--------|-------------------|
 | Weak | Ξ = r_s/(2r) | r/r_s > 10 |
-| Strong | Ξ = 1 - exp(-φ·r_s/r) | r/r_s < 1.8 |
+| Strong | Ξ = 1 - exp(-φ·r_s/r) | r_s/r < 1.8 |
 | Blended | Hermite C² | 1.8 ≤ r/r_s ≤ 2.2 |
 
 **KRITISCH:** Die Strong-Field Formel verwendet `r_s/r` (nicht `r/r_s`), damit Ξ korrekt mit r fällt.

@@ -64,7 +64,7 @@ class RunBundle:
             },
             "formulas": {
                 "xi_weak": "Ξ(r) = r_s / (2r)",
-                "xi_strong": "Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))",
+                "xi_strong": "Ξ(r) = ξ_max × (1 - exp(-φ × r_s / r))",
                 "xi_blend": "C² Hermite interpolation",
                 "D_ssz": "D_SSZ = 1 / (1 + Ξ(r))",
                 "D_gr": "D_GR = √(1 - r_s/r)",

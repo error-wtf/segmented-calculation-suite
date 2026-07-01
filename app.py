@@ -1443,7 +1443,7 @@ def create_app():
 
 | Regime | Condition | Formula for Ξ(r) |
 |--------|-----------|------------------|
-| **Very Close** | r/r_s < 1.8 | Ξ = 1 - e^(-φ·r/r_s) |
+| **Very Close** | r_s/r < 1.8 | Ξ = 1 - e^(-φ·r/r_s) |
 | **Blended** | 1.8 ≤ r/r_s ≤ 2.2 | Hermite C² interpolation |
 | **Photon Sphere** | 2.2 < r/r_s ≤ 3.0 | Ξ = 1 - e^(-φ·r/r_s) |
 | **Strong Field** | 3.0 < r/r_s ≤ 10.0 | Ξ = 1 - e^(-φ·r/r_s) |
@@ -1520,7 +1520,7 @@ def get_regime(r, r_s):
 | **Built-in Suite** | 42 | GPS, Pound-Rebka, Neutron Stars, Invariants |
 
 **Kanonische Regime-Grenzen (segcalc):**
-- Very Close: r/r_s < 1.8
+- Very Close: r_s/r < 1.8
 - Blended: 1.8 ≤ r/r_s ≤ 2.2
 - Photon Sphere: 2.2 < r/r_s ≤ 3.0
 - Strong: 3.0 < r/r_s ≤ 10.0

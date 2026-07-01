@@ -52,7 +52,7 @@
         {
           "test_id": "test_xi_strong_field",
           "method_ids": ["xi_strong"],
-          "description": "Xi = 1 - exp(-φ·r/r_s) at r=r_s",
+          "description": "Xi = 1 - exp(-φ·r_s / r) at r=r_s",
           "input": {"r_over_rs": 1.0},
           "expected": {"value": 0.8019, "tolerance": 0.001},
           "pass_criteria": "within 0.1%",

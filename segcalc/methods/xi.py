@@ -49,7 +49,7 @@ def xi_strong(r: Union[float, np.ndarray], r_s: float,
     - At r = r_s: Xi = xi_max × (1 - exp(-φ)) ≈ 0.802
     - As r → ∞: Xi → 0 (correct asymptotic behavior)
     
-    Valid for: r/r_s < 1.8 (inner region near horizon)
+    Valid for: r_s/r < 1.8 (inner region near horizon)
     
     Parameters:
         r: Radius [m]

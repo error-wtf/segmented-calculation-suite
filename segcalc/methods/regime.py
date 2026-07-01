@@ -5,7 +5,7 @@ Central regime detection for SSZ calculations.
 This ensures consistent regime classification across all methods.
 
 Regimes (r/r_s):
-- very_close:    r/r_s < 1.8      (near horizon, SSZ uses strong formula)
+- very_close:    r_s/r < 1.8      (near horizon, SSZ uses strong formula)
 - blended:       1.8 ≤ r/r_s < 2.2 (transition zone, Hermite C² blend)
 - photon_sphere: 2.2 ≤ r/r_s < 3.0 (SSZ optimal, 82% win rate)
 - strong:        3.0 ≤ r/r_s < 10  (strong field, Δ(M) applies)
@@ -52,7 +52,7 @@ def detect_regime(r_m: float, r_s: float) -> str:
         Regime string: "very_close", "blended", "photon_sphere", "strong", or "weak"
     
     Physical meaning:
-        - very_close (r/r_s < 1.8): Near horizon, SSZ strong formula
+        - very_close (r_s/r < 1.8): Near horizon, SSZ strong formula
         - blended (1.8-2.2): Transition zone with Hermite interpolation
         - photon_sphere (2.2-3.0): SSZ optimal regime (82% wins vs GR)
         - strong (3.0-10.0): Strong field, Δ(M) correction applies

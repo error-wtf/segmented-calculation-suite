@@ -96,7 +96,7 @@ v_esc × v_fall = c² (machine precision)
 **Contract Source:** IMPLEMENTATION_CONTRACT.md §1.2
 
 ```
-Ξ(r) = Ξ_max × (1 - exp(-φ × r/r_s))
+Ξ(r) = Ξ_max × (1 - exp(-φ × r_s / r))
 Ξ_max = 1.0
 ```
 

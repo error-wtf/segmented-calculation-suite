@@ -96,7 +96,7 @@ def plot_xi_regimes(save_path: Optional[str] = None) -> plt.Figure:
     Plot Xi(r) across all regimes.
     
     CANONICAL regime boundaries (segcalc):
-    - Very Close: r/r_s < 1.8
+    - Very Close: r_s/r < 1.8
     - Blended: 1.8 ≤ r/r_s ≤ 2.2
     - Photon Sphere: 2.2 < r/r_s ≤ 3.0
     - Strong: 3.0 < r/r_s ≤ 10.0

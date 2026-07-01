@@ -36,7 +36,7 @@ Nach vollständiger Analyse von **400+ .md Dateien** aus allen SSZ-Repositories:
 Xi_weak(r) = r_s / (2r)
 
 # STRONG FIELD (r/r_s < 90)  
-Xi_strong(r) = 1 - exp(-φ × r / r_s)
+Xi_strong(r) = 1 - exp(-φ × r_s / r)
 
 # BLEND ZONE (90 <= r/r_s <= 110)
 Xi_blend = Hermite C² Interpolation

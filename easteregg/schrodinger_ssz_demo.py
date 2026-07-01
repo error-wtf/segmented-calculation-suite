@@ -45,7 +45,7 @@ def build_potential(r: np.ndarray, r_s: float = 1.0) -> np.ndarray:
 
         V(r) = -D(r) / r,
 
-    where D(r) = 1 - Xi(r) and Xi(r) = exp(-r / r_s).  We adopt
+    where D(r) = 1 - Xi(r) and Xi(r) = exp(-r_s / r).  We adopt
     dimensionless units with G = M = m = 1.
 
     Parameters
@@ -60,7 +60,7 @@ def build_potential(r: np.ndarray, r_s: float = 1.0) -> np.ndarray:
     np.ndarray
         Potential values at each radial point.
     """
-    Xi = np.exp(-r / r_s)
+    Xi = np.exp(-r_s / r)
     D = 1.0 - Xi
     # Avoid division by zero at r=0 by adding a small epsilon
     V = -D / r

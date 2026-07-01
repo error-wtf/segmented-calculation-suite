@@ -37,7 +37,7 @@ xi = r_s / (2.0 * r)
 
 **LaTeX:**
 ```
-Ξ(r) = ξ_max × (1 - exp(-φ × r / r_s))
+Ξ(r) = ξ_max × (1 - exp(-φ × r_s / r))
 ```
 
 **Implemented:**

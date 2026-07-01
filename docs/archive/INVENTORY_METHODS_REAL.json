@@ -38,7 +38,7 @@
         {"name": "xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}
       ],
       "formula_weak": "Xi = r_s/(2r)",
-      "formula_strong": "Xi = 1 - exp(-phi*r/r_s)",
+      "formula_strong": "Xi = 1 - exp(-phi*r_s / r)",
       "regime_threshold": 100,
       "note": "NO BLEND in implementation - hard switch at 100"
     },
@@ -58,7 +58,7 @@
         {"name": "dxi_dr", "type": "float", "unit": "1/m"}
       ],
       "formula_weak": "dXi/dr = -r_s/(2r²)",
-      "formula_strong": "dXi/dr = (phi/r_s)*exp(-phi*r/r_s)"
+      "formula_strong": "dXi/dr = (phi/r_s)*exp(-phi*r_s / r)"
     },
     {
       "method_id": "ssz_time_dilation",

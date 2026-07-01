@@ -64,20 +64,20 @@ D_SSZ ≈ 1 - Ξ = 1 - r_s/(2r) ≈ √(1 - r_s/r) = D_GR  (for r >> r_s)
 
 ### Segment Density (Saturation Form)
 ```
-Ξ(r) = 1 - exp(-φ × r / r_s)
+Ξ(r) = 1 - exp(-φ × r_s / r)
 
 where φ = (1 + √5) / 2 = 1.618033988749895
 ```
 
 ### Gradient
 ```
-dΞ/dr = (φ / r_s) × exp(-φ × r / r_s)  > 0  (Ξ increases with r)
+dΞ/dr = (φ / r_s) × exp(-φ × r_s / r)  > 0  (Ξ increases with r)
 ```
 
 ### Time Dilation
 ```
 D_SSZ(r) = 1 / (1 + Ξ(r))
-         = 1 / (2 - exp(-φ × r / r_s))
+         = 1 / (2 - exp(-φ × r_s / r))
 ```
 
 ### Properties
@@ -174,7 +174,7 @@ This fails near black holes.
 
 **Strong Field Formula in Weak Field:**
 ```
-Ξ = 1 - exp(-φ×r/r_s)  at r = R_Earth  →  Ξ ≈ 1.0
+Ξ = 1 - exp(-φ×r_s / r)  at r = R_Earth  →  Ξ ≈ 1.0
 ```
 This is **WRONG** - Earth is not "fully segmented".
 

@@ -64,7 +64,7 @@ Das ist kein "Bug" – es ist der aktuelle Stand der Theorie-Entwicklung.
 ### Regime-Grenzen (aktuell implementiert)
 
 ```
-r/r_s < 1.8    →  very_close (strong formula)
+r_s/r < 1.8    →  very_close (strong formula)
 1.8 ≤ r/r_s ≤ 2.2  →  blended (Hermite C²)
 2.2 < r/r_s ≤ 3.0  →  photon_sphere
 3.0 < r/r_s ≤ 10   →  strong
@@ -122,7 +122,7 @@ $$\Xi_{strong}(r) = \xi_{max} \cdot \left(1 - e^{-\varphi \cdot r/r_s}\right) = 
 ```python
 def xi_strong(r: Union[float, np.ndarray], r_s: float, 
               xi_max: float = 1.0, phi: float = PHI) -> Union[float, np.ndarray]:
-    """Strong field segment density. Formula: Ξ(r) = ξ_max × (1 - exp(-φ × r/r_s))"""
+    """Strong field segment density. Formula: Ξ(r) = ξ_max × (1 - exp(-φ × r_s / r))"""
     return xi_max * (1.0 - np.exp(-phi * r_s / r))
 ```
 

@@ -39,7 +39,7 @@ segmented-calculation-suite/
 # Weak Field (r/r_s > 10)
 Xi_weak(r, r_s) = r_s / (2 * r)
 
-# Strong Field (r/r_s < 1.8)
+# Strong Field (r_s/r < 1.8)
 Xi_strong(r, r_s) = Xi_max * (1 - exp(-φ * r_s / r))
 
 # Blend Zone (1.8 ≤ r/r_s ≤ 2.2)

@@ -45,7 +45,7 @@ ALPHA_FS = 7.2973525693e-3        # Fine structure constant
 # SSZ Regime boundaries (r/r_s) - CORRECTED per Unified-Results
 # The blend zone is near the horizon, NOT at r=90-110!
 # Natural boundary from φ-geometry: r_φ = (φ/2)·r_s ≈ 0.809·r_s
-REGIME_BLEND_LOW = 1.8            # r/r_s < 1.8 → Inner (strong) field
+REGIME_BLEND_LOW = 1.8            # r_s/r < 1.8 → Inner (strong) field
 REGIME_BLEND_HIGH = 2.2           # r/r_s > 2.2 → Outer field
 # 1.8 < r/r_s < 2.2 → Blend zone (Hermite C²)
 REGIME_WEAK_START = 10.0          # r/r_s > 10 → Weak field (kanonisch)
@@ -153,7 +153,7 @@ def get_regime(r: float, r_s: float) -> str:
     CORRECTED per Unified-Results stratified analysis.
     
     KANONISCHE segcalc GRENZEN (KEIN OVERLAP):
-        - very_close:    r/r_s < 1.8
+        - very_close:    r_s/r < 1.8
         - blended:       1.8 ≤ r/r_s ≤ 2.2 (Hermite C²)
         - photon_sphere: 2.2 < r/r_s ≤ 3.0 (SSZ OPTIMAL)
         - strong:        3.0 < r/r_s ≤ 10.0

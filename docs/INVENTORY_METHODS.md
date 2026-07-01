@@ -57,7 +57,7 @@
 | **Signatur** | `Xi(r, r_s)` |
 | **Inputs** | r (m), r_s (m) |
 | **Output** | float: Ξ ∈ [0, 1) |
-| **Formel** | `Ξ(r) = 1 - exp(-φ × r/r_s)` |
+| **Formel** | `Ξ(r) = 1 - exp(-φ × r_s / r)` |
 | **Units** | Dimensionless |
 | **φ** | (1+√5)/2 ≈ 1.618034 |
 

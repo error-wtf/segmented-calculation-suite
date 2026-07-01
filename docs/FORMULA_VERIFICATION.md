@@ -62,7 +62,7 @@ $$\Xi_{strong}(r) = 1 - e^{-\phi \cdot r / r_s}$$
 ### Paper Source
 
 > **WEAK_STRONG_FIELD_SPEC.md, Section 2.2:**  
-> "For r/r_s < 90 (strong field): Ξ(r) = 1 - exp(-φ × r / r_s)"
+> "For r/r_s < 90 (strong field): Ξ(r) = 1 - exp(-φ × r_s / r)"
 
 ### Code Implementation
 

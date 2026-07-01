@@ -158,7 +158,7 @@ E:\clone\segmented-calculation-suite\
 # segcalc/methods/xi.py
 
 def xi_strong(r: float, r_s: float, phi: float = PHI) -> float:
-    """Ξ(r) = 1 - exp(-φ × r/r_s)"""
+    """Ξ(r) = 1 - exp(-φ × r_s / r)"""
 
 def xi_weak(r: float, r_s: float) -> float:
     """Ξ(r) = r_s/(2r)"""

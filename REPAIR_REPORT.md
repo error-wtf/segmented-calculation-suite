@@ -127,7 +127,7 @@ else:
 ### ✅ Regime-Definitionen in constants.py
 **Datei:** `segcalc/config/constants.py:48-54`
 ```python
-REGIME_BLEND_LOW = 1.8   # r/r_s < 1.8 → Inner (strong) field
+REGIME_BLEND_LOW = 1.8   # r_s/r < 1.8 → Inner (strong) field
 REGIME_BLEND_HIGH = 2.2  # r/r_s > 2.2 → Outer field
 ```
 

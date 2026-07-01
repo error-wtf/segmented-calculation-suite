@@ -52,7 +52,7 @@
         ],
         "outputs": [{"name": "Xi", "type": "float", "unit": "dimensionless", "description": "Segment density"}]
       },
-      "formula": "Ξ(r) = 1 - exp(-φ·r/r_s)",
+      "formula": "Ξ(r) = 1 - exp(-φ·r_s / r)",
       "regime": "strong",
       "validity": "r/r_s < 90",
       "dependencies": ["PHI"],
@@ -374,7 +374,7 @@
         ],
         "outputs": [{"name": "dXi_dr", "type": "float", "unit": "1/m", "description": "Xi derivative"}]
       },
-      "formula": "dΞ/dr = (φ/r_s)·exp(-φ·r/r_s)",
+      "formula": "dΞ/dr = (φ/r_s)·exp(-φ·r_s / r)",
       "dependencies": ["PHI"],
       "implemented": false
     },

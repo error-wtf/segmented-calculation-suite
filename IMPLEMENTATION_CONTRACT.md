@@ -82,7 +82,7 @@ M_SUN = 1.98847e30  # kg
 
 **Strong field (r/r_s < ~100):**
 ```
-Ξ = 1 - exp(-φ·r/r_s)
+Ξ = 1 - exp(-φ·r_s / r)
 ```
 **Reference:** full-output.md:L78-L81 (PPN test), memory: SSZ_COMPLETE_PHYSICS_REFERENCE
 

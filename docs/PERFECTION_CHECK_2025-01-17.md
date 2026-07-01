@@ -95,7 +95,7 @@ z_ssz = z_gr × (1 + Δ(M)/100)          # SSZ (strong field)
 **Problem:** xi_strong hatte falsches Argument
 ```python
 # FALSCH: Xi steigt mit r (unphysikalisch!)
-xi = 1 - exp(-φ · r/r_s)
+xi = 1 - exp(-φ · r_s / r)
 
 # KORREKT: Xi fällt mit r ✓
 xi = 1 - exp(-φ · r_s/r)

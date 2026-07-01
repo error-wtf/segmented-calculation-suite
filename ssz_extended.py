@@ -355,7 +355,7 @@ def sensitivity_scan(xi_max_range: np.ndarray, phi_range: np.ndarray,
         for p in phi_range:
             try:
                 def xi_exp(r):
-                    return xm * (1 - np.exp(-p * r / r_s))
+                    return xm * (1 - np.exp(-p * r_s / r))
                 
                 def D_ssz(r):
                     return 1.0 / (1.0 + xi_exp(r))

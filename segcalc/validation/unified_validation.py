@@ -361,7 +361,7 @@ def run_regime_tests() -> CategoryResult:
     
     NOTE: Tests use PROBE_RADIUS_* sample points (90/110 r_s) for regression testing.
     These are NOT regime boundaries! Actual regime boundaries are:
-      - very_close: r/r_s < 1.8
+      - very_close: r_s/r < 1.8
       - blended: 1.8 ≤ r/r_s ≤ 2.2
       - photon_sphere: 2.2 < r/r_s ≤ 3.0
       - strong: 3.0 < r/r_s ≤ 10.0

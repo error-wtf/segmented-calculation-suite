@@ -10,7 +10,7 @@
 
 | Parameter | Kanonischer Wert | Legacy (VERBOTEN) |
 |-----------|------------------|-------------------|
-| Very Close | r/r_s < 1.8 | r/r_s < 2.0 ❌ |
+| Very Close | r_s/r < 1.8 | r/r_s < 2.0 ❌ |
 | Blended | 1.8 ≤ r/r_s ≤ 2.2 | 90-110 ❌ |
 | Photon Sphere | 2.2 < r/r_s ≤ 3.0 | (nicht definiert) |
 | Strong Field | 3.0 < r/r_s ≤ 10.0 | < 90 ❌ |
@@ -37,7 +37,7 @@
 
 **Nachher:**
 ```markdown
-| **Very Close** | r/r_s < 1.8 | Ξ = 1 - e^(-φ·r/r_s) |
+| **Very Close** | r_s/r < 1.8 | Ξ = 1 - e^(-φ·r/r_s) |
 | **Photon Sphere** | 2.2 < r/r_s ≤ 3.0 | ... |
 ```
 

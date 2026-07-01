@@ -2,7 +2,7 @@
 Test Regime Classification - KANONISCHE segcalc Grenzen (KEIN OVERLAP)
 
 Testet get_regime() gegen die kanonischen Grenzwerte:
-- very_close:    r/r_s < 1.8
+- very_close:    r_s/r < 1.8
 - blended:       1.8 ≤ r/r_s ≤ 2.2 (Hermite C²)
 - photon_sphere: 2.2 < r/r_s ≤ 3.0 (SSZ OPTIMAL)
 - strong:        3.0 < r/r_s ≤ 10.0
@@ -26,7 +26,7 @@ class TestRegimeClassification:
     """Tests für kanonische segcalc Regime-Klassifikation."""
 
     def test_very_close_regime(self):
-        """r/r_s < 1.8 → very_close (KEIN Overlap mit blend)"""
+        """r_s/r < 1.8 → very_close (KEIN Overlap mit blend)"""
         r_s = 3000.0
         
         # Klar unter 1.8

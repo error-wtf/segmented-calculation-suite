@@ -148,7 +148,7 @@ At r/r_s = 100: xi_blended = xi_weak = 0.005 ✅
 
 **The argument order in exponentials matters!**
 
-- `exp(-φ·r/r_s)` → Xi **increases** with r (WRONG for segment density)
+- `exp(-φ·r_s / r)` → Xi **increases** with r (WRONG for segment density)
 - `exp(-φ·r_s/r)` → Xi **decreases** with r (CORRECT for segment density)
 
 The physical intuition: Segment density should be highest near the gravitating mass and approach zero at infinity, just like gravitational potential.

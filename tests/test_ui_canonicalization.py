@@ -152,7 +152,7 @@ class TestNoLegacyStrings:
             content = f.read()
 
         # Must contain canonical values
-        assert 'r/r_s < 1.8' in content, "Reference tab must show < 1.8 for very_close"
+        assert 'r_s/r < 1.8' in content, "Reference tab must show < 1.8 for very_close"
         assert '1.8 ≤ r/r_s ≤ 2.2' in content, "Reference tab must show [1.8, 2.2] for blended"
         assert '2.2 < r/r_s ≤ 3.0' in content, "Reference tab must show (2.2, 3.0] for photon_sphere"
 
